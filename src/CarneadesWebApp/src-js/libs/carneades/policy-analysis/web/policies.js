@@ -52,7 +52,7 @@ PM.on_policy_filtering = function(event) {
 };
 
 PM.find_available_lang = function(current_policy) {
-    if(!_.isNil(current_policy.header.description[IMPACT.lang])) {
+    if(!_.isNil(current_policy['header']['description'][IMPACT.lang])) {
         return IMPACT.lang;
     } else {
         return "en";
@@ -71,7 +71,7 @@ PM.display_policies = function(sectionid, subset) {
                     current_policy.outline_text = PM.theory_outline_text(current_policy.sections,
                                                                          'policies',
                                                                         subset);
-                    current_policy.description_text = current_policy.header.description[lang];
+                    current_policy.description_text = current_policy['header']['description'][lang];
                     var language_clj = carneades.policy_analysis.web.views.pmt.theory.convert_language(current_policy.language);
                     current_policy.policies_text = PM.policies_text(language_clj,
                                                                     current_policy.sections,
@@ -84,17 +84,17 @@ PM.display_policies = function(sectionid, subset) {
                     
                     var template_variables = _.clone(current_policy);
                     _.extend(template_variables, 
-                             PM.merge_menu_props({current_issue: $.i18n.prop('pmt_current_issue'),
-                                                  issue: PM.get_issue_text(),
-                                                  can_display: $.i18n.prop('pmt_can_display'),
-                                                  all_policies: $.i18n.prop('pmt_all_policies'),
-                                                  policies_making_in: $.i18n.prop('pmt_policies_making_in'),
-                                                  policies_making_out: $.i18n.prop('pmt_policies_making_out'),
-                                                  policies_making_undecided: $.i18n.prop('pmt_policies_making_undecided'),
-                                                  pmt_intro_pmt: $.i18n.prop('pmt_intro_pmt'),
-                                                  pmt_table_of_contents: $.i18n.prop('pmt_table_of_contents'),
-                                                  pmt_see_effects: $.i18n.prop('pmt_see_effects'),
-                                                  pmt_policies_filtering_indication: $.i18n.prop('pmt_policies_filtering_indication')
+                             PM.merge_menu_props({'current_issue': $.i18n.prop('pmt_current_issue'),
+                                                  'issue': PM.get_issue_text(),
+                                                  'can_display': $.i18n.prop('pmt_can_display'),
+                                                  'all_policies': $.i18n.prop('pmt_all_policies'),
+                                                  'policies_making_in': $.i18n.prop('pmt_policies_making_in'),
+                                                  'policies_making_out': $.i18n.prop('pmt_policies_making_out'),
+                                                  'policies_making_undecided': $.i18n.prop('pmt_policies_making_undecided'),
+                                                  'pmt_intro_pmt': $.i18n.prop('pmt_intro_pmt'),
+                                                  'pmt_table_of_contents': $.i18n.prop('pmt_table_of_contents'),
+                                                  'pmt_see_effects': $.i18n.prop('pmt_see_effects'),
+                                                  'pmt_policies_filtering_indication': $.i18n.prop('pmt_policies_filtering_indication')
                                                  }));
 
                     var current_policy_html = ich.policies(template_variables);
@@ -134,6 +134,8 @@ PM.display_policies = function(sectionid, subset) {
 
 };
 
+goog.exportProperty(PM, 'display_policies', PM.display_policies);
+
 PM.on_select_policy = function(id) {
     console.log('db before evaluate: ' + IMPACT.db);
     PM.busy_cursor_on();
@@ -162,7 +164,7 @@ PM.theory_outline_text = function(sections, urlfragment, subset) {
     
     _.each(sections, function(section) {
                if(PM.should_be_displayed(section, subset)) {
-                   text += '<li><a href="#/{0}/{1}">{2}</a></li>'.format(urlfragment, section.id, section.header.title);
+                   text += '<li><a href="#/{0}/{1}">{2}</a></li>'.format(urlfragment, section.id, section['header']['title']);
                    text += PM.theory_outline_text(section.sections, urlfragment, subset);
                }
            });
@@ -176,8 +178,8 @@ PM.schemes_text = function(language, schemes, lang) {
     var text = "<div>";
     
     _.each(schemes, function(scheme) {
-               if(scheme.header.description && scheme.header.description[lang]) {
-                   text += '{0}'.format(PM.markdown_to_html(scheme.header.description[lang]));
+               if(scheme['header']['description'] && scheme['header']['description'][lang]) {
+                   text += '{0}'.format(PM.markdown_to_html(scheme['header']['description'][lang]));
                }
                
                text += PM.scheme_content_text(language, scheme, lang);
@@ -196,39 +198,39 @@ PM.scheme_content_text = function(language, scheme, lang) {
     var text = "";
 
     // TODO: this formatting code should be in a template
-    text += '<div class="scheme-content" ><b>id:</b> {0}'.format(scheme.id);
+    text += '<div class="scheme-content" ><b>id:</b> {0}'.format(scheme['id']);
 
-    text += '<br><b>strict:</b> {0}'.format(scheme.strict);
+    text += '<br><b>strict:</b> {0}'.format(scheme['strict']);
     
-    text += '<br><b>direction:</b> {0}'.format(scheme.pro ? "pro" : "con");
+    text += '<br><b>direction:</b> {0}'.format(scheme['pro'] ? "pro" : "con");
 
-    text += '<br><b>conclusion:</b> {0}'.format(PM.format_sexpr(scheme.conclusion, language, lang));
+    text += '<br><b>conclusion:</b> {0}'.format(PM.format_sexpr(scheme['conclusion'], language, lang));
 
     text += '<br><b>premises:</b><div class="rule-body"> <ul>';
      
 
-    _.each(scheme.premises, function(premise) {
-               if(premise.statement.atom[0] != "valid") {
-                   text += "<li>{0}</li>".format(PM.format_sexpr(premise.statement.atom, language, lang));
+    _.each(scheme['premises'], function(premise) {
+               if(premise['statement']['atom'][0] != "valid") {
+                   text += "<li>{0}</li>".format(PM.format_sexpr(premise['statement']['atom'], language, lang));
                }
            });
     text += '</ul></div>';
 
-    if(scheme.assumptions.length > 0) {
+    if(scheme['assumptions']['length'] > 0) {
         text += '<b>assumptions:</b><div class="rule-body"> <ul>';
 
-        _.each(scheme.assumptions, function(premise) {
-                   text += "<li>{0}</li>".format(PM.format_sexpr(premise.statement.atom, language, lang));
+        _.each(scheme['assumptions'], function(premise) {
+                   text += "<li>{0}</li>".format(PM.format_sexpr(premise['statement']['atom'], language, lang));
                }); 
 
         text += '</ul></div>';
     }
 
-    if(scheme.exceptions.length > 0) {
+    if(scheme['exceptions'].length > 0) {
         text += '<b>exceptions:</b><div class="rule-body"> <ul>';
 
-        _.each(scheme.exceptions, function(premise) {
-                   text += "<li>{0}</li>".format(PM.format_sexpr(premise.statement.atom, language, lang));
+        _.each(scheme['exceptions'], function(premise) {
+                   text += "<li>{0}</li>".format(PM.format_sexpr(premise['statement']['atom'], language, lang));
                }); 
         
         text += '</ul></div>';
@@ -255,8 +257,8 @@ PM.policies_text = function(language, sections, level, subset, on_policy, lang) 
                        on_policy(section.id);
                        text += '<input type="submit" value="{1}" id="input{0}" />'.format(section.id, $.i18n.prop('pmt_select'));
                    }
-                   text += ' {1}</h{0}></form>'.format(level + 1, section.header.title);
-                   text += '<p>{0}</p>'.format(PM.markdown_to_html(section.header.description[lang]));
+                   text += ' {1}</h{0}></form>'.format(level + 1, section['header']['title']);
+                   text += '<p>{0}</p>'.format(PM.markdown_to_html(section['header']['description'][lang]));
                    text += PM.schemes_text(language, section.schemes, lang);
                    text += PM.policies_text(language, section.sections, level + 1, subset, on_policy, lang);
                    text += '</div>';
@@ -296,7 +298,7 @@ PM.get_policy_header = function(policy_id) {
         var subsection = sections[i].sections;
         for(var j = 0; j < subsection.length; j++) {
             if(subsection[j].id == policy_id) {
-                return subsection[j].header;
+                return subsection[j]['header'];
             }
         }
     }

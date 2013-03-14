@@ -4,10 +4,12 @@
 goog.provide('carneades.policy_analysis.web.views.sct_helper');
 
 PM.display_sct_intro = function() {
-    var sct_intro = new PM.SctIntro({model: PM.sct});
+    var sct_intro = new PM.SctIntro({'model': PM.sct});
     sct_intro.render();
     $('#pm').html(sct_intro.$el);  
 };
+
+goog.exportProperty(PM, 'display_sct_intro', PM.display_sct_intro);
 
 PM.sct_issues_url = function() {
     return '/sct/issues';
@@ -26,10 +28,10 @@ PM.display_sct_issues = function() {
     if(PM.debate_info.get('main-issues') == undefined) {
         PM.debate_info.fetch({success: function() {
                                   sct_issues = new PM.SctIssues(
-                                      {model: PM.sct,
-                                       issues: PM.debate_info.get('main-issues'),
-                                       statements: PM.debate_statements, 
-                                       arguments: PM.debate_arguments});
+                                      {'model': PM.sct,
+                                       'issues': PM.debate_info.get('main-issues'),
+                                       'statements': PM.debate_statements, 
+                                       'arguments': PM.debate_arguments});
                                   sct_issues.render();
                                   $('#pm').html(sct_issues.$el);
                               }
@@ -44,6 +46,8 @@ PM.display_sct_issues = function() {
         $('#pm').html(sct_issues.$el);  
     } 
 };
+
+goog.exportProperty(PM, 'display_sct_issues', PM.display_sct_issues);
 
 PM.sct_question_url = function() {
     return '/sct/question';
@@ -60,6 +64,8 @@ PM.display_sct_question = function() {
     
     $('#pm').html(sct_question.$el);
 };
+
+goog.exportProperty(PM, 'display_sct_question', PM.display_sct_question);
 
 PM.sct_summary_url = function() {
     return '/sct/summary';
@@ -78,6 +84,8 @@ PM.display_sct_summary = function() {
     
 };
 
+goog.exportProperty(PM, 'display_sct_summary', PM.display_sct_summary);
+
 PM.sct_comparison_url = function() {
     return '/sct/comparison';
 };
@@ -94,4 +102,6 @@ PM.display_sct_comparison = function() {
     $('#pm').html(sct_comparison.$el);
     
 };
+
+goog.exportProperty(PM, 'display_sct_comparison', PM.display_sct_comparison);
 

@@ -17,11 +17,11 @@ AGB.format_selected_statement = function(statement) {
 };
 
 AGB.format_filtered_scheme = function(scheme) {
-    return "<div>{0}</div>".format(scheme.header.title);
+    return "<div>{0}</div>".format(scheme['header']['title']);
 };
 
 AGB.format_selected_scheme = function(scheme) {
-    return "{0}".format(scheme.header.title);
+    return "{0}".format(scheme['header']['title']);
 };
 
 AGB.format_filtered_matching_result = function(result) {

@@ -14,7 +14,7 @@ PM.Statement = Backbone.Model.extend(
      },
      
      validate: function(attrs) {
-         if(_.isNil(attrs.text)) {
+         if(_.isNil(attrs['text'])) {
              return "Text attribute is missing";
          }
          

@@ -86,3 +86,5 @@ PM.Sct = Backbone.Model.extend(
      
     }
 );
+
+goog.exportProperty(PM, 'Sct', PM.Sct);

@@ -23,7 +23,7 @@ PM.PremisesCandidatesView = Backbone.View.extend(
 
      render: function() {
          var haselements = this.model.get(this.container).length > 0;
-         this.$el.html(ich.premisescandidates({haselements: haselements,
+         this.$el.html(ich['premisescandidates']({haselements: haselements,
                                                elements_name: this.elements_name}));
 
          var self = this;
@@ -32,13 +32,13 @@ PM.PremisesCandidatesView = Backbone.View.extend(
              function(premise) {
                  premise.store();
                  premise.set('container', self.model.get(self.container));
-                 var premisecandidateview = new PM.PremiseCandidateView({model: premise});
+                 var premisecandidateview = new PM.PremiseCandidateView({'model': premise});
                  self.premises_candidates_views.push(premisecandidateview);
                  premisecandidateview.render();
                  self.$('.argument-premises').append(premisecandidateview.$el);
              });
          
-         this.$el.append(ich.button({clazz: "add-premise",
+         this.$el.append(ich['button']({clazz: "add-premise",
                                      value: this.add_more_text}));    
          
          return this;
@@ -46,7 +46,7 @@ PM.PremisesCandidatesView = Backbone.View.extend(
      
      add_premise: function() {
          var premisecandidate = new PM.PremiseCandidate(
-             {statements: this.model.get('statements')});
+             {'statements': this.model.get('statements')});
 
          this.model.get(this.container).add(premisecandidate); 
          return false;

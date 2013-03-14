@@ -12,7 +12,7 @@ PM.set_admin_url = function() {
 };
 
 PM.display_admin = function() {
-    var admin_html = ich.admin();
+    var admin_html = ich['admin']();
     PM.ajax_post(IMPACT.simulation_url, {"current-policy": null},
                  function(currentpolicy) {
                      PM.ajax_get(IMPACT.wsurl + "/policies",
@@ -21,7 +21,7 @@ PM.display_admin = function() {
                                      var content = "";
                                      _.each(Object.keys(policies).sort(), function(key) {
                                              var val = policies[key];
-                                             content += '<option value="{0}">{1}</option>'.format(key, val.header.title);});
+                                             content += '<option value="{0}">{1}</option>'.format(key, val['header']['title']);});
                                      $('#policies').html(content);
                                      $('#policies').val(currentpolicy);
                                      $('#submit').click(PM.on_admin_save);
@@ -32,6 +32,8 @@ PM.display_admin = function() {
                  IMPACT.password,
                  PM.on_error);
 };
+
+goog.exportProperty(PM, 'display_admin', PM.display_admin);
 
 PM.on_admin_save = function() {
     var policy = $('#policies').val();

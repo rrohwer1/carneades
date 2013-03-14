@@ -24,3 +24,5 @@ PM.Statements = Backbone.Collection.extend(
     }
     
 );
+
+goog.exportProperty(PM, 'Statements', PM.Statements);

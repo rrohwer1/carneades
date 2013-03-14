@@ -19,3 +19,5 @@ PM.Theory = Backbone.Model.extend(
      
     }
 );
+
+goog.exportProperty(PM, 'Theory', PM.Theory);

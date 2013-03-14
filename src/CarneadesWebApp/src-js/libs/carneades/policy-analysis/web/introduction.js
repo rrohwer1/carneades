@@ -20,17 +20,19 @@ PM.display_introduction = function() {
                 IMPACT.password,
                 PM.on_error);
 
-    var introduction_html = ich.introduction(
-        PM.merge_menu_props({pmt_pmt: $.i18n.prop('pmt_pmt'),
-                             pmt_start: $.i18n.prop('pmt_start'),
-                             pmt_intro_pmt: $.i18n.prop('pmt_intro_pmt'),
-                             pmt_intro: PM.markdown_to_html($.i18n.prop('pmt_intro'))
+    var introduction_html = ich['introduction'](
+        PM.merge_menu_props({'pmt_pmt': $.i18n.prop('pmt_pmt'),
+                             'pmt_start': $.i18n.prop('pmt_start'),
+                             'pmt_intro_pmt': $.i18n.prop('pmt_intro_pmt'),
+                             'pmt_intro': PM.markdown_to_html($.i18n.prop('pmt_intro'))
                             }));
     $('#pm').html(introduction_html.filter("#introduction"));
     $('#start').click(PM.on_start_button);
     PM.activate('#introduction-item');
     PM.attach_lang_listener();
 };
+
+goog.exportProperty(PM, 'display_introduction', PM.display_introduction);
 
 PM.on_start_button = function() {
     // reset session

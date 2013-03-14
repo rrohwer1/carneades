@@ -14,7 +14,7 @@ PM.set_arguments_url = function(db) {
 // this is the main entry point to display
 // either the outline, the map, an argument or a statement
 PM.display_arguments = function(db, type, id) {
-    var arguments_html = ich.arguments(PM.merge_menu_props({}));
+    var arguments_html = ich['arguments'](PM.merge_menu_props({}));
     
     if(_.isNil(db)) {
         db = IMPACT.db;
@@ -53,6 +53,8 @@ PM.display_arguments = function(db, type, id) {
         });
 
 };
+
+goog.exportProperty(PM, 'display_arguments', PM.display_arguments);
 
 PM.current_mainissueatompredicate = function() {
     var current_issue = PM.current_issue();

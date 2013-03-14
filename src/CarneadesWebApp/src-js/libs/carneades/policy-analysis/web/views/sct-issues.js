@@ -14,12 +14,12 @@ PM.SctIssues = Backbone.View.extend(
      initialize: function(attrs) {
          this.model.set('statement-poll', 
                         new PM.StatementPoll(
-                            {id: this.model.get('username'),
-                             votes: {}}));
+                            {'id': this.model.get('username'),
+                             'votes': {}}));
          this.model.set('argument-poll', 
                         new PM.ArgumentPoll(
-                            {id: this.model.get('username'),
-                             votes: {}}));
+                            {'id': this.model.get('username'),
+                             'votes': {}}));
 
          this.issues = attrs.issues;
          this.statements = attrs.statements;

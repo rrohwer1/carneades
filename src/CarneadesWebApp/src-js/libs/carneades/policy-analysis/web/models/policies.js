@@ -21,3 +21,5 @@ PM.Policies = Backbone.Model.extend(
      
     }
 );
+
+goog.exportProperty(PM, 'Policies', PM.Policies);

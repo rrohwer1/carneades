@@ -18,11 +18,11 @@ PM.display_issues = function() {
                      PM.ajax_get(IMPACT.wsurl + "/policies",
                                  function(policies) {
                                      var data = _.clone(policies[currentpolicy]);
-                                     data.pmt_issues_desc = $.i18n.prop('pmt_issues_desc');
+                                     data['pmt_issues_desc'] = $.i18n.prop('pmt_issues_desc');
                                      data = PM.merge_menu_props(data);
-                                     data.pmt_submit = $.i18n.prop('pmt_submit');
+                                     data['pmt_submit'] = $.i18n.prop('pmt_submit');
                                      
-                                     var issues_html = ich.issues(data);
+                                     var issues_html = ich['issues'](data);
                                      $('#pm').html(issues_html.filter("#issues"));
                                      $('input').first().attr('checked', true);
                                      $('#submit').click(PM.on_submit_issues);
@@ -37,6 +37,8 @@ PM.display_issues = function() {
                  IMPACT.password,
                  PM.on_error);
 };
+
+goog.exportProperty(PM, 'display_issues', PM.display_issues);
 
 PM.on_submit_issues = function() {
     if($('#issuesform').valid()) {

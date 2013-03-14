@@ -17,7 +17,7 @@ PM.SchemeCandidateView = Backbone.View.extend(
      render: function() {
          var data = this.model.toJSON();
          
-         this.$el.html(ich.schemecandidate({scheme_text: "Scheme"}));
+         this.$el.html(ich['schemecandidate']({scheme_text: "Scheme"}));
          
          this.scheme().select2({formatResult: AGB.format_filtered_scheme,
                                 formatSelection: AGB.format_selected_scheme, 
@@ -25,7 +25,7 @@ PM.SchemeCandidateView = Backbone.View.extend(
                                 data: {
                                     results: data.schemes.toJSON(),
                                     text: function(scheme) {
-                                        return scheme.header.title;
+                                        return scheme['header']['title'];
                                     }
                                 },
                                 initSelection: function(element, callback) {

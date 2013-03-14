@@ -18,7 +18,7 @@ PM.ConclusionCandidateView = Backbone.View.extend(
      render: function() {
          var data = this.model.toJSON();
          
-         this.$el.html(ich.conclusioncandidate({conclusion_text: $.i18n.prop('pmt_conclusion'),
+         this.$el.html(ich['conclusioncandidate']({conclusion_text: $.i18n.prop('pmt_conclusion'),
                                                 create_new_statement_text: 
                                                 $.i18n.prop('pmt_create_statement')}));
          

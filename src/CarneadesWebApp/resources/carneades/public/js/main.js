@@ -256,7 +256,7 @@ PM.init_i18n = function(callbackfn) {
 
 PM.common_post_load = function() {
     $.ajaxSetup({beforeSend: PM.simple_auth});
-    
+
     PM.schemes = new PM.Schemes;
     PM.schemes.fetch();
   
@@ -385,7 +385,7 @@ PM.load_templates = function(toolboxState) {
                    template.url : toolboxState.pmt.path + '/' + template.url;
                PM.syncget(url,
                           function(content) {
-                              ich.addPartial(template.name, content);
+                              ich['addPartial'](template.name, content);
                           });
            });
 

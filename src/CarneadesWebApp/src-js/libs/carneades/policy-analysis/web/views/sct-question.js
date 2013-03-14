@@ -25,11 +25,11 @@ goog.provide('carneades.policy_analysis.web.views.sct_question');
           var seen = question_data.seen;
 
           if(type == 'claim') {
-              var claim_view = new PM.SctClaim({model: new PM.Statement(question),
-                                                sct: this.model,
-                                                lang: this.lang,
-                                                seen: seen,
-                                                el: this.el});
+              var claim_view = new PM.SctClaim({'model': new PM.Statement(question),
+                                                'sct': this.model,
+                                                'lang': this.lang,
+                                                'seen': seen,
+                                                'el': this.el});
               claim_view.render();
           } else if(type == 'argument') {
               self.$el.html(ich['sct-argument']
@@ -43,10 +43,10 @@ goog.provide('carneades.policy_analysis.web.views.sct_question');
               _.each(question.premises,
                      function(premise) {
                          var claim_view = 
-                             new PM.SctClaim({model: new PM.Statement(premise.statement),
-                                              lang: self.lang,
-                                              embedded: true,
-                                              sct: PM.sct});
+                             new PM.SctClaim({'model': new PM.Statement(premise.statement),
+                                              'lang': self.lang,
+                                              'embedded': true,
+                                              'sct': PM.sct});
 
                          claim_view.render();
                          self.$el.append(claim_view.$el);
@@ -56,7 +56,7 @@ goog.provide('carneades.policy_analysis.web.views.sct_question');
               // self.$el.append('</ol>');
           }
 
-           this.$el.append(ich.button2({label: $.i18n.prop('sct_next')}));
+           this.$el.append(ich['button2']({label: $.i18n.prop('sct_next')}));
 
           // this.$el.html(content);
 
@@ -166,7 +166,7 @@ goog.provide('carneades.policy_analysis.web.views.sct_question');
       },
 
       get_description: function(question) {
-          return AGB.description_text(question.header).replace(/\[.+\]/, "");    
+          return AGB.description_text(question['header']).replace(/\[.+\]/, "");    
       }
 
      }

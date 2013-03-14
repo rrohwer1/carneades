@@ -21,3 +21,5 @@ PM.AgInfo = Backbone.Model.extend(
      
     }
 );
+
+goog.exportProperty(PM, 'AgInfo', PM.AgInfo);

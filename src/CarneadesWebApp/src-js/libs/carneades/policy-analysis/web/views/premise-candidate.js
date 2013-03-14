@@ -25,7 +25,7 @@ PM.PremiseCandidateView = Backbone.View.extend(
      render: function() {
          var data = this.model.toJSON();
          
-         this.$el.html(ich.premisecandidate({pmt_role: $.i18n.prop('pmt_role'),
+         this.$el.html(ich['premisecandidate']({pmt_role: $.i18n.prop('pmt_role'),
                                              pmt_statement: $.i18n.prop('pmt_statement')}));
          
          var role = this.$('.role-input');

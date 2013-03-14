@@ -38,7 +38,7 @@ PM.MetadataEditorView = Backbone.View.extend(
      render: function() {
          var data = this.model.toJSON();
 
-         this.$el.html(ich.metadataeditor2({description: $.i18n.prop('pmt_description'),
+         this.$el.html(ich['metadataeditor2']({description: $.i18n.prop('pmt_description'),
                                             adda: $.i18n.prop('pmt_add_a'),
                                             totheheader: $.i18n.prop('pmt_to_the_header'),
                                             go: $.i18n.prop('pmt_add')}));
@@ -93,9 +93,9 @@ PM.MetadataEditorView = Backbone.View.extend(
      
      add_metadata_element: function(type, val) {
          var element_view = new PM.MetadataElementEditorView(
-             {model: this.model,
-              type: type,
-              name: this.elements[type]});
+             {'model': this.model,
+              'type': type,
+              'name': this.elements[type]});
          if(val) {
              this.model.index_element(type, element_view.cid, val);
          }

@@ -42,12 +42,13 @@
                {:id "prod",
                 :source-paths ["src-cljs" "src-js"]
                 :compiler
-                {:pretty-print false,
+                {:pretty-print true,
                  :output-to "resources/carneades/public/js/compiled-app.js",
                  :libs ["libs"]
+                 :externs ["externs"]
                  ;; there are more work to do in the JS files
                  ;; to get :advanced mode working...
-                 :optimizations :simple}}],
+                 :optimizations :advanced}}],
               :test-commands
               {"questions"
                ["casperjs"

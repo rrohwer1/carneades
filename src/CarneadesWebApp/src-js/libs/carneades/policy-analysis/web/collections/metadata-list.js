@@ -23,3 +23,5 @@ PM.MetadataList = Backbone.Collection.extend(
     }
     
 );
+
+goog.exportProperty(PM, 'MetadataList', PM.MetadataList);

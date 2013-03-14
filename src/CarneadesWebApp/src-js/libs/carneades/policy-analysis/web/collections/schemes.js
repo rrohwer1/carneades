@@ -16,3 +16,5 @@ PM.Schemes = Backbone.Collection.extend(
     }
     
 );
+
+goog.exportProperty(PM, 'Schemes', PM.Schemes);

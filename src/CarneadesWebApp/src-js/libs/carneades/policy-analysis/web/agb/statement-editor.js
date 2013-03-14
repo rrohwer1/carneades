@@ -38,9 +38,9 @@ AGB.show_statement_editor = function(config) {
         AGB.fillin_statement_editor(config.statement);
     } else {
         var metadata_editor_view = new PM.MetadataEditorView(
-            {model: new PM.MetadataCandidate({metadata: new PM.Metadata(),
-                                              current_lang: IMPACT.lang}),
-             el: $('#statement-header')});
+            {'model': new PM.MetadataCandidate({'metadata': new PM.Metadata(),
+                                                'current_lang': IMPACT.lang}),
+             'el': $('#statement-header')});
         $('#statement-header').data('view', metadata_editor_view);
     }
     
@@ -82,8 +82,8 @@ AGB.set_statement_main = function(ismain) {
 
 // Fills in the inputs of the statement editor
 AGB.fillin_statement_editor = function(stmt) {
-    if(stmt.text && stmt.text.en) {
-        $('#statement-editor-text').val(stmt.text.en);    
+    if(stmt['text'] && stmt['text']['en']) {
+        $('#statement-editor-text').val(stmt['text']['en']);    
     } 
     $('#statement-editor-standard').val(stmt.standard);
     AGB.set_statement_main(stmt.main);
@@ -91,8 +91,8 @@ AGB.fillin_statement_editor = function(stmt) {
     $('#statement-editor-atom').val(stmt.atom);
     // AGB.fillin_metadata_editor(stmt.header);
     var metadata_editor_view = new PM.MetadataEditorView(
-        {model: new PM.MetadataCandidate({metadata: new PM.Metadata(stmt.header),
-                                          current_lang: IMPACT.lang}),
+        {model: new PM.MetadataCandidate({'metadata': new PM.Metadata(stmt['header']),
+                                          'current_lang': IMPACT.lang}),
          el: $('#statement-header')});
     $('#statement-header').data('view', metadata_editor_view);
     
@@ -122,10 +122,10 @@ AGB.save_statement = function(config) {
     console.log('saving statement: ');
     console.log(stmt);
     var new_statement = new PM.Statement(stmt);
-    new_statement.save(null, {success: function(data) {
-                                  return _.isNil(config.save_callback) ? AGB.statement_created() : config.save_callback(data);
-                              },
-                              error: PM.on_error});
+    new_statement.save(null, {'success': function(data) {
+        return _.isNil(config.save_callback) ? AGB.statement_created() : config.save_callback(data);
+    },
+                              'error': PM.on_error});
     PM.statements.add(new_statement);
     // PM.ajax_post(IMPACT.wsurl + '/statement/' + IMPACT.db, stmt,
     //              _.isNil(config.save_callback) ? AGB.statement_created : config.save_callback,
@@ -167,7 +167,7 @@ AGB.create_statement_editor = function(data) {
     data.pmt_text = $.i18n.prop('pmt_text');
     data.pmt_save_statement = $.i18n.prop('pmt_save_statement');
 
-    var html = ich.statementeditor(data);
+    var html = ich['statementeditor'](data);
     return html;
 };
 

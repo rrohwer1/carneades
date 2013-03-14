@@ -44,7 +44,7 @@ PM.SctClaim = Backbone.View.extend(
               'sct_con_arguments': $.i18n.prop('sct_con_arguments'),
               'sct_weak': $.i18n.prop('sct_weak'),
               'sct_strong': $.i18n.prop('sct_strong'),
-              'claim_text': data.text[this.lang],
+              'claim_text': data['text'][this.lang],
               'has_arg': pro.length > 0 || con.length > 0,
               'has_pro': pro.length > 0,
               'has_con': con.length > 0,

@@ -16,8 +16,8 @@ PM.scheme_text = function(scheme) {
 };
 
 PM.display_schemes = function(scheme_id) {
-    var theory_view = new PM.TheoryView({model: PM.current_theory, 
-                                         current_scheme: scheme_id});
+    var theory_view = new PM.TheoryView({'model': PM.current_theory, 
+                                         'current_scheme': scheme_id});
     
     if(PM.current_theory.get('schemes') == undefined) {
         PM.current_theory.fetch({success: function() {
@@ -32,3 +32,5 @@ PM.display_schemes = function(scheme_id) {
     PM.activate('#schemes-item');
     PM.attach_lang_listener();
 };
+
+goog.exportProperty(PM, 'display_schemes', PM.display_schemes);

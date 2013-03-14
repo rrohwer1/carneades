@@ -21,25 +21,25 @@ AGB.argumentgraph_html = function(db, data)
 {
     AGB.normalize(data);
     data.db = db;
-    data.metadata_text = AGB.format_metadata(data.metadata[0]);
-    data.hasdescription = PM.has_description(data.metadata[0]);
-    data.description_text = AGB.description_text(data.metadata[0]);
+    data['metadata_text'] = AGB.format_metadata(data.metadata[0]);
+    data['hasdescription'] = PM.has_description(data.metadata[0]);
+    data['description_text'] = AGB.description_text(data.metadata[0]);
     AGB.set_mainissues_text(data.main_issues);
-    data.references = data.metadata.filter(function (ref) { return ref.key; });
-    data.hasreferences = data.references.length > 0;
-    AGB.set_references_text(data.references);
-    data.title = data.metadata[0].title ? data.metadata[0].title[0] : $.i18n.prop('pmt_menu_arguments');
-    data.outline_text = AGB.outline_text(data.outline, db);
-    data.pmt_main_issues = $.i18n.prop('pmt_main_issues');
-    data.pmt_outline = $.i18n.prop('pmt_outline');
-    data.pmt_references = $.i18n.prop('pmt_references');
+    data['references'] = data.metadata.filter(function (ref) { return ref.key; });
+    data['hasreferences'] = data.references.length > 0;
+    AGB['set_references_text'](data.references);
+    data['title'] = data.metadata[0].title ? data.metadata[0].title[0] : $.i18n.prop('pmt_menu_arguments');
+    data['outline_text'] = AGB.outline_text(data.outline, db);
+    data['pmt_main_issues'] = $.i18n.prop('pmt_main_issues');
+    data['pmt_outline'] = $.i18n.prop('pmt_outline');
+    data['pmt_references'] = $.i18n.prop('pmt_references');
 
     data = PM.merge_menu_props(data);
     data = PM.merge_ag_menu_props(data); 
 
     data.lang = IMPACT.lang;
     
-    var argumentgraph_html = ich.argumentgraph(data);
+    var argumentgraph_html = ich['argumentgraph'](data);
     return argumentgraph_html.filter('#argumentgraph');
 };
 
@@ -121,11 +121,11 @@ AGB.outline_text = function(tree, db, index)
 // Activates the edition of the argument graph
 AGB.enable_ag_edition = function(db) {
     // $('#ageditormenu').remove();
-    $('#menus').append(ich.ageditormenuon({'new_statement_text': $.i18n.prop('pmt_new_statement'),
+    $('#menus').append(ich['ageditormenuon']({'new_statement_text': $.i18n.prop('pmt_new_statement'),
                                            'new_argument_text': $.i18n.prop('pmt_new_argument')
                                           }));
     $('#newstatement').click(_.bind(AGB.show_statement_editor, AGB,
-                                    {save_callback: function() {
+                                    {'save_callback': function() {
                                          AGB.display_argumentgraph(IMPACT.db);
                                          return false;
                                      }}));
@@ -145,18 +145,18 @@ AGB.is_grounded = function(atom) {
 AGB.new_argument = function(conclusion) {
     var argument = undefined;
     if(conclusion) {
-        argument = new PM.Argument({conclusion: conclusion});
+        argument = new PM.Argument({'conclusion': conclusion});
     } else {
         argument = new PM.Argument();
     }
 
-    var argument_candidate = new PM.ArgumentCandidate({argument: argument,
-                                                       statements: PM.statements,
-                                                       schemes: PM.schemes,
-                                                       current_lang: IMPACT.lang});
+    var argument_candidate = new PM.ArgumentCandidate({'argument': argument,
+                                                       'statements': PM.statements,
+                                                       'schemes': PM.schemes,
+                                                       'current_lang': IMPACT.lang});
 
-    var argument_editor_view = new PM.ArgumentEditorView({model: argument_candidate,
-                                                          title: 'New Argument'});
+    var argument_editor_view = new PM.ArgumentEditorView({'model': argument_candidate,
+                                                          'title': 'New Argument'});
     
     argument_editor_view.render();
     $('#argumenteditor').html(argument_editor_view.$el);

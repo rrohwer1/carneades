@@ -3,6 +3,8 @@
 
 goog.provide('carneades.policy_analysis.web.facts');
 
+goog.require('carneades.policy_analysis.web.views.pmt.questions');
+
 // Returns the relative url of the facts page
 PM.facts_url = function() {
     return 'facts';
@@ -17,13 +19,13 @@ PM.set_facts_url = function() {
 // Displays the questions
 PM.display_facts = function() {
     if(IMPACT.db == undefined) {
-        var facts_html = ich.facts(PM.merge_menu_props({}));
+        var facts_html = ich['facts'](PM.merge_menu_props({}));
         $('#pm').html(facts_html.filter("#facts"));
         PM.activate('#facts-item');
         PM.attach_lang_listener();
         carneades.policy_analysis.web.views.pmt.questions.init_show_questions();
     } else {
-        var facts_html = ich.ask_modify_facts(PM.merge_menu_props(
+        var facts_html = ich['ask_modify_facts'](PM.merge_menu_props(
             {'pmt_facts_already_submitted': $.i18n.prop('pmt_facts_already_submitted'),
              'pmt_modify_facts': $.i18n.prop('pmt_modify_facts')}));
         
@@ -32,3 +34,5 @@ PM.display_facts = function() {
         PM.attach_lang_listener();
     }
 };
+
+goog.exportProperty(PM, 'display_facts', PM.display_facts);

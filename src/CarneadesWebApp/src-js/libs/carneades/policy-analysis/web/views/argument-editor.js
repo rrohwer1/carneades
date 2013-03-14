@@ -34,7 +34,7 @@ PM.ArgumentEditorView = Backbone.View.extend(
      render: function() {
          var data = this.model.toJSON();
          
-         this.$el.html(ich.argumenteditor({title: this.title,
+         this.$el.html(ich['argumenteditor']({title: this.title,
                                            pmt_header: $.i18n.prop('pmt_header'),
                                            pmt_direction: $.i18n.prop('pmt_direction'),
                                            pmt_strict: $.i18n.prop('pmt_strict'),
@@ -62,8 +62,8 @@ PM.ArgumentEditorView = Backbone.View.extend(
          this.$('.weight-input').val(data.argument.attributes.weight);
          this.$('input[type=range]').val(data.argument.attributes.weight);
          
-         this.scheme_candidate_view = new PM.SchemeCandidateView({model: this.model.get('scheme'),
-                                                                  el: this.$('.scheme-candidate')});
+         this.scheme_candidate_view = new PM.SchemeCandidateView({'model': this.model.get('scheme'),
+                                                                  'el': this.$('.scheme-candidate')});
          this.scheme_candidate_view.render();
          var scheme = this.model.get('scheme').get('scheme');
          if(scheme) {
@@ -88,7 +88,7 @@ PM.ArgumentEditorView = Backbone.View.extend(
              data.pmt_title = $.i18n.prop('pmt_title');
              data.pmt_type = $.i18n.prop('pmt_type');
 
-             var scheme_metadata_html = ich.metadata(data);
+             var scheme_metadata_html = ich['metadata'](data);
              this.$('.scheme-metadata').html(scheme_metadata_html);
              
              if(scheme_metadata.description && scheme_metadata.description[IMPACT.lang]) {
@@ -98,35 +98,35 @@ PM.ArgumentEditorView = Backbone.View.extend(
              
          } 
          
-         var conclusioncandidateview = new PM.ConclusionCandidateView({model: this.model.get('conclusion'),
-                                                                       el: this.$('.conclusion-candidate')});
+         var conclusioncandidateview = new PM.ConclusionCandidateView({'model': this.model.get('conclusion'),
+                                                                       'el': this.$('.conclusion-candidate')});
          conclusioncandidateview.render();
 
          if(this.premises_candidates_view) {
              this.premises_candidates_view.remove();
          }
          this.premises_candidates_view = new PM.PremisesCandidatesView(
-             {model: this.model,
-              add_more_text: $.i18n.prop('pmt_add_premise'),
-              container: 'premises',
-              elements_name: 'Premises',
-              el: this.$('.argument-editor-premises')});
+             {'model': this.model,
+              'add_more_text': $.i18n.prop('pmt_add_premise'),
+              'container': 'premises',
+              'elements_name': 'Premises',
+              'el': this.$('.argument-editor-premises')});
          this.premises_candidates_view.render();
 
          if(this.exceptions_candidates_view) {
              this.exceptions_candidates_view.remove();
          }
          this.exceptions_candidates_view = new PM.PremisesCandidatesView(
-             {model: this.model,
-              add_more_text: $.i18n.prop('pmt_add_exception'),
-              container: 'exceptions',
-              elements_name: 'Exceptions',
-              el: this.$('.argument-editor-exceptions')});
+             {'model': this.model,
+              'add_more_text': $.i18n.prop('pmt_add_exception'),
+              'container': 'exceptions',
+              'elements_name': 'Exceptions',
+              'el': this.$('.argument-editor-exceptions')});
          this.exceptions_candidates_view.render();
          
          
-         this.metadata_editor_view = new PM.MetadataEditorView({model: this.model.get('metadata'),
-                                                                el: this.$('.argument-metadata')});
+         this.metadata_editor_view = new PM.MetadataEditorView({'model': this.model.get('metadata'),
+                                                                'el': this.$('.argument-metadata')});
          this.metadata_editor_view.render();
 
          return this;
@@ -195,7 +195,7 @@ PM.ArgumentEditorView = Backbone.View.extend(
          length = premises_candidates.length;
          for(i = 0; i < (nb_premises - length); i++) {
              premises_candidates.push(
-                 new PM.PremiseCandidate({statements: this.model.get('statements')}));
+                 new PM.PremiseCandidate({'statements': this.model.get('statements')}));
          }
          
          // set the exceptions candidate and their expected atoms

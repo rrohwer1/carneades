@@ -22,7 +22,7 @@ PM.MetadataElementEditorView = Backbone.View.extend(
      render: function() {
          var data = this.model.toJSON();
          
-         this.$el.html(ich.metadataelementeditor({name: this.name}));
+         this.$el.html(ich['metadataelementeditor']({name: this.name}));
          var val = this.model.get_element_val(this.type, this.cid);
          if (val) {
              this.$('.metadata-element-input').val(val);

@@ -23,3 +23,5 @@ PM.Arguments = Backbone.Collection.extend(
     }
 
 );
+
+goog.exportProperty(PM, 'Arguments', PM.Arguments);
