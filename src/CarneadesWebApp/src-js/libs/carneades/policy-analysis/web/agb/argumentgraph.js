@@ -27,7 +27,7 @@ AGB.argumentgraph_html = function(db, data)
     AGB.set_mainissues_text(data['main_issues']);
     data['references'] = data['metadata'].filter(function (ref) { return ref.key; });
     data['hasreferences'] = data['references'].length > 0;
-    AGB['set_references_text'](data['references']);
+    AGB.set_references_text(data['references']);
     data['title'] = data['metadata'][0].title ? data['metadata'][0].title[0] : $.i18n.prop('pmt_menu_arguments');
     data['outline_text'] = AGB.outline_text(data['outline'], db);
     data['pmt_main_issues'] = $.i18n.prop('pmt_main_issues');
