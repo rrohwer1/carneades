@@ -491,6 +491,8 @@ Returns the answers indexed by question's id."
 (defn ^:export show-questions
   "Adds the HTML for the questions to the list of questions div."
   [latest-questions-list]
+  (log "show-questions")
+  (log (clj->js latest-questions-list))
   (let [latest (js->clj latest-questions-list :keywordize-keys true)]
     (swap! questions index-questions latest)
     (dispatch/fire :questions-added {:latest-questions latest})))
@@ -513,13 +515,14 @@ Returns the answers indexed by question's id."
   "Shows the remaining questions to the user or the argument graph if
 all questions have been answered."
   [data]
-  (if-let [questions-list (.-questions data)]
+  (if-let [questions-list (aget data "questions")]
     (show-questions questions-list)
     (show-ag (.-db data))))
 
 (defn ^:export init-show-questions
   "Initialize the questions and begins the process of showing them."
   []
+  (log "init show questions")
   (swap! questions assoc :submit-listener send-answers) 
   (js/PM.ajax_post js/IMPACT.simulation_url
                    (clj->js {:request js/IMPACT.question})

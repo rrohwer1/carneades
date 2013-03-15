@@ -24,6 +24,13 @@ var PM = {
     "debate_metadata": {},
     "debate_info": {},
     "on_select_policy": {},
-    "scroll_to": function() {}
+    "scroll_to": function() {},
+    "scroll_to_bottom": function() {},
+    "on_error": function() {},
+    "busy_cursor_on": function() {},
+    "busy_cursor_off": function() {},
+    "ajax_post": function() {},
+    "ajax_get": function() {},
+    "set_arguments_url": function() {}
 };
 PM.attach_lang_listener = function () {};

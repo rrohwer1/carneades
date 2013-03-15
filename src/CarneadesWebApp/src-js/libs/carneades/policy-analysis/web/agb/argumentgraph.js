@@ -77,8 +77,8 @@ AGB.set_mainissues_text = function(mainissues)
 {
     $.each(mainissues, 
            function(index, issue) {
-               issue.statement_nb = index + 1;
-               issue.statement_text = AGB.statement_text(issue);
+               issue['statement_nb'] = index + 1;
+               issue['statement_text'] = AGB.statement_text(issue);
            });
     return mainissues;
 };
@@ -88,7 +88,7 @@ AGB.set_references_text = function(metadata)
 {
     $.each(metadata, 
            function(index, md) {
-               md.metadata_text = AGB.format_metadata(md);
+               md['metadata_text'] = AGB.format_metadata(md);
            });
 };
 

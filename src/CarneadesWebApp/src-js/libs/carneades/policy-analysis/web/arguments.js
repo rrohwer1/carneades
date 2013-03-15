@@ -61,7 +61,7 @@ PM.current_mainissueatompredicate = function() {
     if(current_issue == undefined) {
         return undefined;
     }
-    var match = current_issue.atom.match(/\(([^ ]+) /);
+    var match = current_issue['atom'].match(/\(([^ ]+) /);
     var mainissueatompredicate = "";
     if(match) {
         mainissueatompredicate = match[1];
