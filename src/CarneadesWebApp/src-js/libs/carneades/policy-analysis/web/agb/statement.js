@@ -139,11 +139,11 @@ AGB.set_arg_texts = function(info, direction)
 
 AGB.set_procon_premises_text = function(statement_data)
 {
-    $.each(statement_data.pro_data,
+    $.each(statement_data['pro_data'],
            function(index, pro) {
                AGB.set_premises_text(pro);
            });
-    $.each(statement_data.con_data,
+    $.each(statement_data['con_data'],
            function(index, con) {
                AGB.set_premises_text(con);
            });
@@ -154,8 +154,8 @@ AGB.set_premise_of_texts = function(info)
     $.each(info.premise_of_data,
            function(index, data) {
                var text = AGB.argument_text(data, index + 1);
-               data.argument_text = text;
-               data.id = info.premise_of[index]; // used by the template to create the href
+               data['argument_text'] = text;
+               data['id'] = info['premise_of'][index]; // used by the template to create the href
            }
           );
 };

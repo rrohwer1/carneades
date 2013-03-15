@@ -30,7 +30,7 @@ PM.SctIntro = Backbone.View.extend(
          
          this.$el.html(content);
 
-         this.$('.username').val(data.username);
+         this.$('.username').val(data['username']);
          
          return this;
      },

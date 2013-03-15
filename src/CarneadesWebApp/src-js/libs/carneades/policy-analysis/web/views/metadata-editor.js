@@ -46,17 +46,17 @@ PM.MetadataEditorView = Backbone.View.extend(
          this.$('.language-chooser').tabs({select: this.change_lang,
                                            selected: 0});
          
-         this.select_tab(data.current_lang);
+         this.select_tab(data['current_lang']);
          
-         if(data.metadata.attributes.description) {
+         if(data['metadata']['attributes']['description']) {
              this.description().val(
-                 data.metadata.attributes.description[data.current_lang]); 
+                 data['metadata']['attributes']['description'][data['current_lang']]); 
          } 
 
          this.$('.metadata-description-input').markItUp(mySettings);
 
          var self = this;
-         _.each(data.metadata.attributes,
+         _.each(data['metadata']['attributes'],
                 function(elements, type) {
                     if(type != 'description') {
                         _.each(elements,

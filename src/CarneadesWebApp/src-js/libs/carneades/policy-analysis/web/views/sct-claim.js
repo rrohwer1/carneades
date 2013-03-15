@@ -63,7 +63,7 @@ PM.SctClaim = Backbone.View.extend(
              this.$('input[type=radio]:first').attr('checked', true);
          }
          
-         if(data.pro.length == 0 && data.con.length == 0) {
+         if(data['pro'].length == 0 && data['con'].length == 0) {
              this.$(".show-arguments").remove();
          }
          

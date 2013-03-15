@@ -20,9 +20,9 @@ goog.provide('carneades.policy_analysis.web.views.sct_question');
       render: function() {
           var self = this;
           var question_data = this.model.get('current-question');
-          var question = question_data.question;
-          var type = question_data.type;
-          var seen = question_data.seen;
+          var question = question_data['question'];
+          var type = question_data['type'];
+          var seen = question_data['seen'];
 
           if(type == 'claim') {
               var claim_view = new PM.SctClaim({'model': new PM.Statement(question),
@@ -70,9 +70,9 @@ goog.provide('carneades.policy_analysis.web.views.sct_question');
           var self = this;
 
           var question_data = this.model.get('current-question');
-          var type = question_data.type;
-          var question = question_data.question;
-          var seen = question_data.seen;
+          var type = question_data['type'];
+          var question = question_data['question'];
+          var seen = question_data['seen']; 
 
           var poll;
           if(type == 'claim') {
@@ -138,7 +138,7 @@ goog.provide('carneades.policy_analysis.web.views.sct_question');
       on_next: function() {
           var val = this.$('input:checked').val();
           var question_data = this.model.get('current-question');
-          var type = question_data.type;
+          var type = question_data['type'];
 
           if(type == 'claim') {
               if(val == 'show-arguments') {

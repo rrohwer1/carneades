@@ -45,8 +45,8 @@ PM.on_policy_filtering = function(event) {
                             filter),
                    function(data) {
                        console.log('find-policies returns:');
-                       console.log(data.policies);
-                       PM.display_policies(undefined, data.policies); 
+                       console.log(data['policies']);
+                       PM.display_policies(undefined, data['policies']); 
                    });
     }
 };
@@ -68,13 +68,13 @@ PM.display_policies = function(sectionid, subset) {
                     var current_policy = policies[IMPACT.current_policy];
                     var lang = PM.find_available_lang(current_policy);
                     
-                    current_policy.outline_text = PM.theory_outline_text(current_policy.sections,
+                    current_policy['outline_text'] = PM.theory_outline_text(current_policy['sections'],
                                                                          'policies',
                                                                         subset);
-                    current_policy.description_text = current_policy['header']['description'][lang];
-                    var language_clj = carneades.policy_analysis.web.views.pmt.theory.convert_language(current_policy.language);
-                    current_policy.policies_text = PM.policies_text(language_clj,
-                                                                    current_policy.sections,
+                    current_policy['description_text'] = current_policy['header']['description'][lang];
+                    var language_clj = carneades.policy_analysis.web.views.pmt.theory.convert_language(current_policy['language']);
+                    current_policy['policies_text'] = PM.policies_text(language_clj,
+                                                                    current_policy['sections'],
                                                                     2,
                                                                     subset,
                                                                     function(policyid) {
@@ -150,13 +150,13 @@ PM.on_select_policy = function(id) {
 };
 
 PM.on_evaluated_policy = function(data) {
-    IMPACT.db = data.db;
+    IMPACT.db = data['db'];
     console.log('db after evaluate: ' + IMPACT.db);
     PM.set_arguments_url(IMPACT.db);
 };
 
 PM.should_be_displayed = function(section, subset) {
-    return section.id == IMPACT.question || subset == undefined || _.contains(subset, section.id);
+    return section['id'] == IMPACT.question || subset == undefined || _.contains(subset, section['id']);
 };
 
 PM.theory_outline_text = function(sections, urlfragment, subset) {
@@ -165,7 +165,7 @@ PM.theory_outline_text = function(sections, urlfragment, subset) {
     _.each(sections, function(section) {
                if(PM.should_be_displayed(section, subset)) {
                    text += '<li><a href="#/{0}/{1}">{2}</a></li>'.format(urlfragment, section.id, section['header']['title']);
-                   text += PM.theory_outline_text(section.sections, urlfragment, subset);
+                   text += PM.theory_outline_text(section['sections'], urlfragment, subset);
                }
            });
 
@@ -253,14 +253,14 @@ PM.policies_text = function(language, sections, level, subset, on_policy, lang) 
                if(PM.should_be_displayed(section, subset)) {
                    text += '<div id="{0}">'.format(section.id);
                    text += '<form action=""><h{0}>'.format(level + 1);
-                   if(section.schemes.length > 0) {
+                   if(section['schemes'].length > 0) {
                        on_policy(section.id);
-                       text += '<input type="submit" value="{1}" id="input{0}" />'.format(section.id, $.i18n.prop('pmt_select'));
+                       text += '<input type="submit" value="{1}" id="input{0}" />'.format(section['id'], $.i18n.prop('pmt_select'));
                    }
                    text += ' {1}</h{0}></form>'.format(level + 1, section['header']['title']);
                    text += '<p>{0}</p>'.format(PM.markdown_to_html(section['header']['description'][lang]));
-                   text += PM.schemes_text(language, section.schemes, lang);
-                   text += PM.policies_text(language, section.sections, level + 1, subset, on_policy, lang);
+                   text += PM.schemes_text(language, section['schemes'], lang);
+                   text += PM.policies_text(language, section['sections'], level + 1, subset, on_policy, lang);
                    text += '</div>';
                }
            });
@@ -293,11 +293,11 @@ PM.format_sexpr = function(sexpr, language_clj, lang) {
 // Returns the header of the current policy
 PM.get_policy_header = function(policy_id) {
     var global_policy = PM.policies.get(IMPACT.current_policy);
-    var sections = global_policy.sections;
+    var sections = global_policy['sections'];
     for(var i = 0; i < sections.length; i++) {
-        var subsection = sections[i].sections;
+        var subsection = sections[i]['sections'];
         for(var j = 0; j < subsection.length; j++) {
-            if(subsection[j].id == policy_id) {
+            if(subsection[j]['id'] == policy_id) {
                 return subsection[j]['header'];
             }
         }
@@ -307,11 +307,11 @@ PM.get_policy_header = function(policy_id) {
 // Returns the all the policies ids of the current policy
 PM.get_policies_ids = function() {
     var global_policy = PM.policies.get(IMPACT.current_policy);
-    var sections = global_policy.sections;
+    var sections = global_policy['sections'];
     var policies = [];
     
     for(var i = 0; i < sections.length; i++) {
-        var subsection = sections[i].sections;
+        var subsection = sections[i]['sections'];
         for(var j = 0; j < subsection.length; j++) {
             policies.push(subsection[j].id);
         }

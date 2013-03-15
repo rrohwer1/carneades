@@ -29,18 +29,18 @@ PM.PremiseCandidateView = Backbone.View.extend(
                                              pmt_statement: $.i18n.prop('pmt_statement')}));
          
          var role = this.$('.role-input');
-         role.prop('disabled', !data.editableRole);
-         if(data.premise.role) {
-             role.val(data.premise.role);    
+         role.prop('disabled', !data['editableRole']);
+         if(data['premise']['role']) {
+             role.val(data['premise']['role']);    
          } 
          
          this.$('input[name=positive]').attr('checked', 
-                                             data.premise.positive == undefined ? 
-                                             true : data.premise.positive);
-         this.$('input[name=implicit]').attr('checked', data.premise.implicit);
+                                             data['premise']['positive'] == undefined ? 
+                                             true : data['premise']['positive']);
+         this.$('input[name=implicit]').attr('checked', data['premise']['implicit']);
          
          var statement = this.statement();
-         statement.select2({data: {results: data.statements.toJSON(),
+         statement.select2({data: {results: data['statements'].toJSON(),
                                    text: function(statement) {
                                        return AGB.statement_text(statement);
                                    }
@@ -49,14 +49,14 @@ PM.PremiseCandidateView = Backbone.View.extend(
                             formatSelection: AGB.format_selected_statement,
                             formatResult: AGB.statement_text,
                             initSelection: function(element, callback) {
-                                var statement = data.statements.get(element.val());
+                                var statement = data['statements'].get(element.val());
                                 if(statement) {
                                     callback(statement.toJSON()); 
                                 } 
                             }});
 
-         if(data.premise.statement) {
-             statement.val(data.premise.statement.id).trigger('change');    
+         if(data['premise']['statement']) {
+             statement.val(data['premise']['statement']['id']).trigger('change');    
          } 
          
          return this;
@@ -99,7 +99,7 @@ PM.PremiseCandidateView = Backbone.View.extend(
          var atom = this.model.get('suggested_atom') ? this.model.get('suggested_atom').replace(/\?/g, '') : "";
          AGB.show_statement_editor({atom: atom,
                                    save_callback: function(data) {
-                                       var id = data.id;
+                                       var id = data['id'];
                                        var statements = self.model.get('statements');
                                        var statement = statements.get(id);
                                        

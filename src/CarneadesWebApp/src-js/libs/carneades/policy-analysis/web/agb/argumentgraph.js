@@ -20,16 +20,16 @@ AGB.argumentgraph_url = function(db)
 AGB.argumentgraph_html = function(db, data) 
 {
     AGB.normalize(data);
-    data.db = db;
-    data['metadata_text'] = AGB.format_metadata(data.metadata[0]);
-    data['hasdescription'] = PM.has_description(data.metadata[0]);
-    data['description_text'] = AGB.description_text(data.metadata[0]);
-    AGB.set_mainissues_text(data.main_issues);
-    data['references'] = data.metadata.filter(function (ref) { return ref.key; });
-    data['hasreferences'] = data.references.length > 0;
-    AGB['set_references_text'](data.references);
-    data['title'] = data.metadata[0].title ? data.metadata[0].title[0] : $.i18n.prop('pmt_menu_arguments');
-    data['outline_text'] = AGB.outline_text(data.outline, db);
+    data['db'] = db;
+    data['metadata_text'] = AGB.format_metadata(data['metadata'][0]);
+    data['hasdescription'] = PM.has_description(data['metadata'][0]);
+    data['description_text'] = AGB.description_text(data['metadata'][0]);
+    AGB.set_mainissues_text(data['main_issues']);
+    data['references'] = data['metadata'].filter(function (ref) { return ref.key; });
+    data['hasreferences'] = data['references'].length > 0;
+    AGB['set_references_text'](data['references']);
+    data['title'] = data['metadata'][0].title ? data['metadata'][0].title[0] : $.i18n.prop('pmt_menu_arguments');
+    data['outline_text'] = AGB.outline_text(data['outline'], db);
     data['pmt_main_issues'] = $.i18n.prop('pmt_main_issues');
     data['pmt_outline'] = $.i18n.prop('pmt_outline');
     data['pmt_references'] = $.i18n.prop('pmt_references');
@@ -37,7 +37,7 @@ AGB.argumentgraph_html = function(db, data)
     data = PM.merge_menu_props(data);
     data = PM.merge_ag_menu_props(data); 
 
-    data.lang = IMPACT.lang;
+    data['lang'] = IMPACT.lang;
     
     var argumentgraph_html = ich['argumentgraph'](data);
     return argumentgraph_html.filter('#argumentgraph');

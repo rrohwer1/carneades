@@ -21,19 +21,19 @@ PM.SchemeCandidateView = Backbone.View.extend(
          
          this.scheme().select2({formatResult: AGB.format_filtered_scheme,
                                 formatSelection: AGB.format_selected_scheme, 
-                                placeholder: data.initial_scheme_name,
+                                placeholder: data['initial_scheme_name'],
                                 data: {
-                                    results: data.schemes.toJSON(),
+                                    results: data['schemes'].toJSON(),
                                     text: function(scheme) {
                                         return scheme['header']['title'];
                                     }
                                 },
                                 initSelection: function(element, callback) {
-                                    callback(data.schemes.get(element.val()).toJSON());
+                                    callback(data['schemes'].get(element.val()).toJSON());
                                 }});
          
-         if(data.scheme) {
-             this.scheme().val(data.scheme.id).trigger('change');    
+         if(data['scheme']) {
+             this.scheme().val(data['scheme'].id).trigger('change');    
          }
          
          return this;

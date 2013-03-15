@@ -14,9 +14,9 @@ AGB.set_argument_url = function(db, argid)
 };
 
 AGB.set_has_properties = function(argument_data) {
-    argument_data.hascounterarguments = argument_data.undercutters.length > 0 || argument_data.rebuttals.length > 0 
+    argument_data['hascounterarguments'] = argument_data['undercutters'].length > 0 || argument_data['rebuttals'].length > 0 
         ? true : false;
-    argument_data.hasdependents = argument_data.dependents.length > 0 ? true : false;
+    argument_data['hasdependents'] = argument_data['dependents'].length > 0 ? true : false;
     
     if(_.isNil(argument_data['header'])) {
         return;
@@ -58,12 +58,12 @@ AGB.argument_html = function(db, argument_data)
     argument_data['direction'] = argument_data['pro'] ? "pro" : "con";
     argument_data['db'] = db;
     argument_data['description_text'] = AGB.description_text(argument_data['header']);
-    argument_data['scheme_text'] = PM.scheme_text(argument_data.scheme);
+    argument_data['scheme_text'] = PM.scheme_text(argument_data['scheme']);
     AGB.set_argument_title_text(argument_data);
-    argument_data['direction_text'] = argument_data.pro ? "pro" : "con";
-    argument_data['conclusion'].statement_text = AGB.statement_text(argument_data.conclusion);
+    argument_data['direction_text'] = argument_data['pro'] ? "pro" : "con";
+    argument_data['conclusion'].statement_text = AGB.statement_text(argument_data['conclusion']);
     AGB.set_premises_text(argument_data); 
-    argument_data['haspremises'] = argument_data.premises.length > 0;
+    argument_data['haspremises'] = argument_data['premises'].length > 0;
     AGB.set_undercutters_text(argument_data);
     AGB.set_rebuttals_text(argument_data);
     AGB.set_dependents_text(argument_data);
@@ -117,7 +117,7 @@ AGB.display_argument = function(db, argid)
 
 AGB.set_premises_text = function(argument_data)
 {
-    $.each(argument_data.premises, 
+    $.each(argument_data['premises'], 
            function(index, premise) {
                premise.statement.statement_text = AGB.statement_text(premise.statement, index + 1);
                premise.positive_text = premise.positive ? "" : "neg.";
@@ -136,10 +136,10 @@ AGB.set_argument_title_text = function(info)
 
 AGB.set_undercutters_text = function(info)
 {
-    $.each(info.undercutters_data, 
+    $.each(info['undercutters_data'], 
            function(index, data) {
-               data.argument_text = AGB.argument_text(data, index + 1);
-               data.id = info.undercutters[index];
+               data['argument_text'] = AGB.argument_text(data, index + 1);
+               data['id'] = info['undercutters'][index];
                AGB.set_premises_text(data);
            });  
 };
@@ -148,8 +148,8 @@ AGB.set_rebuttals_text = function(info)
 {
     $.each(info.rebuttals_data,
           function(index, data) {
-              data.argument_text = AGB.argument_text(data, index + info.undercutters_data.length);
-              data.id = info.rebuttals[index];
+              data['argument_text'] = AGB.argument_text(data, index + info['undercutters_data'].length);
+              data['id'] = info['rebuttals'][index];
               AGB.set_premises_text(data);
           });
 };
@@ -158,8 +158,8 @@ AGB.set_dependents_text = function(info)
 {
     $.each(info.dependents_data,
           function(index, data) {
-              data.statement_text = AGB.statement_text(data, index + 1);
-              data.id = info.dependents[index];
+              data['statement_text'] = AGB.statement_text(data, index + 1);
+              data['id'] = info['dependents'][index];
           });
 };
 

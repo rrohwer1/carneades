@@ -86,7 +86,7 @@ PM.copy_case = function(db) {
         PM.ajax_post(IMPACT.wsurl + '/copy-case/' + db,
                      {},
                      function(data) {
-                         PM.set_arguments_url(data.db);
+                         PM.set_arguments_url(data['db']);
                          PM.notify($.i18n.prop('pmt_now_viewing_copy'));
                      },
                      IMPACT.user,

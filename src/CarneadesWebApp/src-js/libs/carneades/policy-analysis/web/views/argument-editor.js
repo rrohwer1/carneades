@@ -47,20 +47,20 @@ PM.ArgumentEditorView = Backbone.View.extend(
                                            pmt_save_argument: $.i18n.prop('pmt_save_argument') 
                                           }));
 
-         if(data.argument.attributes.pro) {
+         if(data['argument']['attributes']['pro']) {
              this.pro_el().attr('checked',true);
          } else {
              this.con_el().attr('checked', true);
          }
          
-         if(data.argument.attributes.strict) {
+         if(data['argument']['attributes']['strict']) {
              this.strict_yes_el().attr('checked', true);
          } else {
              this.strict_no_el().attr('checked', true);
          }
 
-         this.$('.weight-input').val(data.argument.attributes.weight);
-         this.$('input[type=range]').val(data.argument.attributes.weight);
+         this.$('.weight-input').val(data['argument']['attributes']['weight']);
+         this.$('input[type=range]').val(data['argument']['attributes']['weight']);
          
          this.scheme_candidate_view = new PM.SchemeCandidateView({'model': this.model.get('scheme'),
                                                                   'el': this.$('.scheme-candidate')});
@@ -68,31 +68,31 @@ PM.ArgumentEditorView = Backbone.View.extend(
          var scheme = this.model.get('scheme').get('scheme');
          if(scheme) {
              var scheme_metadata = _.clone(scheme.get('header'));
-             delete scheme_metadata.title;
+             delete scheme_metadata['title'];
              PM.set_metadata_has_properties(scheme_metadata);
 
              var data = _.clone(scheme_metadata);
-             data.pmt_key = $.i18n.prop('pmt_key');
-             data.pmt_coverage = $.i18n.prop('pmt_coverage');
-             data.pmt_creator = $.i18n.prop('pmt_creator');
-             data.pmt_date = $.i18n.prop('pmt_date');
-             data.pmt_date = $.i18n.prop('pmt_date');
-             data.pmt_format = $.i18n.prop('pmt_format');
-             data.pmt_identifier = $.i18n.prop('pmt_identifier');
-             data.pmt_language = $.i18n.prop('pmt_language');
-             data.pmt_publisher = $.i18n.prop('pmt_publisher');
-             data.pmt_relation = $.i18n.prop('pmt_relation');
-             data.pmt_rights = $.i18n.prop('pmt_rights');
-             data.pmt_source = $.i18n.prop('pmt_source');
-             data.pmt_subject = $.i18n.prop('pmt_subject');
-             data.pmt_title = $.i18n.prop('pmt_title');
-             data.pmt_type = $.i18n.prop('pmt_type');
+             data['pmt_key'] = $.i18n.prop('pmt_key');
+             data['pmt_coverage'] = $.i18n.prop('pmt_coverage');
+             data['pmt_creator'] = $.i18n.prop('pmt_creator');
+             data['pmt_date'] = $.i18n.prop('pmt_date');
+             data['pmt_date'] = $.i18n.prop('pmt_date');
+             data['pmt_format'] = $.i18n.prop('pmt_format');
+             data['pmt_identifier'] = $.i18n.prop('pmt_identifier');
+             data['pmt_language'] = $.i18n.prop('pmt_language');
+             data['pmt_publisher'] = $.i18n.prop('pmt_publisher');
+             data['pmt_relation'] = $.i18n.prop('pmt_relation');
+             data['pmt_rights'] = $.i18n.prop('pmt_rights');
+             data['pmt_source'] = $.i18n.prop('pmt_source');
+             data['pmt_subject'] = $.i18n.prop('pmt_subject');
+             data['pmt_title'] = $.i18n.prop('pmt_title');
+             data['pmt_type'] = $.i18n.prop('pmt_type');
 
              var scheme_metadata_html = ich['metadata'](data);
              this.$('.scheme-metadata').html(scheme_metadata_html);
              
-             if(scheme_metadata.description && scheme_metadata.description[IMPACT.lang]) {
-                 var description_text = PM.markdown_to_html(scheme_metadata.description[IMPACT.lang]);
+             if(scheme_metadata['description'] && scheme_metadata['description'][IMPACT.lang]) {
+                 var description_text = PM.markdown_to_html(scheme_metadata['description'][IMPACT.lang]);
                  this.$('.scheme-description').html(description_text);
              }
              
