@@ -17,21 +17,21 @@ PM.MetadataEditorView = Backbone.View.extend(
          _.bindAll(this, 'render', 'description_changed', 'on_add_metadata_element',
                   'change_lang');
          this.model.get('metadata').store();
-         this.elements = {key: $.i18n.prop('pmt_key'),
-                          contributor: $.i18n.prop('pmt_contributor'),
-                          coverage: $.i18n.prop('pmt_coverage'),
-                          creator: $.i18n.prop('pmt_creator'),
-                          date: $.i18n.prop('pmt_date'),
-                          format: $.i18n.prop('pmt_format'),
-                          identifier: $.i18n.prop('pmt_identifier'),
-                          language: $.i18n.prop('pmt_language'),
-                          publisher: $.i18n.prop('pmt_publisher'),
-                          relation: $.i18n.prop('pmt_relation'),
-                          rights: $.i18n.prop('pmt_rights'),
-                          source: $.i18n.prop('pmt_source'),
-                          subject: $.i18n.prop('pmt_subject'),
-                          title: $.i18n.prop('pmt_title'),
-                          type: $.i18n.prop('pmt_type')             
+         this.elements = {'key': $.i18n.prop('pmt_key'),
+                          'contributor': $.i18n.prop('pmt_contributor'),
+                          'coverage': $.i18n.prop('pmt_coverage'),
+                          'creator': $.i18n.prop('pmt_creator'),
+                          'date': $.i18n.prop('pmt_date'),
+                          'format': $.i18n.prop('pmt_format'),
+                          'identifier': $.i18n.prop('pmt_identifier'),
+                          'language': $.i18n.prop('pmt_language'),
+                          'publisher': $.i18n.prop('pmt_publisher'),
+                          'relation': $.i18n.prop('pmt_relation'),
+                          'rights': $.i18n.prop('pmt_rights'),
+                          'source': $.i18n.prop('pmt_source'),
+                          'subject': $.i18n.prop('pmt_subject'),
+                          'title': $.i18n.prop('pmt_title'),
+                          'type': $.i18n.prop('pmt_type')             
                          }; 
      },
      
@@ -84,7 +84,7 @@ PM.MetadataEditorView = Backbone.View.extend(
          Backbone.View.prototype.remove.call(this);
      },
 
-     description_changed: function() {
+     'description_changed': function() {
          var metadata = this.model.get('metadata');
          var description = _.clone(metadata.get('description'));
          description[this.model.get('current_lang')] = this.description().val();
@@ -103,7 +103,7 @@ PM.MetadataEditorView = Backbone.View.extend(
          this.$('.metadata-elements').append(element_view.$el);
      },
      
-     on_add_metadata_element: function() {
+     'on_add_metadata_element': function() {
          var type = this.$('.select-metadata-element').val();
          this.add_metadata_element(type);
      },
@@ -132,7 +132,7 @@ PM.MetadataEditorView = Backbone.View.extend(
          
      },
      
-     change_lang: function(event, ui) {
+     'change_lang': function(event, ui) {
          var lang = this.get_lang(ui.tab);
          
          this.model.set('current_lang', lang);
