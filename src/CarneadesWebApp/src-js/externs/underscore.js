@@ -5,3 +5,4 @@ _.isUndefined = function () {};
 _.bind = function () {};
 _.each = function () {};
 _.isNil = function () {};
+_.bindAll = function () {};
