@@ -6,7 +6,8 @@
   (:use [carneades.database.export :only [export-to-argument-graph]]
         [carneades.engine.argument-evaluation :only [evaluate]]
         [carneades.engine.aspic :only [aspic-grounded]])
-  (:require [carneades.database.db :as db]))
+  (:require [carneades.database.db :as db]
+            [carneades.database.argument-graph :as ag-db]))
 
 (defn evaluate-graph
   "Evalutes a graph stored in the database."
@@ -16,9 +17,9 @@
         ag2 (evaluate aspic-grounded ag1)]
     (db/with-db dbconn
       (doseq [sn (vals (:statement-nodes ag2))]
-        (db/update-statement (str (:id sn))
-                             {:value (:value sn)}))
+        (ag-db/update-statement (str (:id sn))
+                                {:value (:value sn)}))
       (doseq [an (vals (:argument-nodes ag2))]
-        (db/update-argument (str (:id an))
-                            {:value (:value an)}))
+        (ag-db/update-argument (str (:id an))
+                               {:value (:value an)}))
       {:body             true})))

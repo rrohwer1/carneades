@@ -14,6 +14,7 @@
   (:require [clojure.string :as s]
             [carneades.engine.scheme :as scheme]
             [carneades.database.db :as db]
+            [carneades.database.argument-graph :as ag-db]
             [carneades.engine.policy :as policy]
             [carneades.engine.argument-graph :as ag]))
 
@@ -209,10 +210,10 @@ default-fn is a function returning the default formalized answer for a question.
 
 (defn askable-statements-atoms
   "Returns the list of askable statements in the ag stored in db"
-  [db theory]
-  (db/with-db (db/make-database-connection db "guest" "")
-    (let [statements (db/list-statements)]
-      (map :atom (filter (partial askable? theory) statements)))))
+  [dbname theory]
+  (db/with-db (db/make-database-connection dbname "guest" "")
+    (let [statements (ag-db/list-statements)]
+      (map :atom (filter (partial askable? theory) statements))))) 
 
 (defn remove-superfluous-questions
   [questions theory]
@@ -309,8 +310,8 @@ If the literal corresponds to a functional role in the theory, set
 all other roles having the same predicate but different objects to a weight
 of 0.0"
   [literal weight theory]
-  (let [id (db/get-statement literal)]
-   (db/update-statement id {:weight weight})
+  (let [id (ag-db/get-statement literal)]
+    (ag-db/update-statement id {:weight weight})
    (let [pred (get-in theory [:language (literal-predicate literal)])]
      (when (and (scheme/role? pred)
                 (scheme/functional-role? pred)
@@ -319,8 +320,8 @@ of 0.0"
        (let [[_ _ old-obj] literal]
         (doseq [obj (disj (:type pred) old-obj)]
           (let [other-role (scheme/replace-role-obj literal obj)
-                other-id (db/get-statement other-role)]
-            (db/update-statement other-id {:weight 0.0}))))))))
+                other-id (ag-db/get-statement other-role)]
+            (ag-db/update-statement other-id {:weight 0.0}))))))))
 
 (defn update-statements-weights
   "Updates the weight of the statements in the db."
@@ -343,4 +344,4 @@ Statements are represented as a collection of [statement value] element."
   (let [dbconn (db/make-database-connection db username password)]
    (db/with-db dbconn
      (doseq [id ids]
-       (db/update-statement id {:weight 0.5})))))
+       (ag-db/update-statement id {:weight 0.5})))))

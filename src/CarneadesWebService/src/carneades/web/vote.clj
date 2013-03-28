@@ -6,7 +6,7 @@
   (:use carneades.database.db
         [carneades.engine.policy :only [policies find-policies]]
         [carneades.database.export :only [export-to-argument-graph]])
-  (:require [carneades.database.admin :as admin]))
+  (:require [carneades.database.case :as case]))
 
 ;; (defn db-has-main-issue
 ;;   "Returns true if the database has the given main issue defined by this atom."
@@ -39,7 +39,7 @@
   "Returns the statistics for the vote on a case"
   [debateid casedb]
   (with-db (make-database-connection "debates" "guest" "")
-   (let [opinions (admin/get-opinions-for-case debateid casedb)
+   (let [opinions (case/get-opinions-for-case debateid casedb)
          nb-opinions (count opinions)
          grouped-opinions (group-by identity opinions)]
      {:accepted (/ (count (grouped-opinions 1.0)) nb-opinions)
@@ -65,8 +65,8 @@ as the one from the user's vote."
   "Returns the preferred policies for a given debate"
   [debateid]
   (with-db (make-database-connection "debates" "guest" "")
-   (let [nb-polls (admin/count-polls-for-debate debateid)
-         policies (admin/get-policies-for-debate debateid)]
+   (let [nb-polls (case/count-polls-for-debate debateid)
+         policies (case/get-policies-for-debate debateid)]
      (reduce (fn [result [policy nb-favorable-opinion]]
                (assoc result policy (/ nb-favorable-opinion nb-polls)))
              {}

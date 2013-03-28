@@ -8,11 +8,12 @@
         carneades.database.export
         carneades.engine.uuid)
   (:import java.io.File)
-  (:require [carneades.database.db :as db]))
+  (:require [carneades.database.db :as db]
+            [carneades.database.argument-graph :as ag-db]))
 
 (def ^{:dynamic true} *debug* true)
 
-
+(require 'carneades.database.argument-graph)
 ;; (def swank-con swank.core.connection/*current-connection*)
 
 ;; (defmacro break []
@@ -35,7 +36,7 @@
        passwd "pw1"
        db (db/make-database-connection dbname root passwd)]
     (prn "dbname =" dbname)
-    (db/create-argument-database dbname root passwd (make-metadata))
+    (ag-db/create-argument-database dbname root passwd (make-metadata))
     (import-from-argument-graph db ag true)
     dbname))
 

@@ -1,12 +1,16 @@
 ;;; Copyright (c) 2011 Fraunhofer Gesellschaft
 ;;; Licensed under the EUPL V.1.1
 
-(ns ^{:doc  "A database schema and CRUD functions for managing debate databases."}
-       carneades.database.admin
+(ns ^{:doc "A database schema and CRUD functions for managing case
+databases. A case database contains metadata about the cases in the
+project, including the results of the polls about what users think the
+right result should be in each case. "}
+  carneades.database.case
   (:use clojure.pprint
         carneades.engine.uuid
         carneades.engine.dublin-core)
   (:require [carneades.database.db :as db]
+            [carneades.database.argument-graph :as ag-db]
             [clojure.java.jdbc :as jdbc]))
 
 
@@ -88,7 +92,7 @@
   {:pre [(map? m)]}
   (let [id (make-urn)]
     (jdbc/insert-record :debate (assoc m :id id))
-    (db/create-argument-database 
+    (ag-db/create-argument-database 
       id 
       "root" 
       (:password m) 
