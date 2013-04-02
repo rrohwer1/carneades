@@ -31,10 +31,10 @@
 ;;                                              File/separator
 ;;                                              "data/databases")))
 
-(def projects-directory (config/properties "project-directories"
-                                             (str (System/getProperty "user.dir")
-                                                  File/separator
-                                                  "projects")))
+(def projects-directory (config/properties "projects-directory"
+                                           (str (System/getProperty "user.dir")
+                                                File/separator
+                                                "projects")))
 
 (defn dbfilename
   "Returns the filename of a database."
