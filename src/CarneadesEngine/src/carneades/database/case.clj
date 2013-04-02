@@ -17,8 +17,8 @@ right result should be in each case. "}
 (defn create-debate-database
   "Initialize the debate database by creating the tables. 
    Returns true if the database is successul created and initialized"
-  [db-name root-username root-password]
-  (let [db  (db/make-connection db-name root-username root-password)]
+  [project db-name root-username root-password]
+  (let [db  (db/make-connection project db-name root-username root-password)]
     (jdbc/with-connection 
       db
       (jdbc/transaction

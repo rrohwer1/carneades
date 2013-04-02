@@ -234,12 +234,12 @@
       
   ;; Arguments  
       
-  (GET "/argument/:db" [db]
-       (let [db2 (db/make-connection db "guest" "")] 
+  (GET "/argument/:project/:db" [project db]
+       (let [db2 (db/make-connection project db "guest" "")] 
          (db/with-db db2 {:body (map pack-argument (ag-db/list-arguments))})))
       
-  (GET "/argument/:db/:id" [db id]
-       (let [db2 (db/make-connection db "guest" "")]  
+  (GET "/argument/:project/:db/:id" [project db id]
+       (let [db2 (db/make-connection project db "guest" "")]  
          (db/with-db db2 {:body (pack-argument (ag-db/read-argument id))})))
       
   (GET "/pro-arguments/:db/:id" [db id]

@@ -17,7 +17,7 @@
         [carneades.database.export :only [export-to-argument-graph]]
         [clojure.pprint :only [pprint]])
   (:require [carneades.database.db :as db]
-            [carneades.database.admin :as admin]
+            [carneades.database.case :as case]
             [clojure.string :as str]
             [carneades.policy-analysis.web.controllers.reconstruction :as recons]))
 
@@ -152,11 +152,11 @@
 
 (defn init-debate-db
   []
-  (when (not (exists? (db/dbfilename "debates")))
-    (admin/create-debate-database "debates" "root" "pw1")
-    (db/with-db (db/make-connection "debates" "root" "pw1")
-      (admin/create-debate {:title "Copyright in the Knowledge Economy"
-                            :public true
-                            :id "copyright"}))))
+  (when (not (exists? (db/dbfilename "copyright" "debates")))
+    (case/create-debate-database "project" "debates" "root" "pw1")
+    (db/with-db (db/make-connection "copyright" "debates" "root" "pw1")
+      (case/create-debate {:title "Copyright in the Knowledge Economy"
+                           :public true
+                           :id "copyright"}))))
 
 (init-debate-db)
