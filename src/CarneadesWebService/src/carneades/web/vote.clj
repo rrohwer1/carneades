@@ -12,7 +12,7 @@
 ;;   "Returns true if the database has the given main issue defined by this atom."
 ;;   [dbname atom]
 ;;   (try
-;;     (with-db (make-database-connection dbname "guest" "")
+;;     (with-db (make-connection dbname "guest" "")
 ;;       (contains? (set (map :atom (main-issues))) atom))
 ;;     (catch Exception _
 ;;       (do
@@ -30,7 +30,7 @@
 ;;   "Returns the vote score for the first main issue
 ;; or nil if no vote"
 ;;   [dbname]
-;;   (with-db (make-database-connection dbname "root" "pw1")
+;;   (with-db (make-connection dbname "root" "pw1")
 ;;     (when-let [votes (read-statement-poll "vote-from-argument-page")]
 ;;       (let [id (str (:id (first (main-issues))))]
 ;;         (get-in votes [:votes id])))))
@@ -38,7 +38,7 @@
 (defn vote-stats
   "Returns the statistics for the vote on a case"
   [debateid casedb]
-  (with-db (make-database-connection "debates" "guest" "")
+  (with-db (make-connection "debates" "guest" "")
    (let [opinions (case/get-opinions-for-case debateid casedb)
          nb-opinions (count opinions)
          grouped-opinions (group-by identity opinions)]
@@ -51,7 +51,7 @@
 as the one from the user's vote."
   [m]
   (let [{:keys [casedb policykey qid issueid opinion]} m
-        dbconn (make-database-connection casedb "guest" "")]
+        dbconn (make-connection casedb "guest" "")]
     (with-db dbconn
       (let [ag (export-to-argument-graph dbconn)
             theory (policies (symbol policykey))]
@@ -64,7 +64,7 @@ as the one from the user's vote."
 (defn aggregated-vote-stats
   "Returns the preferred policies for a given debate"
   [debateid]
-  (with-db (make-database-connection "debates" "guest" "")
+  (with-db (make-connection "debates" "guest" "")
    (let [nb-polls (case/count-polls-for-debate debateid)
          policies (case/get-policies-for-debate debateid)]
      (reduce (fn [result [policy nb-favorable-opinion]]

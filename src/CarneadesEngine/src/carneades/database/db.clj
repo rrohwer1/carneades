@@ -41,21 +41,23 @@
         (map (memfn getName)
              (file-seq (clojure.java.io/file default-db-host)))))
 
-(defn make-database-connection  
+(defn make-connection
   "Returns a map describing a database connection.
    Available options are :host and :protocol.
    If not specified they default to theirs values
    in ~/.carneades.properties and if not specified there
    to '$PWD/data/databases' and 'file' respectively."
-  [db-name username passwd & options]
-  (let [options (apply hash-map options)
-        db-protocol (:protocol options default-db-protocol) ;; "file|mem|tcp"
-        db-host (:host options default-db-host) ;; "path|host:port" 
-        ]
-    {:classname   "org.h2.Driver" 
-     :subprotocol "h2"
-     :subname (str db-protocol "://" db-host "/" db-name)
-     ; Any additional keys are passed to the driver
-     ; as driver-specific properties.
-     :user  username      ; use "root" for administration
-     :password passwd}))
+  ([db-name username password options]
+     (throw (Exception. "NYI")))
+  ([project-name db-name username passwd options]
+     (let [;; options (apply hash-map options)
+           db-protocol (:protocol options default-db-protocol) ;; "file|mem|tcp"
+           db-host (:host options default-db-host) ;; "path|host:port" 
+           ]
+       {:classname   "org.h2.Driver" 
+        :subprotocol "h2"
+        :subname (str db-protocol "://" db-host "/" db-name)
+                                        ; Any additional keys are passed to the driver
+                                        ; as driver-specific properties.
+        :user  username      ; use "root" for administration
+        :password passwd})))

@@ -64,7 +64,7 @@
   (let [dbname "kwakman"
         root "root"
         passwd "pw1"
-        db (db/make-database-connection dbname root passwd)]
+        db (db/make-connection dbname root passwd)]
      (ag-db/create-argument-database dbname root passwd (make-metadata))
      (import-from-argument-graph db kwakman2 true)))
 

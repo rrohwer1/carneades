@@ -16,7 +16,7 @@
 (defn create-tmp-db
   []
   (case/create-debate-database dbname "root" "pw1")
-  (db/with-db (db/make-database-connection dbname "root" "pw1")
+  (db/with-db (db/make-connection dbname "root" "pw1")
     (case/create-debate {:id debate1name :public false})))
 
 (defn delete-tmp-db
@@ -28,7 +28,7 @@
 (use-fixtures :once db-fixture) 
 
 (deftest test-create-poll
-  (db/with-db (db/make-database-connection dbname "root" "pw1")
+  (db/with-db (db/make-connection dbname "root" "pw1")
     (let [userid (make-uuid-str)
           casedb (make-uuid-str)
           poll-to-create {:mainissueatompredicate "may-publish"
@@ -43,7 +43,7 @@
       (is (= (:mainissueatompredicate poll-to-create) (:mainissueatompredicate poll))))))
 
 (deftest test-read-poll
-  (db/with-db (db/make-database-connection dbname "root" "pw1")
+  (db/with-db (db/make-connection dbname "root" "pw1")
     (let [userid (make-uuid-str)
           casedb (make-uuid-str)
           poll-to-create {:mainissueatompredicate "may-publish"
@@ -58,7 +58,7 @@
       (is (= userid (:userid poll))))))
 
 (deftest test-update-poll
-  (db/with-db (db/make-database-connection dbname "root" "pw1")
+  (db/with-db (db/make-connection dbname "root" "pw1")
     (let [userid (make-uuid-str)
           casedb (make-uuid-str)
           poll-to-create {:mainissueatompredicate "may-publish"
@@ -74,7 +74,7 @@
       (is (= new-opinion (:opinion modified-poll))))))
 
 (deftest test-count-polls-for-debate
-  (db/with-db (db/make-database-connection dbname "root" "pw1")
+  (db/with-db (db/make-connection dbname "root" "pw1")
     (jdbc/do-commands "DELETE FROM policy"
                       "DELETE FROM vote"
                       "DELETE FROM poll")
@@ -94,7 +94,7 @@
       (is (= 2 (case/count-polls-for-debate debate1name))))))
 
 (deftest test-get-policies-for-debate
-  (db/with-db (db/make-database-connection dbname "root" "pw1")
+  (db/with-db (db/make-connection dbname "root" "pw1")
     (jdbc/do-commands "DELETE FROM policy"
                       "DELETE FROM vote"
                       "DELETE FROM poll")

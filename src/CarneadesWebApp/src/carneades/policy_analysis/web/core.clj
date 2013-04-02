@@ -34,7 +34,7 @@
         ;; TODO: changes the pass
        root "root"
        passwd "pw1"
-       db (db/make-database-connection dbname root passwd)]
+       db (db/make-connection dbname root passwd)]
     (prn "dbname =" dbname)
     (ag-db/create-argument-database dbname root passwd (make-metadata))
     (import-from-argument-graph db ag true)
@@ -43,7 +43,7 @@
 (defn load-ag
   [dbname]
   ;; TODO: changes the pass
-  (let [db (db/make-database-connection dbname "root" "pw1")]
+  (let [db (db/make-connection dbname "root" "pw1")]
     (export-to-argument-graph db)))
 
 

@@ -102,7 +102,7 @@
         [username password] (get-username-and-password request)]
     (pseudo-delete-statements db username password (:deleted data))
     (modify-statements-weights db username password to-modify theory)
-    (let [dbconn (db/make-database-connection db username password)
+    (let [dbconn (db/make-connection db username password)
           ag (export-to-argument-graph dbconn)
           ;; restarts the engine to expand new rules
           ;; that could be now reachable with the new facts
@@ -154,7 +154,7 @@
   []
   (when (not (exists? (db/dbfilename "debates")))
     (admin/create-debate-database "debates" "root" "pw1")
-    (db/with-db (db/make-database-connection "debates" "root" "pw1")
+    (db/with-db (db/make-connection "debates" "root" "pw1")
       (admin/create-debate {:title "Copyright in the Knowledge Economy"
                             :public true
                             :id "copyright"}))))

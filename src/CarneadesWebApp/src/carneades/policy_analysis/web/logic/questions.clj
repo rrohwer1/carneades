@@ -211,7 +211,7 @@ default-fn is a function returning the default formalized answer for a question.
 (defn askable-statements-atoms
   "Returns the list of askable statements in the ag stored in db"
   [dbname theory]
-  (db/with-db (db/make-database-connection dbname "guest" "")
+  (db/with-db (db/make-connection dbname "guest" "")
     (let [statements (ag-db/list-statements)]
       (map :atom (filter (partial askable? theory) statements))))) 
 
@@ -287,7 +287,7 @@ default-fn is a function returning the default formalized answer for a question.
   "Returns a list of questions to modify the answer in the ag stored in db."
   [db theory-name lang]
   (let [theory (policy/policies (symbol theory-name))
-        ag (export-to-argument-graph (db/make-database-connection db "guest" ""))
+        ag (export-to-argument-graph (db/make-connection db "guest" ""))
         atoms (askable-statements-atoms db theory)
         atoms (put-atoms-being-accepted-in-the-front ag atoms)
         atoms-by-pred (group-by first atoms)
@@ -326,7 +326,7 @@ of 0.0"
 (defn update-statements-weights
   "Updates the weight of the statements in the db."
   [db username password statements theory]
-  (let [dbconn (db/make-database-connection db username password)]
+  (let [dbconn (db/make-connection db username password)]
    (db/with-db dbconn
      (doseq [[literal weight] statements]
        (smart-update-statement literal weight theory)))))
@@ -341,7 +341,7 @@ Statements are represented as a collection of [statement value] element."
 (defn pseudo-delete-statements
   "Set the weight of the statements to 0.5 in the db."
   [db username password ids]
-  (let [dbconn (db/make-database-connection db username password)]
+  (let [dbconn (db/make-connection db username password)]
    (db/with-db dbconn
      (doseq [id ids]
        (ag-db/update-statement id {:weight 0.5})))))

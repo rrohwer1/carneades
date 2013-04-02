@@ -12,7 +12,7 @@
              object."}
   carneades.database.argument-graph
   (:use clojure.pprint
-        [carneades.database.db :only [with-db make-database-connection]]
+        [carneades.database.db :only [with-db make-connection]]
         carneades.engine.uuid
         carneades.engine.dublin-core
         carneades.engine.statement
@@ -30,7 +30,7 @@
    the creators of the model, among other information.
    Returns true if the database is successul created and initialized"
   [db-name root-username root-password metadata]
-  (let [db  (make-database-connection db-name root-username root-password)]
+  (let [db  (make-connection db-name root-username root-password)]
     (jdbc/with-connection 
       db
       (jdbc/transaction
@@ -958,11 +958,11 @@
 (defn make-copy
   "Makes a copy of the database and returns the copy's name"
   [dbname username password]
-  (let [script (with-db (make-database-connection dbname username password)
+  (let [script (with-db (make-connection dbname username password)
                  (jdbc/with-query-results content ["script"] (doall (map :script content))))
         newdbname (uuid/make-uuid-str)]
     ;; TODO take new-username and new-password as arguments and remove old admin access
-    (with-db (make-database-connection newdbname username password)
+    (with-db (make-connection newdbname username password)
       (apply jdbc/do-commands script))
     newdbname))
 

@@ -131,12 +131,12 @@ Note: This example illustrates how descriptions can include paragraphs, hyperlin
 ; 
 ;
  
-; (def db (db/make-database-connection "aston" "root" "pw1"))
+; (def db (db/make-connection "aston" "root" "pw1"))
 ; (import-from-argument-graph db aston true)
 
 (defn -main []
   (let [dbname "aston"  ; (str "db-" (make-uuid))
-        db (db/make-database-connection dbname "root" "pw1")]
+        db (db/make-connection dbname "root" "pw1")]
     (ag-db/create-argument-database 
       dbname 
       "root" 

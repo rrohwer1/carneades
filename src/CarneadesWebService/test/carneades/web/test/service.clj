@@ -42,7 +42,7 @@
 
 (defn create-debate
   []
-  (db/with-db (db/make-database-connection debatedb-name "root" "pw1")
+  (db/with-db (db/make-connection debatedb-name "root" "pw1")
     (case/create-debate {:public false :id dbname})))
 
 (defn create-tmp-dbs
