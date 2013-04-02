@@ -24,7 +24,7 @@
 
 (declare create-metadata)
 
-(defn create-argument-database2
+(defn create-argument-database
   "Initialize the database by creating the tables. Metadata can be
    provided to describe the debate being modeled in the database and
    the creators of the model, among other information.
