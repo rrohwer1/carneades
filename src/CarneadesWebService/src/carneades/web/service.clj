@@ -608,10 +608,11 @@
          (evaluate-graph db username password)
          {:body true}))
 
-  (POST "/copy-case/:db" request
+  (POST "/copy-case/:project/:db" request
         (let [[username password] (get-username-and-password request)
+              project (-> request :params :project)
               dbname (-> request :params :db)]
-          {:body {:db (ag-db/make-copy dbname username password)}}))
+          {:body {:db (db/make-copy project dbname username password)}}))
 
   ;; Other 
       

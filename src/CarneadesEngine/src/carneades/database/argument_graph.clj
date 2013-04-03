@@ -13,14 +13,12 @@
   carneades.database.argument-graph
   (:use clojure.pprint
         [carneades.database.db :only [with-db make-connection]]
-        carneades.engine.uuid
         carneades.engine.dublin-core
         carneades.engine.statement
         carneades.engine.argument
         carneades.engine.utils)
   (:require [clojure.java.jdbc :as jdbc]
-            [clojure.string :as s]
-            [carneades.engine.uuid :as uuid]))
+            [clojure.string :as s]))
 
 (declare create-metadata)
 
@@ -955,14 +953,5 @@
              (<= (:weight s) 0.75))  ; assumed true
         (update-statement id {:weight 0.5}))))) ; question
 
-(defn make-copy
-  "Makes a copy of the database and returns the copy's name"
-  [dbname username password]
-  (let [script (with-db (make-connection dbname username password)
-                 (jdbc/with-query-results content ["script"] (doall (map :script content))))
-        newdbname (uuid/make-uuid-str)]
-    ;; TODO take new-username and new-password as arguments and remove old admin access
-    (with-db (make-connection newdbname username password)
-      (apply jdbc/do-commands script))
-    newdbname))
+
 

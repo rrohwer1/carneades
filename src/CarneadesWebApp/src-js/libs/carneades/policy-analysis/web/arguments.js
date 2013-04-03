@@ -84,7 +84,7 @@ PM.current_case_pollid = function() {
 
 PM.copy_case = function(db) {
     if(confirm($.i18n.prop('pmt_copy_current_case'))) {
-        PM.ajax_post(IMPACT.wsurl + '/copy-case/' + db,
+        PM.ajax_post(IMPACT.wsurl + '/copy-case/' + IMPACT.project + '/' + db,
                      {},
                      function(data) {
                          PM.set_arguments_url(data.db);
