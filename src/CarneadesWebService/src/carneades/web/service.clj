@@ -476,8 +476,8 @@
       
   ;; XML
       
-  (GET "/export/:db" [db]
-       (let [dbconn (db/make-connection db "guest" "")]
+  (GET "/export/:project/:db" [project db]
+       (let [dbconn (db/make-connection project db "guest" "")]
          (db/with-db dbconn
            (let [arg-graph (export-to-argument-graph dbconn)
                  xml (with-out-str (argument-graph->xml arg-graph))]
