@@ -492,12 +492,13 @@
 
   ;; SVG Maps
 
-  (ANY "/map/:db" {params :params}
+  (ANY "/map/:project/:db" {params :params}
        (let [db (:db params)
+             project (:project params)
              _ (prn "params =" params)
              lang (keyword (:lang params))
              options (dissoc params :db :lang)
-             dbconn (db/make-connection db "guest" "")]
+             dbconn (db/make-connection project db "guest" "")]
          (db/with-db dbconn
            (let [convert-option (fn [val]
                                   (try
