@@ -37,8 +37,8 @@
 
 (defn vote-stats
   "Returns the statistics for the vote on a case"
-  [debateid casedb]
-  (with-db (make-connection "debates" "guest" "")
+  [project debateid casedb]
+  (with-db (make-connection project "debates" "guest" "")
    (let [opinions (case/get-opinions-for-case debateid casedb)
          nb-opinions (count opinions)
          grouped-opinions (group-by identity opinions)]
@@ -50,8 +50,8 @@
   "Finds the policies that give to the main issue the same acceptability
 as the one from the user's vote."
   [m]
-  (let [{:keys [casedb policykey qid issueid opinion]} m
-        dbconn (make-connection casedb "guest" "")]
+  (let [{:keys [project casedb policykey qid issueid opinion]} m
+        dbconn (make-connection project casedb "guest" "")]
     (with-db dbconn
       (let [ag (export-to-argument-graph dbconn)
             theory (policies (symbol policykey))]
@@ -63,8 +63,8 @@ as the one from the user's vote."
 
 (defn aggregated-vote-stats
   "Returns the preferred policies for a given debate"
-  [debateid]
-  (with-db (make-connection "debates" "guest" "")
+  [project debateid]
+  (with-db (make-connection project "debates" "guest" "")
    (let [nb-polls (case/count-polls-for-debate debateid)
          policies (case/get-policies-for-debate debateid)]
      (reduce (fn [result [policy nb-favorable-opinion]]

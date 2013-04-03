@@ -59,7 +59,8 @@
                           :casedb js/IMPACT.db
                           :policykey js/IMPACT.current_policy
                           :qid js/IMPACT.question
-                          :issueid (.-id (js/PM.current_issue))}))
+                          :issueid (.-id (js/PM.current_issue))
+                          :project js/IMPACT.project}))
                nil
                (clj->js {:success (fn [response]
                                     (set! js/document.cookie

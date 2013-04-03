@@ -66,22 +66,24 @@
              id (:id (:params request))]
          (db/with-db db {:body (case/update-debate id m)})))
 
-  (GET "/debate-poll/:debateid" [debateid]
-       (db/with-db (db/make-connection *debatedb-name* "guest" "")
+  (GET "/debate-poll/:project/:debateid" [project debateid]
+       (db/with-db (db/make-connection project *debatedb-name* "guest" "")
          {:body (case/list-polls debateid)}))
   
-  (GET "/debate-poll/:debateid/:id" request
+  (GET "/debate-poll/:project/:debateid/:id" request
        (let [id (get-in request [:params :id])
-             dbconn (db/make-connection *debatedb-name* "guest" "")]
+             project (get-in request [:params :project])
+             dbconn (db/make-connection project *debatedb-name* "guest" "")]
          (db/with-db dbconn
            {:body (case/read-poll id)})))
 
-  (POST "/debate-poll/:debateid" request
+  (POST "/debate-poll/:project/:debateid" request
         (let [m (json/read-json (slurp (:body request)))
+              project (get-in request [:params :project])
               cookies (:cookies request)
               cookieid (get-in cookies ["ring-session" :value])
               policies (map str (vote/find-policies-matching-vote m))
-              m (dissoc m :id :policykey :qid :issueid)
+              m (dissoc m :id :policykey :qid :issueid :project)
               ;; the userid of the poll is a sha256 hash of the cookie id
               ;; thus we are sure the user can vote only once for the session.
               ;; The id is hashed to prevent other users of guessing the cookie
@@ -90,12 +92,12 @@
               m (assoc m :userid id)
               debateid (get-in request [:params :debateid])
               [username password] (get-username-and-password request)
-              dbconn (db/make-connection *debatedb-name* username password)]
+              dbconn (db/make-connection project *debatedb-name* username password)]
           (db/with-db dbconn
             (let [id (case/create-poll debateid m policies)]
              {:body {:id id}}))))
   
-  (PUT "/debate-poll/:debateid" request
+  (PUT "/debate-poll/:project/:debateid" request
        ;; TODO: users can modify the vote of the others!
        {:status 404}
        ;; (let [m (json/read-json (slurp (:body request)))
@@ -108,11 +110,11 @@
        )
 
   ;; poll results for the PMT (not for the SCT)
-  (GET "/poll-results/:debateid/:casedb" [debateid casedb]
-       {:body (vote/vote-stats debateid casedb)})
+  (GET "/poll-results/:project:debateid/:casedb" [project debateid casedb]
+       {:body (vote/vote-stats project debateid casedb)})
   
-  (GET "/aggregated-poll-results/:debateid" [debateid]
-       {:body (vote/aggregated-vote-stats debateid)})
+  (GET "/aggregated-poll-results/:project/:debateid" [project debateid]
+       {:body (vote/aggregated-vote-stats project debateid)})
       
   ;; To Do: Deleting debates, poll-debate
        
