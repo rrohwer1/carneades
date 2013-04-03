@@ -103,7 +103,7 @@ AGB.argument_html = function(db, argument_data)
 
 AGB.display_argument = function(db, argid)
 {
-    PM.ajax_get(IMPACT.wsurl + '/argument-info/' + db + '/' + argid,
+    PM.ajax_get(IMPACT.wsurl + '/argument-info/' + IMPACT.project + '/' + db + '/' + argid,
                 function(argument_data) {
                     $('#browser').html(AGB.argument_html(db, argument_data));
                     $('#export').click(function (event){
