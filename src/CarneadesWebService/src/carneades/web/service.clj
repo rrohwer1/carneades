@@ -456,8 +456,8 @@
                                  :main-issues main-issues
                                  :outline outline}}))))
 
-  (GET "/statement-info/:db/:id" [db id]
-       (let [dbconn (db/make-connection db "guest" "")]
+  (GET "/statement-info/:project/:db/:id" [project db id]
+       (let [dbconn (db/make-connection project db "guest" "")]
          (db/with-db dbconn
            (let [stmt (pack-statement (ag-db/read-statement id))
                  pro-data (doall (map argument-data (:pro stmt)))
