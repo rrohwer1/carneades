@@ -65,7 +65,8 @@
         ag (reject ag rejected-statements)
         ag (enter-language ag (-> session :theory :language))
         ag (evaluate aspic-grounded ag)
-        dbname (store-ag ag)
+        project (:project session)
+        dbname (store-ag project ag)
         session (assoc session
                   :all-questions-answered true
                   :db dbname)]

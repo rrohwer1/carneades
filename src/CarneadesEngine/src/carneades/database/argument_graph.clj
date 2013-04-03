@@ -29,8 +29,8 @@
    provided to describe the debate being modeled in the database and
    the creators of the model, among other information.
    Returns true if the database is successul created and initialized"
-  [db-name root-username root-password metadata]
-  (let [db  (make-connection db-name root-username root-password)]
+  [project-name db-name root-username root-password metadata]
+  (let [db  (make-connection project-name db-name root-username root-password)]
     (jdbc/with-connection 
       db
       (jdbc/transaction

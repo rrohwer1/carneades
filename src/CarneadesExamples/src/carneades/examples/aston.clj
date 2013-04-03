@@ -137,7 +137,8 @@ Note: This example illustrates how descriptions can include paragraphs, hyperlin
 (defn -main []
   (let [dbname "aston"  ; (str "db-" (make-uuid))
         db (db/make-connection dbname "root" "pw1")]
-    (ag-db/create-argument-database 
+    (ag-db/create-argument-database
+     "examples"
       dbname 
       "root" 
       "pw1" 

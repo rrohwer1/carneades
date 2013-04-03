@@ -498,7 +498,8 @@ need to better understand the rules. [@SIIA, pp. 15-16.]"}
 (defn -main []
   (let [dbname "copyright"  ; (str "db-" (make-uuid))
         db (db/make-connection dbname "root" "pw1")]
-    (ag-db/create-argument-database 
+    (ag-db/create-argument-database
+     "examples"
      dbname 
      "root" 
      "pw1" 

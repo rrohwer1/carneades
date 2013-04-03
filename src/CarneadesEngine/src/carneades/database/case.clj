@@ -90,14 +90,16 @@ right result should be in each case. "}
    the new database."
   [m]   
   {:pre [(map? m)]}
-  (let [id (make-urn)]
-    (jdbc/insert-record :debate (assoc m :id id))
-    (ag-db/create-argument-database 
-      id 
-      "root" 
-      (:password m) 
-      (make-metadata :title (:title m)))
-    id))
+  (throw (Exception. "NYI"))
+  ;; (let [id (make-urn)]
+  ;;   (jdbc/insert-record :debate (assoc m :id id))
+  ;;   (ag-db/create-argument-database 
+  ;;     id 
+  ;;     "root" 
+  ;;     (:password m) 
+  ;;     (make-metadata :title (:title m)))
+  ;;   id)
+  )
 
 (defn read-debate 
   "urn -> map or nil

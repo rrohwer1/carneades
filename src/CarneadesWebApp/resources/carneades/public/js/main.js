@@ -57,7 +57,7 @@ PM.url_changed = function(url) {
          return;
     }
 
-    var url_regex = /\/([^ \/]+)(?:\/([^ \/]+))?(?:\/([^ ?\/]+))?(?:\/([^ \/]+))?/;
+    var url_regex = /\/([^ \/]+)(?:\/([^ \/]+))?(?:\/([^ \/]+))?(?:\/([^ ?\/]+))?(?:\/([^ \/]+))?/;
     var result = url_regex.exec(url.value);
     if(result != null) {
         PM.dispatch_url(result);
@@ -70,7 +70,7 @@ PM.dispatch_url = function(sections) {
     } else if(sections[1] == "facts") {
         PM.dispatch_facts_url(sections[2]);
     } else if(sections[1] == "arguments") {
-        PM.display_arguments(sections[3], sections[2], sections[4]); 
+        PM.display_arguments(sections[3], sections[4], sections[2], sections[5]); 
     } else if(sections[1] == "policies") {
         PM.display_policies(sections[2]);
     } else if(sections[1] == "schemes") {

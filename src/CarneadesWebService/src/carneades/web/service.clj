@@ -444,7 +444,7 @@
                  main-issues (map pack-statement (ag-db/main-issues))
                  outline (create-outline 5)]
              {:body             {:metadata (map unzip-metadata metadata)
-                                 :ag-db/main-issues main-issues
+                                 :main-issues main-issues
                                  :outline outline}}))))
 
   (GET "/statement-info/:db/:id" [db id]

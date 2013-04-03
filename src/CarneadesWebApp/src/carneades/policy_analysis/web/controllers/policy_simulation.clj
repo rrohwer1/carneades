@@ -117,6 +117,7 @@
   (info "[new-session] lang =" lang)
   (info "current-policy: " (deref current-policy))
   {:lang lang
+   :project "copyright"
    :query nil
    :theory (policies (deref current-policy))})
 

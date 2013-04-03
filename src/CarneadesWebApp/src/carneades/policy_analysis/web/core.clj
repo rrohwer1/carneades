@@ -29,15 +29,15 @@
 
 (defn store-ag
   "Stores ag into a LKIF and returns the dbname"
-  [ag]
+  [project ag]
  (let [dbname (str "db-" (make-uuid))
         ;; TODO: changes the pass
        root "root"
        passwd "pw1"
-       db (db/make-connection dbname root passwd)]
+       dbconn (db/make-connection project dbname root passwd)]
     (prn "dbname =" dbname)
-    (ag-db/create-argument-database dbname root passwd (make-metadata))
-    (import-from-argument-graph db ag true)
+    (ag-db/create-argument-database project dbname root passwd (make-metadata))
+    (import-from-argument-graph dbconn ag true)
     dbname))
 
 (defn load-ag

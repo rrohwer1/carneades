@@ -13,7 +13,7 @@ AGB.set_argumentgraph_url = function(db)
 // Returns the relative URL of the argument graph page
 AGB.argumentgraph_url = function(db)
 {
-    return '/arguments/outline/' + db;
+    return '/arguments/outline/' + IMPACT.project + '/' + db;
 };
 
 // Returns the HTML content of the argument graph page
@@ -58,7 +58,7 @@ AGB.display_argumentgraph = function(db)
         return;
     }
 
-    PM.ajax_get(IMPACT.wsurl + '/argumentgraph-info/' + db,
+    PM.ajax_get(IMPACT.wsurl + '/argumentgraph-info/' + IMPACT.project + '/' + db,
                 function(data) {
                     $('#browser').html(AGB.argumentgraph_html(db, data));
                     $('#export').click(
