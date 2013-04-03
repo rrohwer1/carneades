@@ -589,9 +589,9 @@
                  root "root"
                  passwd "pw1"
                  dbname (str "db-" (make-uuid))
-                 dbconn2 (db/make-connection dbname root passwd)
+                 dbconn2 (db/make-connection project dbname root passwd)
                  metadata (map map->metadata (ag-db/list-metadata))]
-             (ag-db/create-argument-database dbname root passwd (first metadata))
+             (ag-db/create-argument-database project dbname root passwd (first metadata))
              (import-from-argument-graph dbconn2 ag false)
              (db/with-db dbconn2
                (doseq [m (rest metadata)]

@@ -137,8 +137,8 @@ PM.display_policies = function(sectionid, subset) {
 PM.on_select_policy = function(id) {
     console.log('db before evaluate: ' + IMPACT.db);
     PM.busy_cursor_on();
-    PM.ajax_get(IMPACT.wsurl + '/evaluate-policy/{0}/{1}/{2}/{3}'.
-                format(IMPACT.db, IMPACT.current_policy, IMPACT.question, id),
+    PM.ajax_get(IMPACT.wsurl + '/evaluate-policy/{0}/{1}/{2}/{3}/{4}'.
+                format(IMPACT.project, IMPACT.db, IMPACT.current_policy, IMPACT.question, id),
                 function(data) {
                     PM.busy_cursor_off();
                     PM.on_evaluated_policy(data);
