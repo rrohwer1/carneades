@@ -29,9 +29,10 @@ PM.display_arguments = function(project, db, type, id) {
     }
     
     IMPACT.db = db;
-
-    console.log('project = ' + project);
-    IMPACT.project = project;
+    
+    if(!_.isNil(project)) {
+        IMPACT.project = project;
+    }
     
     $('#pm').html(arguments_html.filter("#arguments"));
     PM.activate('#arguments-item');

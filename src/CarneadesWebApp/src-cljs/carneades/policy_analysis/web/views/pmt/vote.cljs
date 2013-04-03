@@ -68,7 +68,8 @@
                                                "="
                                                (.-id response))))
                          :error js/PM.on_model_error}))
-        (template this :after-vote {:db db}))))
+        (template this :after-vote {:db db
+                                    :project js/IMPACT.project}))))
 
   :show-vote-results
   ([]
@@ -77,7 +78,7 @@
          (let [claim-text (aget (.-text claim) lang)]
            (js/PM.busy_cursor_on)
            (js/PM.ajax_get
-            (str js/IMPACT.wsurl "/poll-results/" js/IMPACT.debate_db "/"
+            (str js/IMPACT.wsurl "/poll-results/" js/IMPACT.project "/" js/IMPACT.debate_db "/"
                  js/IMPACT.db)
             (fn [result]
               (let [scores (js->clj result :keywordize-keys true)]

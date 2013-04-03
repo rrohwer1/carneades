@@ -110,7 +110,7 @@
        )
 
   ;; poll results for the PMT (not for the SCT)
-  (GET "/poll-results/:project:debateid/:casedb" [project debateid casedb]
+  (GET "/poll-results/:project/:debateid/:casedb" [project debateid casedb]
        {:body (vote/vote-stats project debateid casedb)})
   
   (GET "/aggregated-poll-results/:project/:debateid" [project debateid]
