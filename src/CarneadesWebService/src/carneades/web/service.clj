@@ -117,17 +117,17 @@
   ;; To Do: Deleting debates, poll-debate
        
   ;; Metadata        
-  (GET "/metadata/:db" [db] 
-       (let [db2 (db/make-connection db "guest" "")]
+  (GET "/metadata/:project/:db" [project db] 
+       (let [db2 (db/make-connection project db "guest" "")]
          (db/with-db db2 {:body (ag-db/list-metadata)})))
       
-  (GET "/metadata/:db/:id" [db id]
+  (GET "/metadata/:project/:db/:id" [project db id]
        (let [db2 (db/make-connection db "guest" "")]
          (db/with-db db2 {:body
                        (unzip-metadata
                         (ag-db/read-metadata id))})))
       
-  (POST "/metadata/:db" request
+  (POST "/metadata/:project/:db" request
         (let [db (:db (:params request))
               m (json/read-json (slurp (:body request)))
               [username password] (get-username-and-password request)
@@ -137,7 +137,7 @@
                                  (zip-metadata
                                   (map->metadata m)))}})))
 
-  (PUT "/metadata/:db/:id" request   
+  (PUT "/metadata/:project/:db/:id" request   
        (let [m (json/read-json (slurp (:body request)))
              m (zip-metadata m)
              [username password] (get-username-and-password request)
@@ -147,11 +147,9 @@
                               (ag-db/update-metadata id m)
                               (let [data (ag-db/read-metadata id)
                                     x (unzip-metadata data)]
-                                (prn "data: " data)
-                                (prn "unzipped: " x)
                                 x))})))
       
-  (DELETE "/metadata/:db/:id" request
+  (DELETE "/metadata/:project/:db/:id" request
           (let [[username password] (get-username-and-password request)
                 dbname (:db (:params request))
                 dbconn (db/make-connection dbname username password)
@@ -160,33 +158,36 @@
       
   ;; Statements
       
-  (GET "/statement/:db" [db] 
-       (let [db2 (db/make-connection db "guest" "")]
+  (GET "/statement/:project/:db" [project db] 
+       (let [db2 (db/make-connection project db "guest" "")]
          (db/with-db db2 {:body (map pack-statement (ag-db/list-statements))})))  
       
-  (GET "/statement/:db/:id" [db id] 
-       (let [db2 (db/make-connection db "guest" "")]
+  (GET "/statement/:project/:db/:id" [project db id] 
+       (let [db2 (db/make-connection project db "guest" "")]
          (db/with-db db2 
-           {:body           (pack-statement (ag-db/read-statement id))})))
+           {:body (pack-statement (ag-db/read-statement id))})))
             
-  (POST "/statement/:db" request  
+  (POST "/statement/:project/:db" request  
         (let [m (json/read-json (slurp (:body request)))
               s (unpack-statement m)
               [username password] (get-username-and-password request)
-              db (db/make-connection (:db (:params request)) username password)]
-          (db/with-db db {:body
-                       {:id (ag-db/create-statement s)}})))
+              {:keys [project db]} (:params request)
+              db (db/make-connection project db username password)]
+          (db/with-db db
+            {:body {:id (ag-db/create-statement s)}})))
       
-  (PUT "/statement/:db" request  
+  (PUT "/statement/:project/:db" request  
        (let [m (json/read-json (slurp (:body request)))
              ;; s (unpack-statement m)
              [username password] (get-username-and-password request)
-             db (db/make-connection (:db (:params request)) username password)
+             {:keys [project db]} (:params request)
+             dbconn (db/make-connection db username password)
              id (:id m)
              m (assoc m :header (zip-metadata (:header m)))]
-         (db/with-db db {:body (do
-                              (ag-db/update-statement id (dissoc m :id))
-                              (pack-statement (ag-db/read-statement id)))})))
+         (db/with-db dbconn
+           {:body (do
+                    (ag-db/update-statement id (dissoc m :id))
+                    (pack-statement (ag-db/read-statement id)))})))
       
   (DELETE "/statement/:db/:id" request
           (let [[username password] (get-username-and-password request)
@@ -436,8 +437,8 @@
 
   ;; Aggregated information
       
-  (GET "/argumentgraph-info/:db" [db]
-       (let [dbconn (db/make-connection db "guest" "")]
+  (GET "/argumentgraph-info/:project/:db" [project db]
+       (let [dbconn (db/make-connection project db "guest" "")]
          (db/with-db dbconn
            (let [metadata (ag-db/list-metadata)
                  main-issues (map pack-statement (ag-db/main-issues))

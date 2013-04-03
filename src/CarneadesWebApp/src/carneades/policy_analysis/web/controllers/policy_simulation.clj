@@ -153,7 +153,7 @@
 (defn init-debate-db
   []
   (when (not (exists? (db/dbfilename "copyright" "debates")))
-    (case/create-debate-database "project" "debates" "root" "pw1")
+    (case/create-debate-database "copyright" "debates" "root" "pw1")
     (db/with-db (db/make-connection "copyright" "debates" "root" "pw1")
       (case/create-debate {:title "Copyright in the Knowledge Economy"
                            :public true
