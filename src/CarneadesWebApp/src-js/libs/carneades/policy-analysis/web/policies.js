@@ -37,8 +37,9 @@ PM.on_policy_filtering = function(event) {
     if(filter == 'all') {
         PM.display_policies(undefined, undefined);
     } else {
-        PM.ajax_get(IMPACT.wsurl + '/find-policies/{0}/{1}/{2}/{3}/{4}'
-                    .format(IMPACT.db, 
+        PM.ajax_get(IMPACT.wsurl + '/find-policies/{0}/{1}/{2}/{3}/{4}/{5}'
+                    .format(IMPACT.project,
+                            IMPACT.db, 
                             IMPACT.current_policy, 
                             IMPACT.question, 
                             PM.current_issue().id,

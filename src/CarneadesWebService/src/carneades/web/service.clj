@@ -598,9 +598,9 @@
                  (ag-db/create-metadata m)))
              {:body             {:db dbname}}))))
 
-  (GET "/find-policies/:db/:policykey/:qid/:issueid/:acceptability"
-       [db policykey qid issueid acceptability]
-       (let [dbconn (db/make-connection db "guest" "")]
+  (GET "/find-policies/:project/:db/:policykey/:qid/:issueid/:acceptability"
+       [project db policykey qid issueid acceptability]
+       (let [dbconn (db/make-connection project db "guest" "")]
          (db/with-db dbconn
            (let [ag (export-to-argument-graph dbconn)
                  theory (policies (symbol policykey))
