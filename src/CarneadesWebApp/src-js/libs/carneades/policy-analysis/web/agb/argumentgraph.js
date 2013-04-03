@@ -165,7 +165,7 @@ AGB.new_argument = function(conclusion) {
 };
 
 AGB.evaluate = function(callback) {
-    PM.ajax_post(IMPACT.wsurl + '/evaluate-argument-graph/' + IMPACT.db, {},
+    PM.ajax_post(IMPACT.wsurl + '/evaluate-argument-graph/' + IMPACT.project + '/' + IMPACT.db, {},
                 function(data) {
                     PM.notify('Evaluation finished');
                     if(_.isFunction(callback)) {

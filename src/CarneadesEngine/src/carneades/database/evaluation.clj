@@ -11,8 +11,8 @@
 
 (defn evaluate-graph
   "Evalutes a graph stored in the database."
-  [dbname username password]
-  (let [dbconn (db/make-connection dbname username password)
+  [project dbname username password]
+  (let [dbconn (db/make-connection project dbname username password)
         ag1 (export-to-argument-graph dbconn)
         ag2 (evaluate aspic-grounded ag1)]
     (db/with-db dbconn

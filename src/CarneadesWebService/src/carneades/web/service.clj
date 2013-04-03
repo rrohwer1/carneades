@@ -571,8 +571,9 @@
   (GET "/policies" []
        {:body       policies})
 
-  (GET "/evaluate-policy/:db/:policykey/:qid/:policyid" [db policykey qid policyid]
-       (let [dbconn (db/make-connection db "guest" "")]
+  (GET "/evaluate-policy/:project/:db/:policykey/:qid/:policyid"
+       [project db policykey qid policyid]
+       (let [dbconn (db/make-connection project db "guest" "")]
          (db/with-db dbconn
            (let [ag (export-to-argument-graph dbconn)
                  ag (evaluate-policy (symbol qid) (symbol policyid)
@@ -604,10 +605,11 @@
 
   ;; Argument Evaluation
     
-  (POST "/evaluate-argument-graph/:db" request
+  (POST "/evaluate-argument-graph/:project/:db" request
        (let [[username password] (get-username-and-password request)
-             db (:db (:params request))]
-         (evaluate-graph db username password)
+             db (:db (:params request))
+             project (:project (:params request))]
+         (evaluate-graph project db username password)
          {:body true}))
 
   (POST "/copy-case/:project/:db" request
