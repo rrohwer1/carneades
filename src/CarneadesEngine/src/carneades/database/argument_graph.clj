@@ -18,7 +18,8 @@
         carneades.engine.argument
         carneades.engine.utils)
   (:require [clojure.java.jdbc :as jdbc]
-            [clojure.string :as s]))
+            [clojure.string :as s]
+            [carneades.engine.uuid :as uuid]))
 
 (declare create-metadata)
 
@@ -284,19 +285,19 @@
   [literal]   
   {:pre [(literal? literal)]}
   (cond (sliteral? literal) 
-        (let [id (if (urn-symbol? (literal-atom literal))
+        (let [id (if (uuid/urn-symbol? (literal-atom literal))
                    (str (literal-atom literal))
-                   (make-urn))]
+                   (uuid/make-urn))]
           (jdbc/insert-record
             :statement {:id id
                         :atom (str (literal-atom literal))})  
           id)
         (statement? literal)
-        (let [id (if (urn-symbol? (:id literal))
+        (let [id (if (uuid/urn-symbol? (:id literal))
                      (str (:id literal))
-                     (if (urn-symbol? (literal-atom literal))
+                     (if (uuid/urn-symbol? (literal-atom literal))
                          (str (literal-atom literal))
-                         (make-urn)))
+                         (uuid/make-urn)))
               text-id (if (:text literal) (create-translation (:text literal))),
               header-id (if (:header literal) (create-metadata (:header literal)))]
           (jdbc/insert-record
@@ -395,7 +396,7 @@
    returned."
   [literal]
   {:pre [(literal? literal)]}
-  (if (urn-symbol? literal)
+  (if (uuid/urn-symbol? literal)
     (str literal)
     (or (and (statement? literal)
              (statement-created? literal)

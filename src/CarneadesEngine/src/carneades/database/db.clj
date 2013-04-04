@@ -42,17 +42,6 @@
   [project dbname]
   (str projects-directory "/" project "/databases/" dbname ".h2.db"))
 
-(defn make-copy
-  "Makes a copy of the database and returns the copy's name"
-  [project dbname username password]
-  (let [script (with-db (make-connection project dbname username password)
-                 (jdbc/with-query-results content ["script"] (doall (map :script content))))
-        newdbname (uuid/make-uuid-str)]
-    ;; TODO take new-username and new-password as arguments and remove old admin access
-    (with-db (make-connection project newdbname username password)
-      (apply jdbc/do-commands script))
-    newdbname))
-
 ;; (defn fetch-databases-names
 ;;   "Looks on the disk to find all existing databases. Returns their names"
 ;;   []
@@ -75,3 +64,15 @@
         :subname db-host
         :user  username
         :password passwd})))
+
+(defn make-copy
+  "Makes a copy of the database and returns the copy's name"
+  [project dbname username password]
+  (let [script (with-db (make-connection project dbname username password)
+                 (jdbc/with-query-results content ["script"] (doall (map :script content))))
+        newdbname (uuid/make-uuid-str)]
+    ;; TODO take new-username and new-password as arguments and remove old admin access
+    (with-db (make-connection project newdbname username password)
+      (apply jdbc/do-commands script))
+    newdbname))
+
