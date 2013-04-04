@@ -355,10 +355,11 @@
   
   ;; Statement Polls
   
-  (GET "/statement-poll/:db" request
+  (GET "/statement-poll/:project/:db" request
        (let [[username password] (get-username-and-password request)
              db (:db (:params request))
-             db2 (db/make-connection db username password)]
+             project (:project (:params request))
+             db2 (db/make-connection project db username password)]
          (db/with-db db2
            (let [ids (set (map :userid (ag-db/list-statement-poll)))
                  polls (doall (map ag-db/read-statement-poll ids))
@@ -367,26 +368,31 @@
                          polls)]
              {:body             polls}))))
   
-  (GET "/statement-poll/:db/:id" request
+  (GET "/statement-poll/:project/:db/:id" request
        (let [[username password] (get-username-and-password request)
              db (:db (:params request))
+             project (:project (:params request))
              dbconn (db/make-connection db username password)]  
          (db/with-db dbconn {:body (ag-db/read-statement-poll (:id (:params request)))})))
 
-  (POST "/statement-poll/:db" request  
+  (POST "/statement-poll/:project/:db" request  
         (let [poll (json/read-json (slurp (:body request))),
               [username password] (get-username-and-password request)
-              db (db/make-connection (:db (:params request)) username password)]
-          (db/with-db db
+              db (:db (:params request))
+              project (:project (:params request))
+              dbconn (db/make-connection project db username password)]
+          (db/with-db dbconn
             (do
               (ag-db/create-statement-poll poll)
               {:body              (ag-db/read-statement-poll (:id poll))}))))
   
-  (PUT "/statement-poll/:db" request  
+  (PUT "/statement-poll/:project/:db" request  
        (let [poll (json/read-json (slurp (:body request)))
              [username password] (get-username-and-password request)
-             db (db/make-connection (:db (:params request)) username password)]
-         (db/with-db db
+             db (:db (:params request))
+             project (:project (:params request))
+             dbconn (db/make-connection project db username password)]
+         (db/with-db dbconn
            (do
              (ag-db/update-statement-poll poll)
              {:body             (ag-db/read-statement-poll (:id poll))}))))
@@ -401,47 +407,55 @@
   
   ;; Argument Polls
   
-  (GET "/argument-poll/:db" request
+  (GET "/argument-poll/:project/:db" request
        (let [[username password] (get-username-and-password request)
              db (:db (:params request))
-             db2 (db/make-connection db username password)] 
-         (db/with-db db2 (let [ids (set (map :userid (ag-db/list-argument-poll)))
-                               polls (map ag-db/read-argument-poll ids)
-                               polls (if (nil? polls)
-                                       ()
-                                       polls)]
-                           {:body                        polls}))))
+             project (:project (:params request))
+             dbconn (db/make-connection project db username password)] 
+         (db/with-db dbconn
+           (let [ids (set (map :userid (ag-db/list-argument-poll)))
+                 polls (map ag-db/read-argument-poll ids)
+                 polls (if (nil? polls)
+                         ()
+                         polls)]
+             {:body                        polls}))))
   
-  (GET "/argument-poll/:db/:id" request
+  (GET "/argument-poll/:project/:db/:id" request
        (let [[username password] (get-username-and-password request)
              db (:db (:params request))
-             id (:db (:params request))
-             dbconn (db/make-connection (:db (:params request)) username password)]  
+             id (:id (:params request))
+             project (:project (:params request))
+             dbconn (db/make-connection project db username password)]  
          (db/with-db dbconn
            {:body (ag-db/read-argument-poll (Integer/parseInt id))})))
 
-  (POST "/argument-poll/:db" request  
+  (POST "/argument-poll/:project/:db" request  
         (let [poll (json/read-json (slurp (:body request))),
               [username password] (get-username-and-password request)
-              db (db/make-connection (:db (:params request)) username password)]
+              db (:db (:params request))
+              project (:project (:params request))
+              db (db/make-connection project db username password)]
           (db/with-db db
             (do (ag-db/create-argument-poll poll)
                 {:body (ag-db/read-argument-poll (:id poll))}))))
   
-  (PUT "/argument-poll/:db" request  
+  (PUT "/argument-poll/:project/:db" request  
        (let [poll (json/read-json (slurp (:body request)))
              [username password] (get-username-and-password request)
-             db (db/make-connection (:db (:params request)) username password)]
-         (db/with-db db
+             db (:db (:params request))
+             project (:project (:params request))
+             dbconn (db/make-connection project db username password)]
+         (db/with-db dbconn
            (do (ag-db/update-argument-poll poll)
                {:body (ag-db/read-argument-poll (:id poll))}))))
   
-  (DELETE "/argument-poll/:db/:id" request
+  (DELETE "/argument-poll/:project/:db/:id" request
           (let [[username password] (get-username-and-password request)
+                project (:project (:params request))
                 db (:db (:params request))
                 id (:id (:params request))
-                db2 (db/make-connection db username password)]
-            (db/with-db db2
+                dbconn (db/make-connection project db username password)]
+            (db/with-db dbconn
               {:body (ag-db/delete-argument-poll (Integer/parseInt id))})))
 
   ;; Aggregated information
