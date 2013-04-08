@@ -268,20 +268,18 @@ PM.common_post_load = function() {
     
     PM.project = new PM.Project({id: "copyright"});
 
-    PM.project.fetch({success: function() {
-
-        var normalized_scheme_path = PM.normalized_theory_path(PM.project,
-                                                               PM.project.get('scheme'));
-        PM.current_theory = new PM.Theory({theory_path: normalized_scheme_path});
-        PM.current_theory.fetch();
-
-        var normalized_policy_path = PM.normalized_theory_path(PM.project,
-                                                               PM.project.get('policy'));
-        PM.current_policy = new PM.Theory({theory_path: normalized_policy_path});
-        PM.current_policy.fetch();
-
-    }});
+    PM.project.fetch({async:false});
       
+    var normalized_scheme_path = PM.normalized_theory_path(PM.project,
+                                                           PM.project.get('scheme'));
+    PM.current_theory = new PM.Theory({theory_path: normalized_scheme_path});
+    PM.current_theory.fetch();
+
+    var normalized_policy_path = PM.normalized_theory_path(PM.project,
+                                                           PM.project.get('policy'));
+    PM.current_policy = new PM.Theory({theory_path: normalized_policy_path});
+    PM.current_policy.fetch();
+
     PM.arguments = new PM.Arguments;
     PM.statements = new PM.Statements;
     
