@@ -281,10 +281,6 @@ PM.common_post_load = function() {
         PM.current_policy.fetch();
 
     }});
-
-    // TODO: check where it is used and replace by scoped call
-    // PM.schemes = new PM.Schemes;
-    // PM.schemes.fetch();
       
     PM.arguments = new PM.Arguments;
     PM.statements = new PM.Statements;

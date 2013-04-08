@@ -13,7 +13,7 @@
         carneades.web.walton-schemes
         ring.util.codec
         [carneades.engine.utils :only [sha256]]
-         [carneades.database.evaluation :only [evaluate-graph]]
+        [carneades.database.evaluation :only [evaluate-graph]]
         [ring.middleware.format-response :only [wrap-restful-response]]
         [ring.middleware.cookies :only [wrap-cookies]])
   (:require [clojure.data.json :as json]
@@ -556,12 +556,12 @@
        {:body
         (project/load-theory project theory)})
 
-  ;; Scheme
-  (GET "/scheme" []                     ; return all schemes
-       {:body       (vals schemes-by-id)})
+  ;; ;; Scheme
+  ;; (GET "/scheme" []                     ; return all schemes
+  ;;      {:body       (vals schemes-by-id)})
   
-  (GET "/scheme/:id" [id]  ;; return the scheme with the given id
-       {:body       (get schemes-by-id (symbol id))})
+  ;; (GET "/scheme/:id" [id]  ;; return the scheme with the given id
+  ;;      {:body       (get schemes-by-id (symbol id))})
   
   (POST "/matching-schemes" request ; return all schemes with conclusions matching a goal
         (let [goal (unpack-statement (json/read-json (slurp (:body request))))]
