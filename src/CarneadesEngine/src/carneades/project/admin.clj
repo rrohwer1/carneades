@@ -74,5 +74,4 @@ representing the project."
   (let [project-properties (load-project-properties project)
         policy-properties (:policy project-properties)
         policy (load-policy project project-properties)]
-    {:policy policy
-     :properties project-properties}))
+    {:properties project-properties}))

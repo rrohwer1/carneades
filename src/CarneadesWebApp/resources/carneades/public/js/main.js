@@ -255,12 +255,12 @@ PM.init_i18n = function(callbackfn) {
         });
 };
 
-PM.normalized_scheme_path = function(project) {
-    if(project.get('scheme').indexOf('/') != -1) {
-        return project.get('scheme'); 
+PM.normalized_theory_path = function(project, path) {
+    if(path.indexOf('/') != -1) {
+        return path; 
     }
 
-    return project.id + '/' + project.get('scheme');
+    return project.id + '/' + path;
 };
 
 PM.common_post_load = function() {
@@ -270,9 +270,15 @@ PM.common_post_load = function() {
 
     PM.project.fetch({success: function() {
 
-        var normalized_scheme_path = PM.normalized_scheme_path(PM.project);
+        var normalized_scheme_path = PM.normalized_theory_path(PM.project,
+                                                               PM.project.get('scheme'));
         PM.current_theory = new PM.Theory({theory_path: normalized_scheme_path});
         PM.current_theory.fetch();
+
+        var normalized_policy_path = PM.normalized_theory_path(PM.project,
+                                                               PM.project.get('policy'));
+        PM.current_policy = new PM.Theory({theory_path: normalized_policy_path});
+        PM.current_policy.fetch();
 
     }});
 
@@ -282,9 +288,6 @@ PM.common_post_load = function() {
       
     PM.arguments = new PM.Arguments;
     PM.statements = new PM.Statements;
-    
-    PM.policies = new PM.Policies;
-    PM.policies.fetch();
     
     PM.init_i18n();
     

@@ -553,7 +553,8 @@
        (prn "/theory")
        (prn "project =" project)
        (prn "theory =" theory)
-       {:body       walton-schemes})
+       {:body
+        (project/load-theory project theory)})
 
   ;; Scheme
   (GET "/scheme" []                     ; return all schemes
