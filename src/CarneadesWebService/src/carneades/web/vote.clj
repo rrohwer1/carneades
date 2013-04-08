@@ -4,7 +4,7 @@
 (ns ^{:doc "Code to calculate votes statitics"}
   carneades.web.vote
   (:use carneades.database.db
-        [carneades.engine.policy :only [policies find-policies]]
+        [carneades.engine.policy :only [find-policies]]
         [carneades.database.export :only [export-to-argument-graph]])
   (:require [carneades.database.case :as case]))
 
@@ -50,16 +50,18 @@
   "Finds the policies that give to the main issue the same acceptability
 as the one from the user's vote."
   [m]
-  (let [{:keys [project casedb policykey qid issueid opinion]} m
-        dbconn (make-connection project casedb "guest" "")]
-    (with-db dbconn
-      (let [ag (export-to-argument-graph dbconn)
-            theory (policies (symbol policykey))]
-        (find-policies ag theory (symbol qid) (symbol issueid)
-                       (condp = opinion
-                         1 :in
-                         0 :out
-                         0.5 :undecided))))))
+  (throw (ex-info "NYI"))
+  ;; (let [{:keys [project casedb policykey qid issueid opinion]} m
+  ;;       dbconn (make-connection project casedb "guest" "")]
+  ;;   (with-db dbconn
+  ;;     (let [ag (export-to-argument-graph dbconn)
+  ;;           theory (policies (symbol policykey))]
+  ;;       (find-policies ag theory (symbol qid) (symbol issueid)
+  ;;                      (condp = opinion
+  ;;                        1 :in
+  ;;                        0 :out
+  ;;                        0.5 :undecided)))))
+  )
 
 (defn aggregated-vote-stats
   "Returns the preferred policies for a given debate"

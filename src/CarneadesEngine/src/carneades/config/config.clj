@@ -3,7 +3,9 @@
 
 (ns ^{:doc "Read and save properties from the properties file"}
     carneades.config.config
-  (:use [carneades.engine.utils :only [exists? safe-read-string]]))
+  (:use [carneades.engine.utils :only [exists?
+                                       safe-read-string
+                                       file-separator]]))
 
 (def configfilename
   (let [default-pathname "config/carneades.clj"]
@@ -12,16 +14,16 @@
      ;; otherwise we go for the one in the user's HOME directory
      default-pathname
      (str (System/getProperty "user.home")
-          File/separator
+          file-separator
           ".carneades.clj"))))
 
 (defn read-properties
   "Reads the properties contained in pathname and returns a map."
   [pathname]
-  (safe-read-string (slurp configfilename)))
+  (safe-read-string (slurp pathname)))
 
 (defn save-properties
-  "Saves the properties to a  file."
+  "Saves the properties to a file."
   [props pathname]
   (spit (pr-str props) pathname))
 

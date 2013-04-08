@@ -434,6 +434,8 @@ call or a symbol."
   (load-string (slurp url))
   (deref (ns-resolve ns-sym theory-sym)))
 
+;; ensure we don't load twice the same namspace
+(memoize load-theory)
 
 (defn- scheme-index-key 
   "term -> symbol 

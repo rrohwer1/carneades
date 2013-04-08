@@ -4,7 +4,7 @@
 (ns carneades.policy-analysis.web.controllers.policy-simulation
   (:use [clojure.data.json :only [json-str read-json]]
         [clojure.tools.logging :only [info debug error]]
-        [carneades.engine.policy :only [get-main-issue policies]]
+        [carneades.engine.policy :only [get-main-issue]]
         [carneades.engine.utils :only [safe-read-string exists?]]
         [carneades.policy-analysis.web.logic.askengine :only [start-engine send-answers-to-engine]]
         [carneades.policy-analysis.web.logic.questions :only [get-predicate get-questions-for-answers-modification
@@ -23,8 +23,6 @@
 
 (defmulti ajax-handler (fn [json _ _] (ffirst json)))
 
-(def current-policy (atom 'copyright-policies))
-
 (defn strs->stmt
   "Converts a collection of a string representing a statement on the client side
    to a formal statement."
@@ -33,12 +31,15 @@
 
 (defmethod ajax-handler :current-policy
   [json session request]
-  {:body (json-str (deref current-policy))})
+  (throw (ex-info "NYI" {}))
+  ;; {:body (json-str (deref current-policy))}
+  )
 
 ;; TODO: this should be access protected
 (defmethod ajax-handler :set-current-policy
   [json session request]
-  (reset! current-policy (symbol (:set-current-policy json)))
+  (throw (ex-info "NYI" {}))
+  ;; (reset! current-policy (symbol (:set-current-policy json)))
   {:session session})
 
 (defmethod ajax-handler :request
@@ -61,16 +62,18 @@
   [json session request]
   (debug "======================================== answers handler! ==============================")
   (debug json)
-  (let [{:keys [last-questions dialog]} session
-        theory (policies (deref current-policy))
-        questions-to-answers (recons/reconstruct-answers (:answers json)
-                                                         dialog
-                                                         theory)
-        ;; _ (do (prn "[:answers] questions-to-answers =" questions-to-answers))
-        session (update-in session [:dialog] add-answers questions-to-answers)
-        ;; _ (do (prn "[:answers] dialog answers =" (:dialog session)))
-        session (send-answers-to-engine session)]
-    (questions-or-solution session)))
+  (throw (ex-info "NYI" {}))
+  ;; (let [{:keys [last-questions dialog project]} session
+  ;;       theory (policies (deref current-policy))
+  ;;       questions-to-answers (recons/reconstruct-answers (:answers json)
+  ;;                                                        dialog
+  ;;                                                        theory)
+  ;;       ;; _ (do (prn "[:answers] questions-to-answers =" questions-to-answers))
+  ;;       session (update-in session [:dialog] add-answers questions-to-answers)
+  ;;       ;; _ (do (prn "[:answers] dialog answers =" (:dialog session)))
+  ;;       session (send-answers-to-engine session)]
+  ;;   (questions-or-solution session))
+  )
 
 (defmethod ajax-handler :modifiable-facts
   [json session request]
@@ -93,33 +96,33 @@
   (prn "modify-facts=")
   (pprint json)
   (prn)
-  (let [data (:modify-facts json)
-        facts (:facts data)
-        db (:db data)
-        theory (policies (deref current-policy))
-        facts (recons/reconstruct-statements facts)
-        to-modify (mapcat (fn [q] (recons/reconstruct-answer q theory (:values q))) facts)
-        [username password] (get-username-and-password request)]
-    (pseudo-delete-statements db username password (:deleted data))
-    (modify-statements-weights db username password to-modify theory)
-    (let [dbconn (db/make-connection db username password)
-          ag (export-to-argument-graph dbconn)
-          ;; restarts the engine to expand new rules
-          ;; that could be now reachable with the new facts
-          ;; session (start-engine session ag)
-          session (assoc session :all-questions-answered true :db db)
-          ] 
-      (questions-or-solution session))))
+  (throw (ex-info "NYI" {}))
+  ;; (let [data (:modify-facts json)
+  ;;       facts (:facts data)
+  ;;       db (:db data)
+  ;;       theory (policies (deref current-policy))
+  ;;       facts (recons/reconstruct-statements facts)
+  ;;       to-modify (mapcat (fn [q] (recons/reconstruct-answer q theory (:values q))) facts)
+  ;;       [username password] (get-username-and-password request)]
+  ;;   (pseudo-delete-statements db username password (:deleted data))
+  ;;   (modify-statements-weights db username password to-modify theory)
+  ;;   (let [dbconn (db/make-connection db username password)
+  ;;         ag (export-to-argument-graph dbconn)
+  ;;         ;; restarts the engine to expand new rules
+  ;;         ;; that could be now reachable with the new facts
+  ;;         ;; session (start-engine session ag)
+  ;;         session (assoc session :all-questions-answered true :db db)
+  ;;         ] 
+  ;;     (questions-or-solution session)))
+  )
 
 (defn new-session
   [lang]
   {:pre [(not (nil? lang))]}
   (info "[new-session] lang =" lang)
-  (info "current-policy: " (deref current-policy))
+  ;; (info "current-policy: " (deref current-policy))
   {:lang lang
-   :project "copyright"
-   :query nil
-   :theory (policies (deref current-policy))})
+   :project "copyright"})
 
 (defmethod ajax-handler :reset
   [json session request]

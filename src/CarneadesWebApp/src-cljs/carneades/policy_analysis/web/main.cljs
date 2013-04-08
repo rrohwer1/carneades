@@ -43,6 +43,7 @@
             [carneades.policy_analysis.web.models.argument_candidate]
             [carneades.policy_analysis.web.models.policies]
             [carneades.policy_analysis.web.models.statement_poll]
+            [carneades.policy_analysis.web.models.project]
             [carneades.policy_analysis.web.utils]
             [carneades.policy_analysis.web.markdown]
             [carneades.policy_analysis.web.views.metadata_editor]

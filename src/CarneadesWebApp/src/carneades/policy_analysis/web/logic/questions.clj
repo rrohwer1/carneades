@@ -286,23 +286,25 @@ default-fn is a function returning the default formalized answer for a question.
 (defn get-questions-for-answers-modification
   "Returns a list of questions to modify the answer in the ag stored in db."
   [db theory-name lang]
-  (let [theory (policy/policies (symbol theory-name))
-        ag (export-to-argument-graph (db/make-connection db "guest" ""))
-        atoms (askable-statements-atoms db theory)
-        atoms (put-atoms-being-accepted-in-the-front ag atoms)
-        atoms-by-pred (group-by first atoms)
-        ;; keep only one atom per predicate
-        atoms (map first (vals atoms-by-pred))
-        questions (map-indexed (fn [idx atom]
-                                 (get-first-question
-                                  idx
-                                  atom
-                                  lang
-                                  theory
-                                  (partial get-default-values ag theory atoms-by-pred)))
-                               atoms)
-        questions (remove-superfluous-questions questions theory)]
-    questions))
+  (throw (ex-info "NYI" {}))
+  ;; (let [theory (policy/policies (symbol theory-name))
+  ;;       ag (export-to-argument-graph (db/make-connection db "guest" ""))
+  ;;       atoms (askable-statements-atoms db theory)
+  ;;       atoms (put-atoms-being-accepted-in-the-front ag atoms)
+  ;;       atoms-by-pred (group-by first atoms)
+  ;;       ;; keep only one atom per predicate
+  ;;       atoms (map first (vals atoms-by-pred))
+  ;;       questions (map-indexed (fn [idx atom]
+  ;;                                (get-first-question
+  ;;                                 idx
+  ;;                                 atom
+  ;;                                 lang
+  ;;                                 theory
+  ;;                                 (partial get-default-values ag theory atoms-by-pred)))
+  ;;                              atoms)
+  ;;       questions (remove-superfluous-questions questions theory)]
+  ;;   questions)
+  )
 
 (defn smart-update-statement
   "Updates the literal in the db with a new weight.

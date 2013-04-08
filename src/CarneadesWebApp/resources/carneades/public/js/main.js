@@ -255,15 +255,31 @@ PM.init_i18n = function(callbackfn) {
         });
 };
 
+PM.normalized_scheme_path = function(project) {
+    if(project.get('scheme').indexOf('/') != -1) {
+        return project.get('scheme'); 
+    }
+
+    return project.id + '/' + project.get('scheme');
+};
+
 PM.common_post_load = function() {
     $.ajaxSetup({beforeSend: PM.simple_auth});
     
-    PM.schemes = new PM.Schemes;
-    PM.schemes.fetch();
-  
-    PM.current_theory = new PM.Theory({id: 'walton'});
-    PM.current_theory.fetch();
-    
+    PM.project = new PM.Project({id: "copyright"});
+
+    PM.project.fetch({success: function() {
+
+        var normalized_scheme_path = PM.normalized_scheme_path(PM.project);
+        PM.current_theory = new PM.Theory({theory_path: normalized_scheme_path});
+        PM.current_theory.fetch();
+
+    }});
+
+    // TODO: check where it is used and replace by scoped call
+    // PM.schemes = new PM.Schemes;
+    // PM.schemes.fetch();
+      
     PM.arguments = new PM.Arguments;
     PM.statements = new PM.Statements;
     

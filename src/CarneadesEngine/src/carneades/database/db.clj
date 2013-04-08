@@ -24,15 +24,9 @@
 
 ;;; Databases
 
-(def default-db-protocol (config/properties "database-protocol"
-                                            "file"))
+(def default-db-protocol "file")
 
-;; (def default-db-host (config/properties "database-host"
-;;                                         (str (System/getProperty "user.dir")
-;;                                              File/separator
-;;                                              "data/databases")))
-
-(def projects-directory (config/properties "projects-directory"
+(def projects-directory (config/properties :projects-directory
                                            (str (System/getProperty "user.dir")
                                                 File/separator
                                                 "projects")))

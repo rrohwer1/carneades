@@ -20,11 +20,13 @@
             [carneades.database.argument-graph :as ag-db]
             [carneades.database.case :as case]
             [carneades.database.db :as db]
+            [carneades.project.admin :as project]
             [compojure.route :as route]
             [compojure.handler :as handler]
             [clojure.string :as str]
             [carneades.maps.lacij :as lacij]
-            [carneades.web.vote :as vote]))
+            [carneades.web.vote :as vote]
+            ))
 
 ;; To Do: 
 ;; - way to bootstrap the debate database
@@ -39,25 +41,35 @@
         authdata (String. (base64-decode authorization))]
     (str/split authdata #":")))
 
+(defn init-projects-data
+  []
+  (reduce (fn [m project]
+            (assoc m project (project/load-project project)))
+          {}
+   (project/list-projects)))
+
+(def state (atom {:projects (project/list-projects)
+                  :projects-data (init-projects-data)}))
+
 (def ^{:dynamic true} *debatedb-name* "debates")
 
 (defroutes carneades-web-service-routes
   
-  ;; Debates
+  ;; Projects
   
-  (GET "/debate" [] 
-       (let [db2 (db/make-connection *debatedb-name* "guest" "")]
-         (db/with-db db2 {:body (case/list-debates)})))
+  (GET "/project" [] 
+       (:projects (deref state)))
   
-  (GET "/debate/:id" [id]
-       (let [db2 (db/make-connection *debatedb-name* "guest" "")]
-         (db/with-db db2 {:body (case/read-debate id)})))
+  (GET "/project/:id" [id]
+       (merge (:properties (get (:projects-data (deref state)) id))
+              {:id id}))
   
-  (POST "/debate" request
+  (POST "/project" request
         (let [m (json/read-json (slurp (:body request)))
               [username password] (get-username-and-password request)
-              db (db/make-connection *debatedb-name* username password)]
-          (db/with-db db {:body (case/create-debate m)})))
+              ;; TODO enforces Admin role here
+              ]
+          (throw (ex-info "NYI" {}))))
   
   (PUT "/debate/:id" request   
        (let [m (json/read-json (slurp (:body request)))
@@ -533,15 +545,12 @@
               :headers {"Content-Type" "image/svg+xml;charset=UTF-8"}
               :body svg}))))
   
-  ;; Schemes
-  (GET "/theory" []
-       ;; TODO
-       {:body       [walton-schemes]})
-
-  (GET "/theory/:id" []
+  ;; Theory
+  (GET "/theory/:project/:path" []
        ;; TODO
        {:body       walton-schemes})
 
+  ;; Scheme
   (GET "/scheme" []                     ; return all schemes
        {:body       (vals schemes-by-id)})
   
@@ -587,43 +596,42 @@
           (prn subs)
           (prn statement)
           {:body          (apply-substitutions subs statement)}))
-
-  ;; Policies
   
-  (GET "/policies" []
-       {:body       policies})
-
   (GET "/evaluate-policy/:project/:db/:policykey/:qid/:policyid"
        [project db policykey qid policyid]
-       (let [dbconn (db/make-connection project db "guest" "")]
-         (db/with-db dbconn
-           (let [ag (export-to-argument-graph dbconn)
-                 ag (evaluate-policy (symbol qid) (symbol policyid)
-                                     (policies (symbol policykey)) ag)
-                 root "root"
-                 passwd "pw1"
-                 dbname (str "db-" (make-uuid))
-                 dbconn2 (db/make-connection project dbname root passwd)
-                 metadata (map map->metadata (ag-db/list-metadata))]
-             (ag-db/create-argument-database project dbname root passwd (first metadata))
-             (import-from-argument-graph dbconn2 ag false)
-             (db/with-db dbconn2
-               (doseq [m (rest metadata)]
-                 (ag-db/create-metadata m)))
-             {:body             {:db dbname}}))))
+       (throw (ex-info "NYI" {}))
+       ;; (let [dbconn (db/make-connection project db "guest" "")]
+       ;;   (db/with-db dbconn
+       ;;     (let [ag (export-to-argument-graph dbconn)
+       ;;           ag (evaluate-policy (symbol qid) (symbol policyid)
+       ;;                               (policies (symbol policykey)) ag)
+       ;;           root "root"
+       ;;           passwd "pw1"
+       ;;           dbname (str "db-" (make-uuid))
+       ;;           dbconn2 (db/make-connection project dbname root passwd)
+       ;;           metadata (map map->metadata (ag-db/list-metadata))]
+       ;;       (ag-db/create-argument-database project dbname root passwd (first metadata))
+       ;;       (import-from-argument-graph dbconn2 ag false)
+       ;;       (db/with-db dbconn2
+       ;;         (doseq [m (rest metadata)]
+       ;;           (ag-db/create-metadata m)))
+       ;;       {:body             {:db dbname}})))
+       )
 
   (GET "/find-policies/:project/:db/:policykey/:qid/:issueid/:acceptability"
        [project db policykey qid issueid acceptability]
-       (let [dbconn (db/make-connection project db "guest" "")]
-         (db/with-db dbconn
-           (let [ag (export-to-argument-graph dbconn)
-                 theory (policies (symbol policykey))
-                 policies (find-policies ag theory (symbol qid) (symbol issueid)
-                                         (condp = acceptability
-                                           "in" :in
-                                           "out" :out
-                                           "undecided" :undecided))]
-             {:body             {:policies policies}}))))
+       (throw (ex-info "NYI" {}))
+       ;; (let [dbconn (db/make-connection project db "guest" "")]
+       ;;   (db/with-db dbconn
+       ;;     (let [ag (export-to-argument-graph dbconn)
+       ;;           theory (policies (symbol policykey))
+       ;;           policies (find-policies ag theory (symbol qid) (symbol issueid)
+       ;;                                   (condp = acceptability
+       ;;                                     "in" :in
+       ;;                                     "out" :out
+       ;;                                     "undecided" :undecided))]
+       ;;       {:body             {:policies policies}})))
+       )
 
   ;; Argument Evaluation
   
