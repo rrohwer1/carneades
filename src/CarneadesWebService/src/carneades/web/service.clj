@@ -58,11 +58,13 @@
   ;; Projects
   
   (GET "/project" [] 
-       (:projects (deref state)))
+       {:body
+        (:projects (deref state))})
   
   (GET "/project/:id" [id]
-       (merge (:properties (get (:projects-data (deref state)) id))
-              {:id id}))
+       {:body
+        (merge (get-in (deref state) [:projects-data id :properties])
+               {:id id})})
   
   (POST "/project" request
         (let [m (json/read-json (slurp (:body request)))
@@ -546,8 +548,11 @@
               :body svg}))))
   
   ;; Theory
-  (GET "/theory/:project/:path" []
+  (GET "/theory/:project/:theory" [project theory]
        ;; TODO
+       (prn "/theory")
+       (prn "project =" project)
+       (prn "theory =" theory)
        {:body       walton-schemes})
 
   ;; Scheme

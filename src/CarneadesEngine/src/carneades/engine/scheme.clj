@@ -431,7 +431,7 @@ call or a symbol."
 (defn load-theory
   "Dynamically loads the theory at url and returns it."
   [filepath]
-  (load-file filepath))
+  (deref (load-file filepath)))
 
 ;; ensure we don't load twice the same namespace
 (memoize load-theory)

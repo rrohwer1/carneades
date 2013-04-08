@@ -58,7 +58,7 @@ can be of the form \"theory\" or \"project/theory\". The former refers
   "Loads the theory of a project"
   [project theory]
   (let [project-path (str projects-directory file-separator project)
-        theory-path (absolute-theory-path theory)]
+        theory-path (absolute-theory-path project theory)]
     (theory/load-theory theory-path)))
 
 (defn load-policy
