@@ -1,7 +1,7 @@
 ;;; Copyright (c) 2013 Fraunhofer Gesellschaft
 ;;; Licensed under the EUPL V.1.1
 
-(ns carneades.database.test.case
+(ns carneades.database.test.admin
   (:use [clojure.test :only [deftest is use-fixtures]]
         [carneades.engine.uuid :only [make-uuid-str]])
   (:require [carneades.database.case :as case]

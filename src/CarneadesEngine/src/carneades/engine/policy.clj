@@ -4,7 +4,7 @@
 (ns carneades.engine.policy
   (:use (carneades.engine statement scheme argument-graph aspic argument-evaluation utils)
         [clojure.tools.logging :only (info debug error)])
-  (:require [carneades.config.reader :as config]))
+  (:require [carneades.config.config :as config]))
 
 ;; (def policies-directory (config/properties "policies-directory"))
 ;; (def policies-metadata (read-string
@@ -26,9 +26,9 @@
   [questionid theory]
   (:sections (first (filter #(= (:id %) questionid) (-> theory :sections)))))
 
-(defn get-policy
-  [id policies]
-  (first (filter #(= (:id %) id) policies)))
+;; (defn get-policy
+;;   [id policies]
+;;   (first (filter #(= (:id %) id) policies)))
 
 (defn get-policy-statements
   [policy]

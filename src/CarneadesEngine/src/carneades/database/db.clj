@@ -4,7 +4,7 @@
 
 (ns ^{:doc "Utilities for interacting with databases."}
   carneades.database.db
-  (:require [carneades.config.reader :as config]
+  (:require [carneades.config.config :as config]
             [clojure.java.jdbc :as jdbc]
             [carneades.engine.uuid :as uuid])
   (:import java.io.File))
