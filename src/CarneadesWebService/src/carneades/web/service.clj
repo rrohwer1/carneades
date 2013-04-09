@@ -14,6 +14,7 @@
         ring.util.codec
         [carneades.engine.utils :only [sha256]]
         [carneades.database.evaluation :only [evaluate-graph]]
+        [carneades.web.project :only [init-projects-data!]]
         [ring.middleware.format-response :only [wrap-restful-response]]
         [ring.middleware.cookies :only [wrap-cookies]])
   (:require [clojure.data.json :as json]
@@ -41,15 +42,8 @@
         authdata (String. (base64-decode authorization))]
     (str/split authdata #":")))
 
-(defn init-projects-data
-  []
-  (reduce (fn [m project]
-            (assoc m project (project/load-project project)))
-          {}
-   (project/list-projects)))
-
 (def state (atom {:projects (project/list-projects)
-                  :projects-data (init-projects-data)}))
+                  :projects-data (init-projects-data!)}))
 
 (def ^{:dynamic true} *debatedb-name* "debates")
 
