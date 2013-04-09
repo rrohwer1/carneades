@@ -558,8 +558,14 @@
         (project/load-theory project theory)})
 
   ;; ;; Scheme
-  ;; (GET "/scheme" []                     ; return all schemes
-  ;;      {:body       (vals schemes-by-id)})
+  (GET "/scheme/:project" [project]
+       {:body
+        (:schemes (project/load-theory project
+                              (get-in (deref state)
+                                      [:projects-data
+                                       project
+                                       :properties
+                                       :scheme])))})
   
   ;; (GET "/scheme/:id" [id]  ;; return the scheme with the given id
   ;;      {:body       (get schemes-by-id (symbol id))})
