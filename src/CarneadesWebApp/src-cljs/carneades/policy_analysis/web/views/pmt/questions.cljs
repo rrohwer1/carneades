@@ -522,7 +522,8 @@ all questions have been answered."
   []
   (swap! questions assoc :submit-listener send-answers) 
   (js/PM.ajax_post js/IMPACT.simulation_url
-                   (clj->js {:request js/IMPACT.question})
+                   (clj->js {:request {:question js/IMPACT.question
+                                       :project (.toJSON js/PM.project)}})
                    show-questions-or-ag
                    js/IMPACT.user
                    js/IMPACT.password

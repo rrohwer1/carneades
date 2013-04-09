@@ -18,6 +18,7 @@
         [clojure.pprint :only [pprint]])
   (:require [carneades.database.db :as db]
             [carneades.database.case :as case]
+            [carneades.project.admin :as project]
             [clojure.string :as str]
             [carneades.policy-analysis.web.controllers.reconstruction :as recons]))
 
@@ -29,23 +30,16 @@
   [coll]
   (map symbol (apply list coll)))
 
-(defmethod ajax-handler :current-policy
-  [json session request]
-  (throw (ex-info "NYI" {}))
-  ;; {:body (json-str (deref current-policy))}
-  )
-
-;; TODO: this should be access protected
-(defmethod ajax-handler :set-current-policy
-  [json session request]
-  (throw (ex-info "NYI" {}))
-  ;; (reset! current-policy (symbol (:set-current-policy json)))
-  {:session session})
-
 (defmethod ajax-handler :request
   [json session request]
   (debug "======================================== request handler! ==============================")
-  (let [session (assoc session :query (get-main-issue (:theory session) (symbol (:request json))))
+  (let [{:keys [question project]} (:request json)
+        ;; _ (pprint "project=") _ (pprint project)
+        policy (project/load-theory (:id project) (:policy project))
+        ;; _ (pprint "policy=") _ (pprint policy)
+        session (assoc session
+                  :query (get-main-issue policy (symbol question))
+                  :policy policy)
         session (start-engine session)]
     {:session session
      :body (json-str {:questions (:last-questions session)})}))
@@ -79,7 +73,7 @@
   [json session request]
   (let [jsondata (json :modifiable-facts)
         db (jsondata :db)
-        theory (jsondata :theory)]
+        theory (jsondata :policy)]
     {:body (json-str (get-questions-for-answers-modification
                       db
                       theory
