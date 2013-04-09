@@ -56,18 +56,16 @@
   [json session request]
   (debug "======================================== answers handler! ==============================")
   (debug json)
-  (throw (ex-info "NYI" {}))
-  ;; (let [{:keys [last-questions dialog project]} session
-  ;;       theory (policies (deref current-policy))
-  ;;       questions-to-answers (recons/reconstruct-answers (:answers json)
-  ;;                                                        dialog
-  ;;                                                        theory)
-  ;;       ;; _ (do (prn "[:answers] questions-to-answers =" questions-to-answers))
-  ;;       session (update-in session [:dialog] add-answers questions-to-answers)
-  ;;       ;; _ (do (prn "[:answers] dialog answers =" (:dialog session)))
-  ;;       session (send-answers-to-engine session)]
-  ;;   (questions-or-solution session))
-  )
+  (let [{:keys [last-questions dialog project]} session
+        policy (:policy session)
+        questions-to-answers (recons/reconstruct-answers (:answers json)
+                                                         dialog
+                                                         policy)
+        ;; _ (do (prn "[:answers] questions-to-answers =" questions-to-answers))
+        session (update-in session [:dialog] add-answers questions-to-answers)
+        ;; _ (do (prn "[:answers] dialog answers =" (:dialog session)))
+        session (send-answers-to-engine session)]
+    (questions-or-solution session)))
 
 (defmethod ajax-handler :modifiable-facts
   [json session request]
