@@ -554,10 +554,6 @@
   
   ;; Theory
   (GET "/theory/:project/:theory" [project theory]
-       ;; TODO
-       (prn "/theory")
-       (prn "project =" project)
-       (prn "theory =" theory)
        {:body
         (project/load-theory project theory)})
 
@@ -610,23 +606,27 @@
   
   (GET "/evaluate-policy/:project/:db/:policykey/:qid/:policyid"
        [project db policykey qid policyid]
-       (throw (ex-info "NYI" {}))
-       ;; (let [dbconn (db/make-connection project db "guest" "")]
-       ;;   (db/with-db dbconn
-       ;;     (let [ag (export-to-argument-graph dbconn)
-       ;;           ag (evaluate-policy (symbol qid) (symbol policyid)
-       ;;                               (policies (symbol policykey)) ag)
-       ;;           root "root"
-       ;;           passwd "pw1"
-       ;;           dbname (str "db-" (make-uuid))
-       ;;           dbconn2 (db/make-connection project dbname root passwd)
-       ;;           metadata (map map->metadata (ag-db/list-metadata))]
-       ;;       (ag-db/create-argument-database project dbname root passwd (first metadata))
-       ;;       (import-from-argument-graph dbconn2 ag false)
-       ;;       (db/with-db dbconn2
-       ;;         (doseq [m (rest metadata)]
-       ;;           (ag-db/create-metadata m)))
-       ;;       {:body             {:db dbname}})))
+       (let [dbconn (db/make-connection project db "guest" "")]
+         (db/with-db dbconn
+           (let [ag (export-to-argument-graph dbconn)
+                 policy (project/load-theory
+                         project
+                         (get-in (deref state) [:projects-data project :properties :policy]))
+                 ag (evaluate-policy (symbol qid)
+                                     (symbol policyid)
+                                     policy
+                                     ag)
+                 root "root"
+                 passwd "pw1"
+                 dbname (str "db-" (make-uuid))
+                 dbconn2 (db/make-connection project dbname root passwd)
+                 metadata (map map->metadata (ag-db/list-metadata))]
+             (ag-db/create-argument-database project dbname root passwd (first metadata))
+             (import-from-argument-graph dbconn2 ag false)
+             (db/with-db dbconn2
+               (doseq [m (rest metadata)]
+                 (ag-db/create-metadata m)))
+             {:body             {:db dbname}})))
        )
 
   (GET "/find-policies/:project/:db/:policykey/:qid/:issueid/:acceptability"
