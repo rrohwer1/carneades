@@ -6,34 +6,8 @@
   (:use carneades.database.db
         [carneades.engine.policy :only [find-policies]]
         [carneades.database.export :only [export-to-argument-graph]])
-  (:require [carneades.database.case :as case]))
-
-;; (defn db-has-main-issue
-;;   "Returns true if the database has the given main issue defined by this atom."
-;;   [dbname atom]
-;;   (try
-;;     (with-db (make-connection dbname "guest" "")
-;;       (contains? (set (map :atom (main-issues))) atom))
-;;     (catch Exception _
-;;       (do
-;;         (prn "error with" dbname)
-;;         nil))))
-
-;; (defn fetch-databases-by-main-issue
-;;   "Returns the list of the databases names having
-;; for main issue the statement with the given atom."
-;;   [atom]
-;;   (filter (fn [dbname] (db-has-main-issue dbname atom)) (fetch-databases-names)))
-
-
-;; (defn vote-for-main-issue
-;;   "Returns the vote score for the first main issue
-;; or nil if no vote"
-;;   [dbname]
-;;   (with-db (make-connection dbname "root" "pw1")
-;;     (when-let [votes (read-statement-poll "vote-from-argument-page")]
-;;       (let [id (str (:id (first (main-issues))))]
-;;         (get-in votes [:votes id])))))
+  (:require [carneades.database.case :as case]
+            [carneades.project.admin :as project]))
 
 (defn vote-stats
   "Returns the statistics for the vote on a case"
@@ -49,19 +23,17 @@
 (defn find-policies-matching-vote
   "Finds the policies that give to the main issue the same acceptability
 as the one from the user's vote."
-  [m]
-  (throw (ex-info "NYI"))
-  ;; (let [{:keys [project casedb policykey qid issueid opinion]} m
-  ;;       dbconn (make-connection project casedb "guest" "")]
-  ;;   (with-db dbconn
-  ;;     (let [ag (export-to-argument-graph dbconn)
-  ;;           theory (policies (symbol policykey))]
-  ;;       (find-policies ag theory (symbol qid) (symbol issueid)
-  ;;                      (condp = opinion
-  ;;                        1 :in
-  ;;                        0 :out
-  ;;                        0.5 :undecided)))))
-  )
+  [project project-properties m]
+  (let [{:keys [casedb policykey qid issueid opinion]} m
+        dbconn (make-connection project casedb "guest" "")]
+    (with-db dbconn
+      (let [ag (export-to-argument-graph dbconn)
+            policy (project/load-theory project (:policy project-properties))]
+        (find-policies ag policy (symbol qid) (symbol issueid)
+                       (condp = opinion
+                         1 :in
+                         0 :out
+                         0.5 :undecided))))))
 
 (defn aggregated-vote-stats
   "Returns the preferred policies for a given debate"

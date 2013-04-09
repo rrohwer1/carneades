@@ -96,7 +96,12 @@
               project (get-in request [:params :project])
               cookies (:cookies request)
               cookieid (get-in cookies ["ring-session" :value])
-              policies (map str (vote/find-policies-matching-vote m))
+              policies (map str (vote/find-policies-matching-vote
+                                 project
+                                 (get-in (deref state)
+                                         [:projects-data
+                                          project :properties])
+                                 m))
               m (dissoc m :id :policykey :qid :issueid :project)
               ;; the userid of the poll is a sha256 hash of the cookie id
               ;; thus we are sure the user can vote only once for the session.
