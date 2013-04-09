@@ -631,18 +631,18 @@
 
   (GET "/find-policies/:project/:db/:policykey/:qid/:issueid/:acceptability"
        [project db policykey qid issueid acceptability]
-       (throw (ex-info "NYI" {}))
-       ;; (let [dbconn (db/make-connection project db "guest" "")]
-       ;;   (db/with-db dbconn
-       ;;     (let [ag (export-to-argument-graph dbconn)
-       ;;           theory (policies (symbol policykey))
-       ;;           policies (find-policies ag theory (symbol qid) (symbol issueid)
-       ;;                                   (condp = acceptability
-       ;;                                     "in" :in
-       ;;                                     "out" :out
-       ;;                                     "undecided" :undecided))]
-       ;;       {:body             {:policies policies}})))
-       )
+       (let [dbconn (db/make-connection project db "guest" "")]
+         (db/with-db dbconn
+           (let [ag (export-to-argument-graph dbconn)
+                 policy (project/load-theory
+                         project
+                         (get-in (deref state) [:projects-data project :properties :policy]))
+                 policies (find-policies ag policy (symbol qid) (symbol issueid)
+                                         (condp = acceptability
+                                           "in" :in
+                                           "out" :out
+                                           "undecided" :undecided))]
+             {:body             {:policies policies}}))))
 
   ;; Argument Evaluation
   
