@@ -290,7 +290,7 @@ PM.format_sexpr = function(sexpr, language_clj, lang) {
 
 // Returns the header of the current policy
 PM.get_policy_header = function(policy_id) {
-    var global_policy = PM.policies.get(IMPACT.current_policy);
+    var global_policy = PM.current_policy.toJSON();
     var sections = global_policy.sections;
     for(var i = 0; i < sections.length; i++) {
         var subsection = sections[i].sections;
@@ -304,7 +304,7 @@ PM.get_policy_header = function(policy_id) {
 
 // Returns the all the policies ids of the current policy
 PM.get_policies_ids = function() {
-    var global_policy = PM.policies.get(IMPACT.current_policy);
+    var global_policy = PM.current_policy.toJSON();
     var sections = global_policy.sections;
     var policies = [];
     
