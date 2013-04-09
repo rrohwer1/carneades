@@ -57,11 +57,12 @@ can be of the form \"theory\" or \"project/theory\". The former refers
 (defn load-theory
   "Loads the theory of a project"
   [project theory]
+  {:pre [(not (nil? project))]}
   (let [project-path (str projects-directory file-separator project)
         theory-path (absolute-theory-path project theory)]
     (theory/load-theory theory-path)))
 
-(defn load-policy
+(defn- load-policy
   "Loads the policy of a project"
   [project project-properties]
   (when-let [policy (:policy project-properties)]

@@ -15,6 +15,7 @@
             [carneades.engine.scheme :as scheme]
             [carneades.database.db :as db]
             [carneades.database.argument-graph :as ag-db]
+            [carneades.project.admin :as project]
             [carneades.engine.policy :as policy]
             [carneades.engine.argument-graph :as ag]))
 
@@ -210,8 +211,12 @@ default-fn is a function returning the default formalized answer for a question.
 
 (defn askable-statements-atoms
   "Returns the list of askable statements in the ag stored in db"
-  [dbname policy]
-  (db/with-db (db/make-connection dbname "guest" "")
+  [project dbname policy]
+  (prn "[askable-statements-atoms]")
+  (prn "project=" project)
+  (prn "policy=")
+  (pprint policy)
+  (db/with-db (db/make-connection project dbname "guest" "")
     (let [statements (ag-db/list-statements)]
       (map :atom (filter (partial askable? policy) statements))))) 
 
@@ -285,26 +290,24 @@ default-fn is a function returning the default formalized answer for a question.
 
 (defn get-questions-for-answers-modification
   "Returns a list of questions to modify the answer in the ag stored in db."
-  [db policy-name lang]
-  (throw (ex-info "NYI" {}))
-  ;; (let [policy (policy/policies (symbol policy-name))
-  ;;       ag (export-to-argument-graph (db/make-connection db "guest" ""))
-  ;;       atoms (askable-statements-atoms db policy)
-  ;;       atoms (put-atoms-being-accepted-in-the-front ag atoms)
-  ;;       atoms-by-pred (group-by first atoms)
-  ;;       ;; keep only one atom per predicate
-  ;;       atoms (map first (vals atoms-by-pred))
-  ;;       questions (map-indexed (fn [idx atom]
-  ;;                                (get-first-question
-  ;;                                 idx
-  ;;                                 atom
-  ;;                                 lang
-  ;;                                 policy
-  ;;                                 (partial get-default-values ag policy atoms-by-pred)))
-  ;;                              atoms)
-  ;;       questions (remove-superfluous-questions questions policy)]
-  ;;   questions)
-  )
+  [project db policy-name lang]
+  (let [policy (project/load-theory project policy-name)
+        ag (export-to-argument-graph (db/make-connection project db "guest" ""))
+        atoms (askable-statements-atoms project db policy)
+        atoms (put-atoms-being-accepted-in-the-front ag atoms)
+        atoms-by-pred (group-by first atoms)
+        ;; keep only one atom per predicate
+        atoms (map first (vals atoms-by-pred))
+        questions (map-indexed (fn [idx atom]
+                                 (get-first-question
+                                  idx
+                                  atom
+                                  lang
+                                  policy
+                                  (partial get-default-values ag policy atoms-by-pred)))
+                               atoms)
+        questions (remove-superfluous-questions questions policy)]
+    questions))
 
 (defn smart-update-statement
   "Updates the literal in the db with a new weight.
@@ -327,8 +330,8 @@ of 0.0"
 
 (defn update-statements-weights
   "Updates the weight of the statements in the db."
-  [db username password statements policy]
-  (let [dbconn (db/make-connection db username password)]
+  [project db username password statements policy]
+  (let [dbconn (db/make-connection project db username password)]
    (db/with-db dbconn
      (doseq [[literal weight] statements]
        (smart-update-statement literal weight policy)))))
@@ -336,14 +339,14 @@ of 0.0"
 (defn modify-statements-weights
   "Updates the values of the given statements in the db.
 Statements are represented as a collection of [statement value] element."
-  [db username password statements policy]
-  (update-statements-weights db username password statements policy)
-  (evaluate-graph db username password))
+  [project db username password statements policy]
+  (update-statements-weights project db username password statements policy)
+  (evaluate-graph project db username password))
 
 (defn pseudo-delete-statements
   "Set the weight of the statements to 0.5 in the db."
-  [db username password ids]
-  (let [dbconn (db/make-connection db username password)]
+  [project db username password ids]
+  (let [dbconn (db/make-connection project db username password)]
    (db/with-db dbconn
      (doseq [id ids]
        (ag-db/update-statement id {:weight 0.5})))))

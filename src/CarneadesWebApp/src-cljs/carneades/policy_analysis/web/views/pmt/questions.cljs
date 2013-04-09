@@ -478,7 +478,11 @@ Returns the answers indexed by question's id."
       (js/PM.busy_cursor_on)
       (let [{:keys [questions deleted]} (deref questions)]
        (js/PM.ajax_post js/IMPACT.simulation_url
-                        (clj->js {:modify-facts {:facts (vals questions)
+                        (clj->js {:modify-facts {:facts (vals
+                                                         questions)
+                                                 :project
+                                                 js/IMPACT.project
+                                                 :policy js/IMPACT.current_policy
                                                  :deleted deleted
                                                  :db js/IMPACT.db}})
                         (fn [data]

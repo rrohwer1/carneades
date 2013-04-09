@@ -14,7 +14,6 @@ var IMPACT = {
     wsurl: "/carneadesws",
     argumentbrowser_url: "/argumentbrowser",
     simulation_url: "/carneades/policy-analysis/questions",
-    current_policy: "copyright-policies",
     debate_db: "copyright",
     rootpath: null
 };
@@ -269,6 +268,8 @@ PM.common_post_load = function() {
     PM.project = new PM.Project({id: "copyright"});
 
     PM.project.fetch({async:false});
+
+    IMPACT.current_policy = PM.project.get('policy');
       
     var normalized_scheme_path = PM.normalized_theory_path(PM.project,
                                                            PM.project.get('scheme'));

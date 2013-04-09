@@ -71,10 +71,12 @@
   [json session request]
   (let [jsondata (json :modifiable-facts)
         db (jsondata :db)
-        theory (jsondata :policy)]
+        policy (jsondata :policy)
+        project (jsondata :project)]
     {:body (json-str (get-questions-for-answers-modification
+                      project
                       db
-                      theory
+                      policy
                       (keyword (:lang session))))}))
 
 (defn get-username-and-password
@@ -85,27 +87,24 @@
 
 (defmethod ajax-handler :modify-facts
   [json session request]
-  (prn "modify-facts=")
-  (pprint json)
-  (prn)
-  (throw (ex-info "NYI" {}))
-  ;; (let [data (:modify-facts json)
-  ;;       facts (:facts data)
-  ;;       db (:db data)
-  ;;       theory (policies (deref current-policy))
-  ;;       facts (recons/reconstruct-statements facts)
-  ;;       to-modify (mapcat (fn [q] (recons/reconstruct-answer q theory (:values q))) facts)
-  ;;       [username password] (get-username-and-password request)]
-  ;;   (pseudo-delete-statements db username password (:deleted data))
-  ;;   (modify-statements-weights db username password to-modify theory)
-  ;;   (let [dbconn (db/make-connection db username password)
-  ;;         ag (export-to-argument-graph dbconn)
-  ;;         ;; restarts the engine to expand new rules
-  ;;         ;; that could be now reachable with the new facts
-  ;;         ;; session (start-engine session ag)
-  ;;         session (assoc session :all-questions-answered true :db db)
-  ;;         ] 
-  ;;     (questions-or-solution session)))
+  (let [data (:modify-facts json)
+        facts (:facts data)
+        db (:db data)
+        project (:project data)
+        theory (project/load-theory project (:policy data))
+        facts (recons/reconstruct-statements facts)
+        to-modify (mapcat (fn [q] (recons/reconstruct-answer q theory (:values q))) facts)
+        [username password] (get-username-and-password request)]
+    (pseudo-delete-statements project db username password (:deleted data))
+    (modify-statements-weights project db username password to-modify theory)
+    (let [dbconn (db/make-connection project db username password)
+          ag (export-to-argument-graph dbconn)
+          ;; restarts the engine to expand new rules
+          ;; that could be now reachable with the new facts
+          ;; session (start-engine session ag)
+          session (assoc session :all-questions-answered true :db db)
+          ] 
+      (questions-or-solution session)))
   )
 
 (defn new-session
