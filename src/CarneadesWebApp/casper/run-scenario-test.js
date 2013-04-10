@@ -87,7 +87,66 @@ var test_scenario_outline = function() {
     this.test.assertEval(function() {
         return $('p:first').text() == "☐ The person may publish the work.";
     }, 'The outline page shows that the main issue is not acceptable');
+
+    casper.then(function() {
+        this.click('#schemes-item');
+    });
+
+    casper.waitForSelector('.theory-view', test_scenario_schemes);
+
 };
+
+var test_scenario_schemes = function() {
+    this.test.assertEval(function() {
+        return $('#outline li:first a').text().match('Argument from') != null;
+    }, 'There is a least one scheme on the schemes page named Argument from..');
+
+    casper.then(function() {
+        this.click('#policies-item');
+    });
+
+    casper.waitForSelector('.policies-filtering', test_scenario_policies);
+};
+
+var test_scenario_policies = function() {
+    casper.then(function() {
+        this.click('#in');
+        this.waitWhileSelector('#UrhG', test_scenario_policies_aktionbundnis);
+    });
+
+};
+
+var test_scenario_policies_aktionbundnis = function() {
+    this.test.assertEval(function() {
+        return $('input[type=submit]').length == 1;
+    }, 'Only one policy makes the issue acceptable');
+
+    casper.then(function() {
+        this.click('#inputQ12-Aktionsbundnis');
+    });
+
+    casper.waitForSelector('#argumentgraph', 
+                           test_scenario_outline_after_eval,
+                           function() {
+                               this.fail('Selecting a policy does not work');
+                           },
+                           10000);
+};
+
+var test_scenario_outline_after_eval = function() {
+    this.test.assertEval(function() {
+        return $('p:first').text() == "☑ The person may publish the work.";
+    }, 'The outline page shows that the main issue is now acceptable');
+};
+
+// TODO test changing answer to license
+// TODO test validating UhRG
+// TODO test issue is in
+// TODO test creating a statement
+// TODO test creating an argument
+// TODO test reading the general map
+// TODO test copy / export / vote / evaluate
+
 
 casper.start(casper.cli.get('url'), function() {
     casper.waitForSelector('#mainmenu', function() {
