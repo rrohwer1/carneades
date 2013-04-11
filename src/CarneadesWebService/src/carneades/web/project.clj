@@ -11,7 +11,7 @@
     (db/with-db (db/make-connection project "debates" "root" "pw1")
       (case/create-debate {:title "Debates"
                            :public true
-                           :id (gensym (str project "-debates"))}))))
+                           :id "main"}))))
 
 (defn init-projects-data!
   "Returns the project data and creates debate databases if missing."

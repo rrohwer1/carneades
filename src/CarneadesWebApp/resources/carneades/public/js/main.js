@@ -14,7 +14,7 @@ var IMPACT = {
     wsurl: "/carneadesws",
     argumentbrowser_url: "/argumentbrowser",
     simulation_url: "/carneades/policy-analysis/questions",
-    debate_db: "copyright",
+    debate_db: "main",
     rootpath: null
 };
 

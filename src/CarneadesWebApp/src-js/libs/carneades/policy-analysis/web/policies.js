@@ -121,13 +121,13 @@ PM.display_policies = function(sectionid, subset) {
                                  
                                  $('.policy-filtering').click(PM.on_policy_filtering);
 
-                                 // hack
-                                 $('a:contains(argument map)').click(
-                                     function() {
-                                         PM.set_arguments_url('copyright');       
-                                         return false;    
-                                     }
-                                 );
+                                 // // hack for UID
+                                 // $('a:contains(argument map)').click(
+                                 //     function() {
+                                 //         PM.set_arguments_url('copyright');       
+                                 //         return false;    
+                                 //     }
+                                 // );
 
                              }
                             });
