@@ -137,11 +137,88 @@ var test_scenario_outline_after_eval = function() {
     this.test.assertEval(function() {
         return $('p:first').text() == "☑ The person may publish the work.";
     }, 'The outline page shows that the main issue is now acceptable');
+
+    casper.then(function() {
+        this.click('#facts-item');
+    });
+
+    casper.waitForText('Modify the facts.', test_scenario_change_facts);
+
 };
 
-// TODO test changing answer to license
-// TODO test validating UhRG
-// TODO test issue is in
+var test_scenario_change_facts = function() {
+    casper.then(function() {
+        this.click('a[href="#/facts/modify"]');
+    });
+
+    casper.waitForText('You can modify the answers below', test_scenario_change_facts_license);
+};
+
+var test_scenario_change_facts_license = function() {
+
+    // selects 'yes' for the license question
+    casper.thenEvaluate(function(term) {
+        document.querySelector('input[name="input-q3-7"][value=yes]').setAttribute('checked', true);
+    });
+
+    casper.then(function() {
+        this.click('input[type=button][value=Submit]');
+    });
+
+    casper.waitForSelector('#argumentgraph', 
+                           test_scenario_select_urhg,
+                           function() {
+                               this.fail('Modifying the answer does not work');
+                           },
+                           10000);
+};
+
+var test_scenario_select_urhg = function() {
+    casper.then(function() {
+        this.click('#policies-item');
+    });
+
+    casper.waitForSelector('.policies-filtering', test_scenario_select_urhg2);
+};
+
+
+var test_scenario_select_urhg2 = function() {
+    this.capture('/tmp/carneades.png', {
+        top: 0,
+        left: 0,
+        width: 1024,
+        height: 800
+    });
+
+    casper.then(function() {
+        this.click('#inputUrhG');
+    });
+
+    casper.waitForSelector('#argumentgraph', 
+                           test_scenario_copy,
+                           function() {
+                               this.fail('Applying UrhG policy does not work');
+                           },
+                           10000)
+};
+
+var test_scenario_copy = function () {
+    casper.then(function() {
+        this.click('#copy');
+    });
+
+    casper.setFilter("page.confirm", function(msg) {
+        return msg === "Make a copy of the current case?" ? true : false;
+    });
+
+    casper.waitForText('You are now viewing a copy of the case.', test_scenario_export);
+
+};
+
+var test_scenario_export = function () {
+    
+};
+
 // TODO test creating a statement
 // TODO test creating an argument
 // TODO test reading the general map
