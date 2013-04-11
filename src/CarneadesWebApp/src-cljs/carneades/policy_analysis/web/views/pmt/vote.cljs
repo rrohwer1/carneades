@@ -66,10 +66,11 @@
                                     (set! js/document.cookie
                                           (str "pollid-" js/IMPACT.db
                                                "="
-                                               (.-id response))))
-                         :error js/PM.on_model_error}))
-        (template this :after-vote {:db db
-                                    :project js/IMPACT.project}))))
+                                               (.-id response)))
+                                    (template this :after-vote
+                                              {:db db
+                                               :project js/IMPACT.project}))
+                         :error js/PM.on_model_error})))))
 
   :show-vote-results
   ([]

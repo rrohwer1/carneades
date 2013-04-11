@@ -1,4 +1,4 @@
-var casper = require('casper').create();
+var casper = require('casper').create({waitTimeout: 10000});
 
 console.log('url = ' + casper.cli.get('url'));
 
@@ -183,13 +183,6 @@ var test_scenario_select_urhg = function() {
 
 
 var test_scenario_select_urhg2 = function() {
-    this.capture('/tmp/carneades.png', {
-        top: 0,
-        left: 0,
-        width: 1024,
-        height: 800
-    });
-
     casper.then(function() {
         this.click('#inputUrhG');
     });
@@ -211,19 +204,107 @@ var test_scenario_copy = function () {
         return msg === "Make a copy of the current case?" ? true : false;
     });
 
-    casper.waitForText('You are now viewing a copy of the case.', test_scenario_export);
+    casper.waitForText('You are now viewing a copy of the case.', 
+                       function () {
+                           casper.waitForText('may publish the work', test_scenario_vote);
+                       });
 
 };
 
-var test_scenario_export = function () {
+var test_scenario_vote = function () {
+    casper.then(function () {
+        this.click('.vote');
+    });
+
+   casper.waitForText('Given the facts of this case', test_scenario_vote2);
+};
+
+var test_scenario_vote2 = function () {
+    casper.then(function () {
+        this.click('.vote-now');
+    });
+
+    casper.waitForText('Thank you for your vote!', test_scenario_vote3);
+
+};
+
+var test_scenario_vote3 = function () {
+    casper.then(function () {
+        this.click('.show-vote-results');
+    });
+
+    casper.waitForText('Claim', test_scenario_vote4);
+};
+
+var test_scenario_vote4 = function () {
+    this.test.assertEval(function () {
+       return $('tr td:nth-of-type(2)').text() == "100.00%";
+    }, 'The vote has been registered');
+
+    casper.then(function() {
+        this.click('#arguments-item');
+    });
+
+    casper.waitForSelector('#argumentgraph', test_scenario_newstatement)
+};
+
+var test_scenario_evaluation = function () {
+    casper.then(function () {
+        this.click('.evaluate');
+    });
+
+    casper.waitForText('Evaluation finished', function() {
+        casper.waitForSelector('#newstatement', test_scenario_newstatement);
+    });
+};
+
+var test_scenario_newstatement = function () {
+    casper.then(function () {
+        this.click('#newstatement');
+    });
+
+    console.log('Waiting for the statement editor');
+    // take_picture.call(this);
+    casper.waitForSelector('#save-statement', test_scenario_newstatement2);
+};    
+
+var test_scenario_newstatement2 = function () {
+    casper.thenEvaluate(function(term) {
+        var text_en = "Here some text!";
+        var metadata_en = "Here some metadata";
+        document.querySelector('input[name=main][value=yes]').setAttribute('checked', true);
+        document.querySelector('#statement-editor-text').value = text_en;  
+        document.querySelector('.metadata-description-input').value = metadata_en;
+
+        this.click('#save-statement');
+    });
+
     
+    casper.waitForSelector('#argumentgraph', test_scenario_newstatement3)
+};
+
+var test_scenario_newstatement3 = function () {
+    casper.waitForText('Here some text!', test_scenario_newstatement4);
+};
+
+var test_scenario_newstatement4 = function () {
 };
 
 // TODO test creating a statement
 // TODO test creating an argument
 // TODO test reading the general map
-// TODO test copy / export / vote / evaluate
+// TODO export
+// TODO test report
 
+var take_picture = function () {
+// timeout
+    this.capture('/tmp/carneades.png', {
+        top: 0,
+        left: 0,
+        width: 1024,
+        height: 1600
+    });
+};
 
 casper.start(casper.cli.get('url'), function() {
     casper.waitForSelector('#mainmenu', function() {

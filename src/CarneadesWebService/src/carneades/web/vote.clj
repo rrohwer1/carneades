@@ -15,6 +15,7 @@
   (with-db (make-connection project "debates" "guest" "")
    (let [opinions (case/get-opinions-for-case debateid casedb)
          nb-opinions (count opinions)
+         nb-opinions (if (zero? nb-opinions) 1 nb-opinions)
          grouped-opinions (group-by identity opinions)]
      {:accepted (/ (count (grouped-opinions 1.0)) nb-opinions)
       :rejected (/ (count (grouped-opinions 0.0)) nb-opinions)

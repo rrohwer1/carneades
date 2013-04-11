@@ -152,7 +152,6 @@ right result should be in each case. "}
 (defn create-poll
   "Adds a poll for the debate table and returns its id."
   [debateid poll policies]
-  (printf "debateid = %s poll = %s policies = %s\n" debateid poll policies)
   (let [id (first (vals (jdbc/insert-record :poll poll)))]
     (jdbc/insert-record :vote {:debate debateid
                                :poll id})

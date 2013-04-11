@@ -59,9 +59,7 @@
                ;;              "casper/run-questions-test.js"]
                
                ;; lein cljsbuild test scenario
-               "scenario" ["casperjs"
-                           "--url=http://localhost:8080/carneades/policy-analysis/#/introduction"
-                           "casper/run-scenario-test.js"]},
+               "scenario" ["./scripts/run-casper-test.sh"]},
               :repl-listen-port 9000,
               :repl-launch-commands
               {"firefox-naked"

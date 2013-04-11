@@ -103,6 +103,7 @@
               ;; number by calling the GET debate-poll API.
               id (sha256 cookieid)
               m (assoc m :userid id)
+              _ (pprint m)
               debateid (get-in request [:params :debateid])
               [username password] (get-username-and-password request)
               dbconn (db/make-connection project *debatedb-name* username password)]
