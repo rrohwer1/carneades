@@ -1,6 +1,11 @@
-var casper = require('casper').create({waitTimeout: 10000});
+var casper = require('casper').create({waitTimeout: 6000});
 
 console.log('url = ' + casper.cli.get('url'));
+
+var test_timeout = function () {
+    take_picture.call(this);
+    this.fail('Timeout!');
+};
 
 var test_scenario_entry = function() {
     this.test.assertEval(function() {
@@ -88,12 +93,15 @@ var test_scenario_outline = function() {
         return $('p:first').text() == "☐ The person may publish the work.";
     }, 'The outline page shows that the main issue is not acceptable');
 
+    // casper.then(function() {
+    //     this.click('#schemes-item');
+    // });
+
+    // casper.waitForSelector('.theory-view', test_scenario_schemes);
     casper.then(function() {
-        this.click('#schemes-item');
+        this.click('#newstatement');
     });
-
-    casper.waitForSelector('.theory-view', test_scenario_schemes);
-
+    casper.waitForSelector('#save-statement', test_scenario_newstatement);
 };
 
 var test_scenario_schemes = function() {
@@ -263,41 +271,66 @@ var test_scenario_newstatement = function () {
         this.click('#newstatement');
     });
 
-    console.log('Waiting for the statement editor');
-    // take_picture.call(this);
     casper.waitForSelector('#save-statement', test_scenario_newstatement2);
 };    
 
 var test_scenario_newstatement2 = function () {
-    casper.thenEvaluate(function(term) {
-        var text_en = "Here some text!";
-        var metadata_en = "Here some metadata";
-        document.querySelector('input[name=main][value=yes]').setAttribute('checked', true);
-        document.querySelector('#statement-editor-text').value = text_en;  
-        document.querySelector('.metadata-description-input').value = metadata_en;
+    this.test.assertExist('input[name=main][value=yes]');
 
-        this.click('#save-statement');
+    casper.thenEvaluate(function(term) {
+        document.querySelector('input[name=main][value=yes]').setAttribute('checked', true);
     });
 
+    // this.test.assertEval(function() {
+    //     return document.querySelector('input[name=main][value=yes]').getAttribute('checked') == "true";
+    // }, 'Main was set to true');
+
+    casper.then(function () {
+        this.click('#save-statement'); 
+    });
     
-    casper.waitForSelector('#argumentgraph', test_scenario_newstatement3)
+    casper.waitWhileSelector('#save-statement', test_scenario_newstatement4)
 };
 
-var test_scenario_newstatement3 = function () {
-    casper.waitForText('Here some text!', test_scenario_newstatement4);
-};
+
+// var text_en = "Here some text!";
+// var metadata_en = "Here some metadata";
+
+// document.querySelector('#statement-editor-text').value = text_en;  
+// document.querySelector('.metadata-description-input').value = metadata_en;
+
+// var test_scenario_newstatement3 = function () {
+
+    
+//     casper.waitForText('Here some text!', test_scenario_newstatement4);
+    
+// };
 
 var test_scenario_newstatement4 = function () {
+    take_picture.call(this);
+
+    casper.then(function () {
+        this.click('#newargument');
+    });
+
+    casper.waitForSelector('.save-argument', test_scenario_newargument);
 };
 
-// TODO test creating a statement
+var test_scenario_newargument = function () {
+    casper.thenEvaluate(function (term) {
+        $('#argument-editor-scheme').select2("val");
+    });
+
+    // take_picture.call(this);
+};
+
 // TODO test creating an argument
 // TODO test reading the general map
 // TODO export
 // TODO test report
 
 var take_picture = function () {
-// timeout
+
     this.capture('/tmp/carneades.png', {
         top: 0,
         left: 0,
