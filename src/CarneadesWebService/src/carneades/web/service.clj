@@ -18,6 +18,7 @@
         [ring.middleware.format-response :only [wrap-restful-response]]
         [ring.middleware.cookies :only [wrap-cookies]])
   (:require [clojure.data.json :as json]
+            [clojure.java.io :as io]
             [carneades.database.argument-graph :as ag-db]
             [carneades.database.case :as case]
             [carneades.database.db :as db]
@@ -66,6 +67,16 @@
               ;; TODO enforces Admin role here
               ]
           (throw (ex-info "NYI" {}))))
+
+  ;; documents for projects
+  (GET "/documents/:project/:doc" [project doc]
+       (let [path (str project/projects-directory file-separator project file-separator
+                       "documents" file-separator doc)]
+         (if (not (exists? path))
+           {:status 404
+            :body "File not found"}
+           {:body
+            (io/input-stream path)})))
   
   (PUT "/debate/:id" request   
        (let [m (json/read-json (slurp (:body request)))

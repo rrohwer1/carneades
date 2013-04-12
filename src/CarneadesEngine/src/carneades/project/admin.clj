@@ -3,12 +3,15 @@
 
 (ns ^{:doc "Management functions for the projects."}
   carneades.project.admin
-  (:use [carneades.engine.utils :only [file-separator exists?]])
+  (:use [carneades.engine.utils :only [file-separator exists? file-separator]])
   (:require [carneades.config.config :as config]
             [carneades.engine.scheme :as theory]
             [clojure.string :as s]))
 
-(def projects-directory (config/properties :projects-directory))
+(def projects-directory (config/properties :projects-directory
+                                           (str (System/getProperty "user.dir")
+                                                file-separator
+                                                "projects")))
 
 (def theories-directory "theories")
 
