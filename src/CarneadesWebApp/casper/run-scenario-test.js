@@ -93,15 +93,15 @@ var test_scenario_outline = function() {
         return $('p:first').text() == "☐ The person may publish the work.";
     }, 'The outline page shows that the main issue is not acceptable');
 
-    // casper.then(function() {
-    //     this.click('#schemes-item');
-    // });
-
-    // casper.waitForSelector('.theory-view', test_scenario_schemes);
     casper.then(function() {
-        this.click('#newstatement');
+        this.click('#schemes-item');
     });
-    casper.waitForSelector('#save-statement', test_scenario_newstatement);
+
+    casper.waitForSelector('.theory-view', test_scenario_schemes);
+    // casper.then(function() {
+    //     this.click('#newstatement');
+    // });
+    // casper.waitForSelector('#save-statement', test_scenario_newstatement);
 };
 
 var test_scenario_schemes = function() {
