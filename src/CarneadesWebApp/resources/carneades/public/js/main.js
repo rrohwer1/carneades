@@ -282,7 +282,7 @@ PM.common_post_load = function() {
     var normalized_policy_path = PM.normalized_theory_path(PM.project,
                                                            PM.project.get('policy'));
     PM.current_policy = new PM.Theory({theory_path: normalized_policy_path});
-    PM.current_policy.fetch();
+    PM.current_policy.fetch({async: false});
 
     PM.arguments = new PM.Arguments;
     PM.statements = new PM.Statements;
