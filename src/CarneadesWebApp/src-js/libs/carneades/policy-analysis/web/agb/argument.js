@@ -5,7 +5,7 @@ goog.provide('carneades.policy_analysis.web.agb.argument');
 
 AGB.argument_url = function(db, argid)
 {
-    return '/arguments/argument/' + db + '/' + argid;
+    return '/arguments/argument/' + IMPACT.project + '/' + db + '/' + argid;
 };
 
 AGB.set_argument_url = function(db, argid)
