@@ -30,7 +30,6 @@
             ))
 
 ;; To Do: 
-;; - way to bootstrap the debate database
 ;; - search operations, including full text search
 ;; - CAF import
 ;; - OPML export
@@ -575,35 +574,35 @@
   ;; (GET "/scheme/:id" [id]  ;; return the scheme with the given id
   ;;      {:body       (get schemes-by-id (symbol id))})
   
-  (POST "/matching-schemes" request ; return all schemes with conclusions matching a goal
-        (let [goal (unpack-statement (json/read-json (slurp (:body request))))]
-          {:body          (get-schemes schemes-by-predicate goal {} true)}))
+  ;; (POST "/matching-schemes" request ; return all schemes with conclusions matching a goal
+  ;;       (let [goal (unpack-statement (json/read-json (slurp (:body request))))]
+  ;;         {:body          (get-schemes schemes-by-predicate goal {} true)}))
   
-  (POST "/apply-scheme/:db/:id" request 
-	;; apply the scheme with the given id to the substitutions in the body
-	;; and add the resulting arguments, if they are ground, to the 
-	;; database. Returns a list of the ids of the new arguments.
-        (let [data (json/read-json (slurp (:body request)))
-              subs (unpack-subs (:subs data))
-              attributes (unpack-arg-attrs (:attributes data))
-              scheme (get schemes-by-id (symbol (:id (:params request))))]
-          (let [responses (instantiate-scheme scheme subs)
-                [username password] (get-username-and-password request)
-                dbconn (db/make-connection (:db (:params request)) username password)]
-            (prn "attributes: " attributes)
-            (db/with-db dbconn
-              {:body              
-               (reduce (fn [ids response]
-                         (ag-db/assume (:assumptions response))
-                         (if (seq ids)
-                           (conj ids (ag-db/create-argument (:argument response)))
-                           ;; the first argument is the main one. It is
-                           ;; created with the attributes sent to the service
-                           (conj ids (ag-db/create-argument (merge
-                                                             (:argument response)
-                                                             attributes)))))
-                       []
-                       responses)}))))
+  ;; (POST "/apply-scheme/:db/:id" request 
+  ;;       ;; apply the scheme with the given id to the substitutions in the body
+  ;;       ;; and add the resulting arguments, if they are ground, to the 
+  ;;       ;; database. Returns a list of the ids of the new arguments.
+  ;;       (let [data (json/read-json (slurp (:body request)))
+  ;;             subs (unpack-subs (:subs data))
+  ;;             attributes (unpack-arg-attrs (:attributes data))
+  ;;             scheme (get schemes-by-id (symbol (:id (:params request))))]
+  ;;         (let [responses (instantiate-scheme scheme subs)
+  ;;               [username password] (get-username-and-password request)
+  ;;               dbconn (db/make-connection (:db (:params request)) username password)]
+  ;;           (prn "attributes: " attributes)
+  ;;           (db/with-db dbconn
+  ;;             {:body              
+  ;;              (reduce (fn [ids response]
+  ;;                        (ag-db/assume (:assumptions response))
+  ;;                        (if (seq ids)
+  ;;                          (conj ids (ag-db/create-argument (:argument response)))
+  ;;                          ;; the first argument is the main one. It is
+  ;;                          ;; created with the attributes sent to the service
+  ;;                          (conj ids (ag-db/create-argument (merge
+  ;;                                                            (:argument response)
+  ;;                                                            attributes)))))
+  ;;                      []
+  ;;                      responses)}))))
 
   (POST "/apply-substitutions" request
 	;; apply the given substitutions to the given statement

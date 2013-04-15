@@ -1,3 +1,2 @@
 {
- :projects-directory "projects"
 }
