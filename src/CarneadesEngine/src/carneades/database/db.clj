@@ -44,7 +44,7 @@
   ([project-name db-name username passwd & options]
      (let [options (apply hash-map options)
            db-protocol (:protocol options default-db-protocol) ;; "file|mem|tcp"
-           db-directory (str projects-directory File/separator
+           db-directory (str project/projects-directory File/separator
                              project-name File/separator "databases") ;; "path|host:port"
            db-host (str db-protocol "://" db-directory "/" db-name)
            ]
