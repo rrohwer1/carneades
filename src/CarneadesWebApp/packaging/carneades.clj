@@ -1,0 +1,3 @@
+{
+ :projects-directory "projects"
+}

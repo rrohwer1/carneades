@@ -10,7 +10,6 @@
         carneades.database.export
         carneades.database.import
         carneades.xml.caf.export
-        carneades.web.walton-schemes
         ring.util.codec
         [carneades.engine.utils :only [sha256]]
         [carneades.database.evaluation :only [evaluate-graph]]
