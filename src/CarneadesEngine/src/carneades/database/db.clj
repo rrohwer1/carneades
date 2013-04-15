@@ -40,13 +40,18 @@
 ;;              (file-seq (clojure.java.io/file default-db-host)))))
 
 (defn make-connection
-  "Returns a map describing a database connection."
+  "Returns a map describing a database connection. Use the :create
+true option to create a new database."
   ([project-name db-name username passwd & options]
      (let [options (apply hash-map options)
            db-protocol (:protocol options default-db-protocol) ;; "file|mem|tcp"
            db-directory (str project/projects-directory File/separator
                              project-name File/separator "databases") ;; "path|host:port"
            db-host (str db-protocol "://" db-directory "/" db-name)
+           db-host (if (:create options)
+                     db-host
+                     ;; see http://www.h2database.com/html/features.html#database_only_if_exists
+                     (str db-host ";IFEXISTS=TRUE"))
            ]
        (prn "db-host " db-host)
        {:classname   "org.h2.Driver" 
@@ -62,7 +67,11 @@
                  (jdbc/with-query-results content ["script"] (doall (map :script content))))
         newdbname (uuid/make-uuid-str)]
     ;; TODO take new-username and new-password as arguments and remove old admin access
-    (with-db (make-connection project newdbname username password)
+    (with-db (make-connection project
+                              newdbname
+                              username
+                              password
+                              :create true)
       (apply jdbc/do-commands script))
     newdbname))
 

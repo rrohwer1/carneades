@@ -8,7 +8,8 @@
   [project]
   (when (not (exists? (db/dbfilename project "debates")))
     (case/create-debate-database project "debates" "root" "pw1")
-    (db/with-db (db/make-connection project "debates" "root" "pw1")
+    (db/with-db (db/make-connection project "debates" "root" "pw1"
+                                    :create true)
       (case/create-debate {:title "Debates"
                            :public true
                            :id "main"}))))

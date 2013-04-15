@@ -29,7 +29,11 @@
    the creators of the model, among other information.
    Returns true if the database is successul created and initialized"
   [project-name db-name root-username root-password metadata]
-  (let [db  (make-connection project-name db-name root-username root-password)]
+  (let [db  (make-connection project-name
+                             db-name
+                             root-username
+                             root-password
+                             :create true)]
     (jdbc/with-connection 
       db
       (jdbc/transaction
