@@ -305,6 +305,13 @@ PM.common_post_load = function() {
                          arguments: PM.debate_arguments,
                          statements: PM.debate_statements,
                          metadata: PM.debate_metadata});
+    
+    PM.markdown_add_hooks();
+};
+
+PM.markdown_add_hooks = function () {
+    var converter = Markdown.getSanitizingConverter(); 
+    converter.hooks.chain("preConversion", PM.citation_to_url); 
 };
 
 // http://www.lockencreations.com/2011/07/02/cant-debug-imported-js-files-when-using-jquery-getscript/

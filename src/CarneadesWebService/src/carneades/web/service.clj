@@ -206,7 +206,7 @@
              ;; s (unpack-statement m)
              [username password] (get-username-and-password request)
              {:keys [project db]} (:params request)
-             dbconn (db/make-connection db username password)
+             dbconn (db/make-connection project db username password)
              id (:id m)
              m (assoc m :header (zip-metadata (:header m)))]
          (db/with-db dbconn

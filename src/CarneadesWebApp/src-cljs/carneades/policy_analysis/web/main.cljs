@@ -10,7 +10,6 @@
             [carneades.policy_analysis.web.agb.metadata]
             [carneades.policy_analysis.web.agb.agb_utils]
             [carneades.policy_analysis.web.agb.map]
-            [carneades.policy_analysis.web.agb.markdown]
             [carneades.policy_analysis.web.ajax]
             [carneades.policy_analysis.web.issues]
             [carneades.policy_analysis.web.collections.schemes]
