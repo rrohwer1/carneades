@@ -402,7 +402,6 @@ PM.load_templates = function(toolboxState) {
     _.each([{name: 'menu', url: 'site/menu.html'},
             {name: 'pmmenu', url: 'site/pmmenu.html'},
             {name: 'metadata', url: 'site/metadata.html'},
-            {name: 'argumentlink', url: 'site/argumentlink.html'},
             {name: 'statementlink', url: 'site/statementlink.html'},
             {name: 'premise', url: 'site/premise.html'}],
            function(template) {
@@ -418,7 +417,6 @@ PM.load_templates = function(toolboxState) {
     _.each(['admin',
             'argumentgraph',
             'argument',
-            'argumentlink',
             'arguments',
             'facts',
             'introduction',
