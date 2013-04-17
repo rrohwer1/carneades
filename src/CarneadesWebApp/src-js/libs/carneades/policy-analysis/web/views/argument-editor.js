@@ -278,7 +278,8 @@ PM.ArgumentEditorView = Backbone.View.extend(
              var scheme = this.model.get('scheme').get('scheme').id;
              argument.set('scheme', '(' + scheme  + ')'); 
          }
-         
+     
+         console.log('saving argument...');
          if(argument.save(null, 
                           {error: PM.on_model_error,
                            wait: true,

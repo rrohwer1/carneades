@@ -1,5 +1,9 @@
 var casper = require('casper').create({waitTimeout: 6000});
 
+casper.on("remote.message", function(message) {
+  this.echo("remote console.log: " + message);
+});
+
 console.log('url = ' + casper.cli.get('url'));
 
 var test_timeout = function () {
@@ -85,13 +89,13 @@ var test_scenario_outline = function() {
         return $('p:first').text() == "☐ The person may publish the work.";
     }, 'The outline page shows that the main issue is not acceptable');
 
-    this.click('#schemes-item');
+    // xthis.click('#schemes-item');
 
-    casper.waitForSelector('.theory-view', test_scenario_schemes);
-    // casper.then(function() {
-    //     this.click('#newstatement');
-    // });
-    // casper.waitForSelector('#save-statement', test_scenario_newstatement);
+    // casper.waitForSelector('.theory-view', test_scenario_schemes);
+    casper.then(function() {
+        this.click('#newstatement');
+    });
+    casper.waitForSelector('#save-statement', test_scenario_newstatement);
 };
 
 var test_scenario_schemes = function() {
@@ -252,8 +256,6 @@ var test_scenario_newstatement2 = function () {
     this.test.assertEval(function() {
         return document.querySelector('input[name=main]:checked').getAttribute('value') == "yes";
     }, 'Main was set to true');
-
-    // take_picture.call(this, '/tmp/carneades_before_save.png');
     
     this.click('#save-statement'); 
     
@@ -262,8 +264,6 @@ var test_scenario_newstatement2 = function () {
 };
 
 var test_scenario_newstatement3 = function () {
-    // take_picture.call(this, '/tmp/carneades_after_save.png');
-    
     this.click('#newargument');
 
     casper.waitForSelector('.save-argument', test_scenario_newargument);    
@@ -271,12 +271,83 @@ var test_scenario_newstatement3 = function () {
 
 var test_scenario_newargument = function () {
     casper.evaluate(function (term) {
-        $('#argument-editor-scheme').select2("val");
+        $('#argument-editor-weight').val(0.6).trigger('change');
+        
+        $('#argument-editor-scheme').select2("val", "appearance").trigger('change');
     });
+    
+    casper.waitForSelector('.premise-candidate', test_scenario_newargument2);
 
 };
 
-// TODO test creating an argument
+var test_scenario_newargument2 = function () {
+    this.test.assertEval(function () { return PM.debate_statements.length > 30; }
+                         , 'There are some statements in the debate');
+    
+    casper.evaluate(function () {
+        var conclusion_id = PM.debate_statements.at(2).id;
+        console.log('conclusion_id = ' + conclusion_id);
+        console.log('selected=');
+        
+        console.log($('.conclusion-candidate .statement-select'));
+        $('.conclusion-candidate .statement-select')
+            .select2("val", conclusion_id)
+            .trigger('change');
+        
+        
+    });
+    
+    casper.evaluate(function () {
+        var premise_id = PM.debate_statements.at(1).id;
+        $('.premise-candidate:first .statement-select')
+            .select2("val", premise_id)
+            .trigger('change');
+    });
+    
+    casper.evaluate(function() {
+        console.log('val=');
+        console.log( $('.conclusion-candidate .statement-select').select2("val") );
+        
+        console.log('val2=');
+        console.log($('.premise-candidate:first .statement-select').select2("val"));
+        
+        console.log('test true?');
+        console.log($('.conclusion-candidate .statement-select').select2("val") != "" 
+                    &&  $('.premise-candidate:first .statement-select').select2("val") != "");
+        
+
+    });
+    
+    casper.waitFor(function () {
+        return this.evaluate(function () {
+            return $('.conclusion-candidate .statement-select').select2("val") != "" 
+                &&  $('.premise-candidate:first .statement-select').select2("val") != "";
+        });
+    });
+    
+    console.log('wait for is finished');
+    
+    this.click('.save-argument'); 
+
+    take_picture.call(this, '/tmp/pic1.png');
+    
+    casper.waitWhileSelector('.save-argument', function () {
+        console.log('Waiting for the argument page');
+        take_picture.call(this, '/tmp/carneades_after_save2.png');
+        console.log(this.getCurrentUrl());
+        casper.waitForSelector('h2', test_scenario_newargument3);
+    });
+    
+};
+
+var test_scenario_newargument3 = function () {
+    console.log('We are on the argument page');
+    take_picture.call(this, '/tmp/carneades_after_save3.png');
+    
+    this.test.assertTextExists('minor');
+    this.test.assertTextExists('0.6');
+};
+
 // TODO test reading the general map
 // TODO export
 // TODO test report
