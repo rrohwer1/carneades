@@ -1,8 +1,8 @@
 var casper = require('casper').create({waitTimeout: 6000});
 
-casper.on("remote.message", function(message) {
-  this.echo("remote console.log: " + message);
-});
+// casper.on("remote.message", function(message) {
+//   this.echo("remote console.log: " + message);
+// });
 
 console.log('url = ' + casper.cli.get('url'));
 
@@ -89,13 +89,13 @@ var test_scenario_outline = function() {
         return $('p:first').text() == "☐ The person may publish the work.";
     }, 'The outline page shows that the main issue is not acceptable');
 
-    // xthis.click('#schemes-item');
+    this.click('#schemes-item');
 
-    // casper.waitForSelector('.theory-view', test_scenario_schemes);
-    casper.then(function() {
-        this.click('#newstatement');
-    });
-    casper.waitForSelector('#save-statement', test_scenario_newstatement);
+    casper.waitForSelector('.theory-view', test_scenario_schemes);
+    // casper.then(function() {
+    //     this.click('#newstatement');
+    // });
+    // casper.waitForSelector('#save-statement', test_scenario_newstatement);
 };
 
 var test_scenario_schemes = function() {
@@ -281,11 +281,11 @@ var test_scenario_newargument = function () {
 };
 
 var test_scenario_newargument2 = function () {
-    this.test.assertEval(function () { return PM.debate_statements.length > 30; }
-                         , 'There are some statements in the debate');
+    this.test.assertEval(function () { return PM.statements.length > 5; }
+                         , 'There are some statements in the cae');
     
     casper.evaluate(function () {
-        var conclusion_id = PM.debate_statements.at(2).id;
+        var conclusion_id = PM.statements.at(2).id;
         console.log('conclusion_id = ' + conclusion_id);
         console.log('selected=');
         
@@ -298,24 +298,10 @@ var test_scenario_newargument2 = function () {
     });
     
     casper.evaluate(function () {
-        var premise_id = PM.debate_statements.at(1).id;
+        var premise_id = PM.statements.at(1).id;
         $('.premise-candidate:first .statement-select')
             .select2("val", premise_id)
             .trigger('change');
-    });
-    
-    casper.evaluate(function() {
-        console.log('val=');
-        console.log( $('.conclusion-candidate .statement-select').select2("val") );
-        
-        console.log('val2=');
-        console.log($('.premise-candidate:first .statement-select').select2("val"));
-        
-        console.log('test true?');
-        console.log($('.conclusion-candidate .statement-select').select2("val") != "" 
-                    &&  $('.premise-candidate:first .statement-select').select2("val") != "");
-        
-
     });
     
     casper.waitFor(function () {
@@ -325,27 +311,17 @@ var test_scenario_newargument2 = function () {
         });
     });
     
-    console.log('wait for is finished');
-    
     this.click('.save-argument'); 
-
-    take_picture.call(this, '/tmp/pic1.png');
     
     casper.waitWhileSelector('.save-argument', function () {
-        console.log('Waiting for the argument page');
-        take_picture.call(this, '/tmp/carneades_after_save2.png');
-        console.log(this.getCurrentUrl());
-        casper.waitForSelector('h2', test_scenario_newargument3);
+        casper.waitForText('Premises', test_scenario_newargument3);
     });
     
 };
 
 var test_scenario_newargument3 = function () {
-    console.log('We are on the argument page');
-    take_picture.call(this, '/tmp/carneades_after_save3.png');
-    
-    this.test.assertTextExists('minor');
-    this.test.assertTextExists('0.6');
+    this.test.assertTextExists('minor', 'There is a minor text');
+    this.test.assertTextExists('0.6', 'There is a 0.6 text');
 };
 
 // TODO test reading the general map
