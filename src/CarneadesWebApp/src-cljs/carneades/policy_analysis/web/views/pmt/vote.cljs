@@ -4,9 +4,9 @@
 (ns carneades.policy-analysis.web.views.pmt.vote
   (:use [jayq.util :only [log clj->js]]
         [jayq.core :only [$ inner attr]]
-        [carneades.policy-analysis.web.views.core :only [template]])
-  (:require [carneades.policy-analysis.web.backbone.core :as bb])
-  (:require-macros [carneades.policy-analysis.web.backbone.macros :as bb]
+        [carneades.analysis.web.views.core :only [template]])
+  (:require [carneades.analysis.web.backbone.core :as bb])
+  (:require-macros [carneades.analysis.web.backbone.macros :as bb]
                    [carneades.policy-analysis.web.views.menu :as menu]))
 
 (defn get-vote-score

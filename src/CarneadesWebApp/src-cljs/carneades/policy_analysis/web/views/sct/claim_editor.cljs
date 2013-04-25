@@ -2,14 +2,15 @@
 ;;; Licensed under the EUPL V.1.1
 
 (ns carneades.policy-analysis.web.views.sct.claim-editor
-  (:use [carneades.policy-analysis.web.views.core :only [template json agreed? disagreed?
-                                prepare-claim prepare-arguments
-                                pro-answered con-answered
-                                get-arg]]
+  (:use [carneades.analysis.web.views.core :only [template json]]
+        [carneades.policy-analysis.web.views.core :only [agreed? disagreed?
+                                                         prepare-claim prepare-arguments
+                                                         pro-answered con-answered
+                                                         get-arg]]
         [jayq.core :only [$ css inner attr val]]
         [jayq.util :only [log clj->js]])
-  (:require [carneades.policy-analysis.web.backbone.core :as bb])
-  (:require-macros [carneades.policy-analysis.web.backbone.macros :as bb])
+  (:require [carneades.analysis.web.backbone.core :as bb])
+  (:require-macros [carneades.analysis.web.backbone.macros :as bb])
   (:refer-clojure :exclude [val]))
 
 (defn init-radio-buttons

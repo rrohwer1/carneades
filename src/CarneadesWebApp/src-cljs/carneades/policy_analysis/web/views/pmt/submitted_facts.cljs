@@ -4,12 +4,12 @@
 (ns carneades.policy-analysis.web.views.pmt.submitted-facts
   (:use [jayq.util :only [log clj->js]]
         [jayq.core :only [$ inner attr append]]
-        [carneades.policy-analysis.web.views.core :only [template]]
+        [carneades.analysis.web.views.core :only [template]]
         [cljs.reader :only [read-string]]
         [carneades.policy-analysis.web.views.pmt.questions :only [show-facts]])
-  (:require [carneades.policy-analysis.web.backbone.core :as bb]
-            [carneades.policy-analysis.web.template :as template])
-  (:require-macros [carneades.policy-analysis.web.backbone.macros :as bb]
+  (:require [carneades.analysis.web.backbone.core :as bb]
+            [carneades.analysis.web.template :as template])
+  (:require-macros [carneades.analysis.web.backbone.macros :as bb]
                    [carneades.policy-analysis.web.views.menu :as menu]))
 
 (defn show-facts-for-modification

@@ -2,13 +2,14 @@
 ;;; Licensed under the EUPL V.1.1
 
 (ns carneades.policy-analysis.web.views.sct.comparison
-  (:use [carneades.policy-analysis.web.views.core :only [template json score-agreed?]]
+  (:use [carneades.analysis.web.views.core :only [template json score-agreed?]]
+        [carneades.policy-analysis.web.views.core :only [score-agreed?]]
         [carneades.policy-analysis.web.models.core :only [get-metadata]]
         [jayq.core :only [$ css inner attr val]]
         [jayq.util :only [log clj->js]])
-  (:require [carneades.policy-analysis.web.backbone.core :as bb]
+  (:require [carneades.analysis.web.backbone.core :as bb]
             [carneades.policy-analysis.web.models.core :as model])
-  (:require-macros [carneades.policy-analysis.web.backbone.macros :as bb]))
+  (:require-macros [carneades.analysis.web.backbone.macros :as bb]))
 
 (defn build-metadata
   "Builds the metadata from the similarity map"

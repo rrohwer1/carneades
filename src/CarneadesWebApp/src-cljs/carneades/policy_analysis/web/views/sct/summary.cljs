@@ -2,13 +2,14 @@
 ;;; Licensed under the EUPL V.1.1
 
 (ns carneades.policy-analysis.web.views.sct.summary
-  (:use [carneades.policy-analysis.web.views.core :only [template json prepare-claim]]
+  (:use [carneades.analysis.web.views.core :only [template json]]
+        [carneades.policy-analysis.web.views.core :only [prepare-claim]]
         [carneades.policy-analysis.web.models.core :only [get-stmt]]
         [jayq.core :only [$ css inner attr val]]
         [jayq.util :only [log clj->js]])
-  (:require [carneades.policy-analysis.web.backbone.core :as bb]
+  (:require [carneades.analysis.web.backbone.core :as bb]
             [carneades.policy-analysis.web.views.sct.claim-editor :as claim])
-  (:require-macros [carneades.policy-analysis.web.backbone.macros :as bb])
+  (:require-macros [carneades.analysis.web.backbone.macros :as bb])
   (:refer-clojure :exclude [val]))
 
 (defn assign-claim-ids

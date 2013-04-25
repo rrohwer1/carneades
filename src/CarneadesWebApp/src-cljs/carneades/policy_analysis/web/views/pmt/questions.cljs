@@ -5,12 +5,12 @@
   carneades.policy-analysis.web.views.pmt.questions
   (:use [jayq.util :only [log clj->js]]
         [jayq.core :only [$ append empty inner]]
-        [carneades.policy-analysis.web.i18n :only [i18n]]
-        [carneades.policy-analysis.web.views.core :only [template]])
+        [carneades.analysis.web.i18n :only [i18n]]
+        [carneades.analysis.web.views.core :only [template]])
   (:require [clojure.string :as s]
-            [carneades.policy-analysis.web.backbone.core :as bb]
-            [carneades.policy-analysis.web.dispatch :as dispatch])
-  (:require-macros [carneades.policy-analysis.web.backbone.macros :as bb]
+            [carneades.analysis.web.backbone.core :as bb]
+            [carneades.analysis.web.dispatch :as dispatch])
+  (:require-macros [carneades.analysis.web.backbone.macros :as bb]
                    [carneades.policy-analysis.web.views.menu :as menu]))
 
 (defn current-fact-value

@@ -4,10 +4,10 @@
 (ns carneades.policy-analysis.web.views.pmt.report
   (:use [jayq.util :only [log clj->js]]
         [jayq.core :only [$ inner attr]]
-        [carneades.policy-analysis.web.views.core :only [template]]
+        [carneades.analysis.web.views.core :only [template]]
         [carneades.policy-analysis.web.views.pmt.vote :only [round-score]])
-  (:require [carneades.policy-analysis.web.backbone.core :as bb])
-  (:require-macros [carneades.policy-analysis.web.backbone.macros :as bb]
+  (:require [carneades.analysis.web.backbone.core :as bb])
+  (:require-macros [carneades.analysis.web.backbone.macros :as bb]
                    [carneades.policy-analysis.web.views.menu :as menu]))
 
 (bb/defview Report
