@@ -460,7 +460,8 @@ PM.load_templates = function(toolboxState) {
             'vote_results',
             'report',
             'submitted_facts',
-            'ask_modify_facts'
+            'ask_modify_facts',
+            'header',
            ],
            function(name) {
                var url = toolboxState == undefined ?

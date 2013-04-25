@@ -1,3 +1,4 @@
+/* policy analysis */
 
 #menu {
     float: left;
@@ -274,4 +275,20 @@
 
 .fact-button {
     vertical-align: bottom;
+}
+
+/* analysis */
+
+/* .header-left { */
+/*     float: left; */
+/* } */
+
+.app-logo {
+    vertical-align: middle;
+}
+
+.app-name {
+    vertical-align: middle;
+    font-weight: bold;
+    font-size: 20px;
 }
