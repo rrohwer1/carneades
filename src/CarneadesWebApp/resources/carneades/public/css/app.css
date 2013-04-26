@@ -279,16 +279,41 @@
 
 /* analysis */
 
-/* .header-left { */
-/*     float: left; */
-/* } */
+.header {
+    width: 100%;
+    /* top: 0; */
+    /* left: 0; */
+    position: fixed;
+}
+
+.header-left {
+    
+    position: absolute;
+    vertical-align: middle;
+    width: 10%;
+    background-color: green;
+}
+
+.header-right {
+    position: absolute;
+    left: 20px;
+}
 
 .app-logo {
-    vertical-align: middle;
+    float: left;
+    min-width: 30px;
+    max-height: 30px;
+    /* vertical-align: middle; */
 }
 
 .app-name {
-    vertical-align: middle;
+    margin-left: 5px;
+    /* vertical-align: middle; */
     font-weight: bold;
     font-size: 20px;
+}
+
+.content {
+    margin-top: 300px;
+    position: absolute;
 }

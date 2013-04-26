@@ -85,6 +85,8 @@ PM.dispatch_url = function(sections) {
         carneades.policy_analysis.web.repl.connect();
     } else if(sections[1] == "report") {
         carneades.policy_analysis.web.views.pmt.report.display();
+    } else if(sections[1] == "home") {
+        carneades.analysis.web.views.home.show();
     }
 };
 
@@ -479,10 +481,10 @@ PM.load_templates = function(toolboxState) {
 // outside of the UID toolbox
 PM.load_carneades_styles = function() {
     PM.load_style(undefined, 'impact-ui/jquery-ui-1.8.11.custom.css', 'toolbox/css');
-    PM.load_style(undefined, 'impact-ui/impact-green.css', 'toolbox/css');
-    PM.load_style(undefined, 'main.css', 'toolbox/css');
-    PM.load_style(undefined, 'carneades/style.css', 'toolbox/css');
-    PM.load_style(undefined, 'local-app.css');
+    // PM.load_style(undefined, 'impact-ui/impact-green.css', 'toolbox/css');
+    // PM.load_style(undefined, 'main.css', 'toolbox/css');
+    // PM.load_style(undefined, 'carneades/style.css', 'toolbox/css');
+    // PM.load_style(undefined, 'local-app.css');
 };
 
 // Loads some specific styles to the app
