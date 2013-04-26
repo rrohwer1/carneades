@@ -284,33 +284,35 @@
     /* top: 0; */
     /* left: 0; */
     position: fixed;
-}
-
-.header-left {
-    
-    position: absolute;
-    vertical-align: middle;
-    width: 10%;
-    background-color: green;
-}
-
-.header-right {
-    position: absolute;
-    left: 20px;
+    display: -webkit-flex;
+    display: flex;
 }
 
 .app-logo {
-    float: left;
-    min-width: 30px;
-    max-height: 30px;
-    /* vertical-align: middle; */
+  -webkit-flex: 1;
+  flex: 1;
+  background-color: green;
+  max-width: 80px;
 }
 
 .app-name {
-    margin-left: 5px;
-    /* vertical-align: middle; */
     font-weight: bold;
     font-size: 20px;
+    -webkit-flex: 2;
+    flex: 2;
+    background-color: red;
+    margin: auto;
+}
+
+.header-menu {
+    left: 20px;
+    -webkit-flex: 2;
+    flex: 2;
+}
+
+.lang-selection {
+    -webkit-flex: 3;
+    flex: 3;
 }
 
 .content {
