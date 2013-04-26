@@ -308,11 +308,13 @@
     left: 20px;
     -webkit-flex: 2;
     flex: 2;
+    margin: auto;
 }
 
 .lang-selection {
     -webkit-flex: 3;
     flex: 3;
+    margin: auto;
 }
 
 .content {
