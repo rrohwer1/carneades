@@ -286,6 +286,14 @@
     position: fixed;
     display: -webkit-flex;
     display: flex;
+    background-purple: blue;
+}
+
+.section-header {
+    top: 70px;
+    height: 30px;
+    position: fixed;
+    background-color: purple;
 }
 
 .footer {
@@ -323,12 +331,11 @@
     margin: auto;
 }
 
-
 .content {
     position:absolute;
-    top: 70px;
+    top: 100px;
     left:0px;
     right:0px;
-    bottom:0px;
+    bottom:20px;
     overflow-y:scroll;
 }
