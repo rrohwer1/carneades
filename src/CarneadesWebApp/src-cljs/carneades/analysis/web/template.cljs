@@ -19,3 +19,4 @@ variables from the Messages.properties file are automatically passed to the temp
     (log (clj->js texts))
     
     (ich/get template augmented)))
+

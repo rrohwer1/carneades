@@ -279,21 +279,37 @@
 
 /* analysis */
 
-.header {
-    height:70px;
+.app-header {
+    height:26px;
     top: 0;
+    margin: 0;
     width: 100%;
     position: fixed;
     display: -webkit-flex;
     display: flex;
-    background-purple: blue;
 }
 
 .section-header {
-    top: 70px;
+    margin-top: 30px;
     height: 30px;
-    position: fixed;
-    background-color: purple;
+    
+    font-weight: bold;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.section-title {
+    margin-right: 5%;
+    background-color: lightgoldenrodyellow;
+   -webkit-flex: none;
+    flex: none;
+}
+
+.section-menu {
+   -webkit-flex: none;
+    flex: none;
+    background-color: cyan;
+    margin-right: 0%;
 }
 
 .footer {
@@ -302,33 +318,33 @@
     height: 20px;
 }
 
-.app-logo {
-  -webkit-flex: 1;
-  flex: 1;
-  background-color: green;
-  max-width: 80px;
-}
+/* .app-logo { */
+/*   -webkit-flex: 1; */
+/*   flex: 1; */
+/*   background-color: green; */
+/*   max-width: 80px; */
+/* } */
 
 .app-name {
-    font-weight: bold;
-    font-size: 20px;
     -webkit-flex: 2;
     flex: 2;
-    background-color: red;
-    margin: auto;
+    font-weight: bold;
+    /* font-size: 20px; */
+    /* margin-top: 0; */
+    /* margin: auto; */
 }
 
 .header-menu {
     left: 20px;
     -webkit-flex: 2;
     flex: 2;
-    margin: auto;
+    /* margin: auto; */
 }
 
 .lang-selection {
     -webkit-flex: 3;
     flex: 3;
-    margin: auto;
+    /* margin: auto; */
 }
 
 .content {

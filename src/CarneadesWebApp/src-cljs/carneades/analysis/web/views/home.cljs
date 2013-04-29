@@ -4,4 +4,4 @@
 
 (defn ^:export show
   []
-  (inner ($ "#pm") (tp/get "header" {})))
+  (inner ($ ".topheader") (tp/get "header" {})))
