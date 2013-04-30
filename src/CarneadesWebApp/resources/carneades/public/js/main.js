@@ -90,6 +90,8 @@ PM.dispatch_url = function(sections) {
         carneades.analysis.web.views.home.show();
     } else if(sections[1] == "project") {
         carneades.analysis.web.views.project.show(sections[2]);
+    } else if(sections[1] == "arguments") {
+        PM.display_arguments(sections[3], sections[4], sections[2], sections[5]); 
     }
 };
 
@@ -469,7 +471,8 @@ PM.load_templates = function(toolboxState) {
             'submitted_facts',
             'ask_modify_facts',
             'header',
-            'home'
+            'home',
+            'project'
            ],
            function(name) {
                var url = toolboxState == undefined ?

@@ -5,4 +5,4 @@
 
 (defn i18n
   [k]
-  (js/jQuery.i18n.prop k))
+  (js/jQuery.i18n.prop (name k)))
