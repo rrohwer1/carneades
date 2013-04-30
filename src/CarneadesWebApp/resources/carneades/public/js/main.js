@@ -464,6 +464,7 @@ PM.load_templates = function(toolboxState) {
             'submitted_facts',
             'ask_modify_facts',
             'header',
+            'home'
            ],
            function(name) {
                var url = toolboxState == undefined ?

@@ -15,8 +15,8 @@ variables from the Messages.properties file are automatically passed to the temp
         texts (apply hash-map (mapcat (fn [e] [(keyword e) (js/jQuery.i18n.prop e)]) entries))
         augmented (merge texts variables)]
     
-    (log "variables =")
-    (log (clj->js texts))
+    ;; (log "variables =")
+    ;; (log (clj->js texts))
     
     (ich/get template augmented)))
 
