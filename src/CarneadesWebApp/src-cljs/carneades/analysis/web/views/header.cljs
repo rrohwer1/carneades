@@ -1,3 +1,6 @@
+;;; Copyright (c) 2013 Fraunhofer Gesellschaft
+;;; Licensed under the EUPL V.1.1
+
 (ns carneades.analysis.web.views.header
   (:use [jayq.core :only [$ inner]]
         [jayq.util :only [log clj->js]])

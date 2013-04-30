@@ -52,12 +52,24 @@
   
   (GET "/project" [] 
        {:body
-        (:projects (deref state))})
+        (let [s (deref state)]
+          
+          (reduce (fn [projects id]
+                    (let [props (get-in s [:projects-data id :properties])]
+                     (conj projects (merge props {:id id}))))
+                  []
+                  (:projects s)))})
   
   (GET "/project/:id" [id]
        {:body
         (merge (get-in (deref state) [:projects-data id :properties])
                {:id id})})
+
+  (PUT "/project/:id" request
+       (let [m (json/read-json (slurp (:body request)))
+             [username password] (get-username-and-password request)]
+         ;; TODO
+         ))
   
   (POST "/project" request
         (let [m (json/read-json (slurp (:body request)))

@@ -19,6 +19,7 @@
             [carneades.policy_analysis.web.collections.argument_polls]
             [carneades.policy_analysis.web.collections.arguments]
             [carneades.policy_analysis.web.collections.metadata_list]
+            [carneades.policy_analysis.web.collections.projects]
             [carneades.policy_analysis.web.introduction]
             [carneades.policy_analysis.web.admin]
             [carneades.policy_analysis.web.menu]
@@ -60,4 +61,5 @@
             [carneades.policy_analysis.web.views.metadata_helper]
             [carneades.policy_analysis.web.views.scheme_helper]
             [carneades.policy_analysis.web.views.sct_intro]
+
             ))

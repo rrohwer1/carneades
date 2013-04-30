@@ -269,8 +269,10 @@ PM.common_post_load = function() {
     $.ajaxSetup({beforeSend: PM.simple_auth});
     
     PM.project = new PM.Project({id: "copyright"});
-
     PM.project.fetch({async:false});
+    
+    PM.projects = new PM.Projects;
+    PM.projects.fetch({async: false});
 
     IMPACT.current_policy = PM.project.get('policies');
       
