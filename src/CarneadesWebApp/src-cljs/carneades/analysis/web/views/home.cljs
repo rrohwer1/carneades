@@ -5,6 +5,9 @@
 
 (defn ^:export show
   []
-  (header/show)
-  (inner ($ ".content") (tp/get "home" {}))
+  (header/show :home)
+  (inner ($ ".content") (tp/get "home" {:projects [{:name "Default" :created "May 2012"}
+                                                   {:name "Copyright in the Knowledge Economy"
+                                                    :created "June 2013"}]}))
+
   )

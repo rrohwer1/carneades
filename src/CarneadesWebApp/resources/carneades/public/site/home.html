@@ -1,2 +1,13 @@
-<div>Hello home!</div>
+<table class="projects">
+  <tbody><tr>
+      <th>{{project}}</th>
+      <th>{{created}}</th>
+    </tr>
+  </tbody>
+  <tbody>
+    {{#projects}}
+    <tr><td>{{name}}</td><td>{{created}}</td></tr>
+    {{/projects}}
+  </tbody>
+</table>
 
