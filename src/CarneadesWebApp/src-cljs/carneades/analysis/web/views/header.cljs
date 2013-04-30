@@ -25,13 +25,15 @@
 
 (defn build-menu
   [menu]
-  (let [html (reduce (fn [html item]
-                       (str html (build-menu-item item false false)))
-           ""
-           (rest (butlast menu)))]
-    (str (build-menu-item (first menu) true false)
-         html
-         (build-menu-item (last menu) false true))))
+  (if (seq menu)
+    (let [html (reduce (fn [html item]
+                         (str html (build-menu-item item false false)))
+                       ""
+                       (rest (butlast menu)))]
+      (str (build-menu-item (first menu) true false)
+           html
+           (build-menu-item (last menu) false true)))
+    ""))
 
 (defn show-menu
   [menu]
