@@ -429,7 +429,7 @@
     left:0px;
     right:0px;
     bottom:20px;
-    overflow-y:scroll;
+    overflow-y: auto;
     margin-left: 10px;
     margin-right: 10px;
 }
