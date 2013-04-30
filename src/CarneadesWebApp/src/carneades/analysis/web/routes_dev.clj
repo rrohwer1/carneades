@@ -15,7 +15,7 @@
             [compojure.handler :as handler]))
 
 (defroutes carneades-webapp-routes
-  (context "/carneades/policy-analysis" [] policy-analysis-routes)
+  (context "/carneades" [] policy-analysis-routes)
   ;; TODO: (context "/carneades/license-analysis" [] license-analysis-routes)
   (context "/carneadesws" [] (wrap-restful-response carneades-web-service-routes)))
 

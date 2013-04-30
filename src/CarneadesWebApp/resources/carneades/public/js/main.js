@@ -65,28 +65,31 @@ PM.url_changed = function(url) {
 };
 
 PM.dispatch_url = function(sections) {
-    if(sections[1] == "issues") {
-        PM.display_issues();
-    } else if(sections[1] == "facts") {
-        PM.dispatch_facts_url(sections[2]);
-    } else if(sections[1] == "arguments") {
-        PM.display_arguments(sections[3], sections[4], sections[2], sections[5]); 
-    } else if(sections[1] == "policies") {
-        PM.display_policies(sections[2]);
-    } else if(sections[1] == "schemes") {
-        PM.display_schemes(sections[2]);
-    } else if(sections[1] == "admin") {
-        PM.display_admin();
-    } else if(sections[1] == "introduction") {
-        PM.display_introduction();
-    } else if(sections[1] == "sct") {
-        PM.dispatch_sct_url(sections[2]);
-    } else if(sections[1] == "repl") {
-        carneades.policy_analysis.web.repl.connect();
-    } else if(sections[1] == "report") {
-        carneades.policy_analysis.web.views.pmt.report.display();
-    } else if(sections[1] == "home") {
+    // if(sections[1] == "issues") {
+    //     PM.display_issues();
+    // } else if(sections[1] == "facts") {
+    //     PM.dispatch_facts_url(sections[2]);
+    // } else if(sections[1] == "arguments") {
+    //     PM.display_arguments(sections[3], sections[4], sections[2], sections[5]); 
+    // } else if(sections[1] == "policies") {
+    //     PM.display_policies(sections[2]);
+    // } else if(sections[1] == "schemes") {
+    //     PM.display_schemes(sections[2]);
+    // } else if(sections[1] == "admin") {
+    //     PM.display_admin();
+    // } else if(sections[1] == "introduction") {
+    //     PM.display_introduction();
+    // } else if(sections[1] == "sct") {
+    //     PM.dispatch_sct_url(sections[2]);
+    // } else if(sections[1] == "repl") {
+    //     carneades.policy_analysis.web.repl.connect();
+    // } else if(sections[1] == "report") {
+    //     carneades.policy_analysis.web.views.pmt.report.display();
+    // } else
+    if(sections[1] == "home") {
         carneades.analysis.web.views.home.show();
+    } else if(sections[1] == "project") {
+        carneades.analysis.web.views.project.show(sections[2]);
     }
 };
 

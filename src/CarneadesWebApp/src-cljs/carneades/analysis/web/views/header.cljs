@@ -6,9 +6,15 @@
         [jayq.util :only [log clj->js]])
   (:require [carneades.analysis.web.template :as tp]))
 
+(defn get-title
+  [title-or-key]
+  (if (keyword? title-or-key)
+    (js/jQuery.i18n.prop (name title-or-key))
+    title-or-key))
+
 (defn show
-  [title-key]
-  (let [title (js/jQuery.i18n.prop (name title-key))]
+  [title-or-key]
+  (let [title (get-title title-or-key)]
     (inner ($ ".topheader") (tp/get "header" {}))
     (inner ($ ".section-title") title)))
 
