@@ -515,6 +515,10 @@ tr {
     border-bottom: 1px solid #7AB817;
 }
 
+th {
+    padding-bottom: 15px;
+}
+
 .projects {
     width: 60%;
 }
