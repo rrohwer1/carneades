@@ -466,12 +466,44 @@ body {
 }
 
 p {
-	cursor: text
+	/* cursor: text */
 }
 
 a, a:link, a:visited, a:hover, a:focus, a:active {
 	color: #1977D1;
 	outline: 0 none;
+	text-decoration: none;
+}
+
+.issue {
+	/* width: 700px; */
+	margin-bottom: 10px;
+}
+
+.issue .label {
+	width: 20px;
+	background: #7ab817;
+	color: #fff;
+	text-align: center;
+	padding: 2px;
+	-moz-border-radius-bottomleft: 11px;
+	border-bottom-left-radius: 11px;
+	-moz-border-radius-topleft: 11px;
+	border-top-left-radius: 11px;
+}
+
+.issue .statement-content {
+	/* width: 640px; */
+	background: #dedede;
+	padding: 10px;
+	-moz-border-radius-bottomright: 11px;
+	border-bottom-right-radius: 11px;
+	-moz-border-radius-topright: 11px;
+	border-top-right-radius: 11px;
+}
+
+.issue .statement-content a {
+	color: #58595B;
 	text-decoration: none;
 }
 
@@ -524,4 +556,16 @@ th {
 .projects {
     margin: auto;
     width: 60%;
+}
+
+.outline ul {
+    list-style-type: none;
+}
+
+.outline a {
+    color: #58595B;
+}
+
+.outline a:hover, .issue a:hover {
+    cursor: pointer;
 }
