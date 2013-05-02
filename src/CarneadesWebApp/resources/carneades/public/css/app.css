@@ -426,13 +426,13 @@
 .content {
     position:absolute;
     top: 60px;
+    width: 700px;
+    margin: 0 auto;
     margin-top: 2%;
     left:0px;
     right:0px;
     bottom:20px;
     overflow-y: auto;
-    margin-left: 10px;
-    margin-right: 10px;
 }
 
 * {
@@ -520,5 +520,6 @@ th {
 }
 
 .projects {
+    margin: auto;
     width: 60%;
 }

@@ -273,39 +273,48 @@ PM.normalized_theory_path = function(project, path) {
 PM.common_post_load = function() {
     $.ajaxSetup({beforeSend: PM.simple_auth});
     
-    PM.project = new PM.Project({id: "copyright"});
-    PM.project.fetch({async:false});
+    PM.init_i18n();
     
     PM.projects = new PM.Projects;
     PM.projects.fetch({async: false});
 
-    IMPACT.current_policy = PM.project.get('policies');
-      
-    var normalized_scheme_path = PM.normalized_theory_path(PM.project,
-                                                           PM.project.get('schemes'));
-    PM.current_theory = new PM.Theory({theory_path: normalized_scheme_path});
-    PM.current_theory.fetch();
+    PM.markdown_add_hooks();
+};
 
-    PM.schemes = new PM.Schemes();
-    PM.schemes.fetch();
 
-    var normalized_policy_path = PM.normalized_theory_path(PM.project,
-                                                           PM.project.get('policies'));
-    PM.current_policy = new PM.Theory({theory_path: normalized_policy_path});
-    PM.current_policy.fetch({async: false});
+// Loads the arguments, statements, schemes and policies of a project
+PM.load_project_data = function (id) {
+    PM.project = new PM.Project({id: id});
+    PM.project.fetch({async:false});
+
+    if(!_.isNil(PM.project.get('schemes'))) {
+        var normalized_scheme_path = PM.normalized_theory_path(PM.project,
+                                                               PM.project.get('schemes'));
+        PM.current_theory = new PM.Theory({theory_path: normalized_scheme_path});
+        PM.current_theory.fetch();
+        
+        PM.schemes = new PM.Schemes();
+        PM.schemes.fetch();
+    }
+       
+    if(!_.isNil(PM.project.get('policies'))) {
+        var normalized_policy_path = PM.normalized_theory_path(PM.project,
+                                                               PM.project.get('policies'));
+        PM.current_policy = new PM.Theory({theory_path: normalized_policy_path});
+        PM.current_policy.fetch({async: false});    
+    }
 
     PM.arguments = new PM.Arguments;
     PM.statements = new PM.Statements;
     
-    PM.init_i18n();
-    
+
     PM.debate_arguments = new PM.Arguments([], {db: IMPACT.debate_db});
     PM.debate_statements = new PM.Statements([], {db: IMPACT.debate_db});
     PM.debate_metadata = new PM.MetadataList([], {db: IMPACT.debate_db});
     
     PM.debate_arguments.fetch();
     PM.debate_statements.fetch();
-    PM.debate_metadata.fetch();
+    PM.debate_metadata.fetch({async: false});
     
     PM.debate_info = new PM.AgInfo({db: IMPACT.debate_db});
     PM.debate_info.fetch();
@@ -315,8 +324,7 @@ PM.common_post_load = function() {
                          arguments: PM.debate_arguments,
                          statements: PM.debate_statements,
                          metadata: PM.debate_metadata});
-    
-    PM.markdown_add_hooks();
+
 };
 
 PM.markdown_add_hooks = function () {

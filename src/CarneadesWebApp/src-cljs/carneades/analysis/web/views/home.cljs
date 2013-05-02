@@ -9,5 +9,6 @@
 
 (defn ^:export show
   []
-  (header/show :home)
+  (header/show {:text :home
+                :link "#/home"})
   (inner ($ ".content") (tp/get "home" {:projects (json js/PM.projects)})))

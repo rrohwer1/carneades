@@ -12,12 +12,18 @@
   [project]
   (let [proj (.get js/PM.projects project)
         pdata (json proj)]
-    (set! PM.project proj)
-    (header/show (.-title pdata) [{:text :arguments
-                                   :link (format "#/arguments/outline/%s/%s" project "main")}
-                                  {:text :guidedtour
-                                   :link (format "#/tour/%s" project)}
-                                  {:text :policies
-                                   :link (format "#/policies/%s" project)}])
+    (js/PM.load_project_data project)
+    (header/show {:text (.-title pdata) :link (str "#/project/" project)}
+                 [{:text :arguments
+                   :link (format "#/arguments/outline/%s/%s" project "main")}
+                  {:text :guidedtour
+                   :link (format "#/tour/%s" project)}
+                  {:text :policies
+                   :link (format "#/policies/%s" project)}])
+    (log "introduction ===>")
+    (log (.-introduction pdata))
+    (log "lang =")
+    (log js/IMPACT.lang)
+    
     (inner ($ ".content") (tp/get "project"
-                                  {:introduction (js/PM.markdown_to_html (.-introduction pdata))}))))
+                                  {:introduction (js/PM.markdown_to_html (aget (.-introduction pdata) js/IMPACT.lang))}))))

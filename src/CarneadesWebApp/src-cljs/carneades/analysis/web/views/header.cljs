@@ -39,11 +39,20 @@
   [menu]
   (inner ($ ".section-menu ul") (build-menu menu)))
 
+(defn build-title
+  [title-data]
+  (format "<a href=\"%s\">%s</a> "
+          (:link title-data)
+          (get-title (:text title-data))))
+
 (defn show
-  ([title-or-key]
-     (show title-or-key []))
-  ([title-or-key menu]
-     (let [title (get-title title-or-key)]
+  "Title-data is a map with a :text and a :link keys. If text is a
+string it is used directly, if it is a keyword the translation
+associated to the keyword is used."
+  ([title-data]
+     (show title-data []))
+  ([title-data menu]
+     (let [title (build-title title-data)]
        (inner ($ ".topheader") (tp/get "header" {}))
        (inner ($ ".section-title") title)
        (show-menu menu))))
