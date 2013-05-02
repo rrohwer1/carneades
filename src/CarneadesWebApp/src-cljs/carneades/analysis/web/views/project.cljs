@@ -20,10 +20,5 @@
                    :link (format "#/tour/%s" project)}
                   {:text :policies
                    :link (format "#/policies/%s" project)}])
-    (log "introduction ===>")
-    (log (.-introduction pdata))
-    (log "lang =")
-    (log js/IMPACT.lang)
-    
     (inner ($ ".content") (tp/get "project"
                                   {:introduction (js/PM.markdown_to_html (aget (.-introduction pdata) js/IMPACT.lang))}))))

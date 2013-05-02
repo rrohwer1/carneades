@@ -11,9 +11,31 @@ PM.set_arguments_url = function(db) {
     $.address.value(PM.arguments_url(db));  
 };
 
+PM.agb_menu = function () {
+    // pmt_ag_menu_copy
+    // pmt_ag_menu_export
+    // pmt_ag_menu_evaluate
+    // pmt_ag_menu_map
+    // pmt_ag_menu_vote
+    console.log('map =');
+    console.log($.i18n.prop('pmt_ag_menu_map'));
+    
+    return [{text: 'pmt_ag_menu_map'
+             ,link: '#/arguments/map/' + PM.project.id + '/main'},
+            {text: 'pmt_ag_menu_vote'
+             ,link: "#/vote!"}
+           ];
+};
+
 // this is the main entry point to display
 // either the outline, the map, an argument or a statement
 PM.display_arguments = function(project, db, type, id) {
+    PM.load_project_data(project);
+    
+    PM.show_menu({text: PM.project.get('title'),
+                  link: "#/project/" + project},
+                 PM.agb_menu());
+
     var arguments_html = ich.arguments(PM.merge_menu_props({}));
     
     if(_.isNil(db)) {

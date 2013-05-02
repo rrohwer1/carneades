@@ -67,7 +67,7 @@ AGB.display_argumentgraph = function(db)
                                         'CAF XML');
                             return false; 
                         });
-                    AGB.enable_ag_edition(db);
+                    // AGB.enable_ag_edition(db);
                 },
                 PM.on_error);
 };
@@ -103,7 +103,7 @@ AGB.outline_text = function(tree, db, index)
         text = "<ul>";
     } else if (node.hasOwnProperty('premises')) {
         var direction_text = node.pro ? "pro" : "con";
-        text = '{0} <span class="content">{1}</span> <ul>'.format(direction_text, AGB.argument_link(db, node.id, AGB.argument_text(node, index)));
+        text = '{0} <span class="argument-content">{1}</span> <ul>'.format(direction_text, AGB.argument_link(db, node.id, AGB.argument_text(node, index)));
     } else {
         var stmt_text = AGB.statement_text(node, index);
         text = "{0} <ul>".format(AGB.statement_link(db, node.id, stmt_text));
@@ -121,16 +121,16 @@ AGB.outline_text = function(tree, db, index)
 // Activates the edition of the argument graph
 AGB.enable_ag_edition = function(db) {
     // $('#ageditormenu').remove();
-    $('#menus').append(ich.ageditormenuon({'new_statement_text': $.i18n.prop('pmt_new_statement'),
-                                           'new_argument_text': $.i18n.prop('pmt_new_argument')
-                                          }));
-    $('#newstatement').click(_.bind(AGB.show_statement_editor, AGB,
-                                    {save_callback: function() {
-                                         AGB.display_argumentgraph(IMPACT.db);
-                                         return false;
-                                     }}));
-    $('#newargument').click(AGB.new_argument);
-    $('.evaluate').click(_.bind(AGB.evaluate, AGB, _.bind(AGB.display_argumentgraph, AGB, db)));
+    // $('#menus').append(ich.ageditormenuon({'new_statement_text': $.i18n.prop('pmt_new_statement'),
+    //                                        'new_argument_text': $.i18n.prop('pmt_new_argument')
+    //                                       }));
+    // $('#newstatement').click(_.bind(AGB.show_statement_editor, AGB,
+    //                                 {save_callback: function() {
+    //                                      AGB.display_argumentgraph(IMPACT.db);
+    //                                      return false;
+    //                                  }}));
+    // $('#newargument').click(AGB.new_argument);
+    // $('.evaluate').click(_.bind(AGB.evaluate, AGB, _.bind(AGB.display_argumentgraph, AGB, db)));
     // $('.vote').click(catb.views.pmt.vote.vote);
     
     return false;

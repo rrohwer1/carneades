@@ -254,6 +254,7 @@ PM.init_i18n = function(callbackfn) {
          path: site_path,
          mode:'both',
          language: IMPACT.lang, 
+         async: false,
          callback: function() {
                  if(_.isFunction(callbackfn)) {
                      callbackfn();
@@ -418,7 +419,8 @@ PM.load_scripts = function(rootpath, is_in_toolbox, callback) {
 PM.load_templates = function(toolboxState) {
     // loads partial templates
     _.each([{name: 'menu', url: 'site/menu.html'},
-            {name: 'pmmenu', url: 'site/pmmenu.html'},
+            // {name: 'pmmenu', url: 'site/pmmenu.html'}
+            // ,
             {name: 'metadata', url: 'site/metadata.html'},
             {name: 'statementlink', url: 'site/statementlink.html'},
             {name: 'argumentlink', url: 'site/argumentlink.html'},
@@ -444,7 +446,7 @@ PM.load_templates = function(toolboxState) {
             'login',
             'menu',
             'metadata',
-            'pmmenu',
+            // 'pmmenu',
             'policies',
             'premise',
             'statement',

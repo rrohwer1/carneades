@@ -21,7 +21,7 @@
    (format "<li><a href=\"%s\" class=\"%s\">%s</a></li>"
            (:link item)
            class
-           (i18n (:text item)))))
+           (i18n (keyword (:text item))))))
 
 (defn build-menu
   [menu]
