@@ -582,7 +582,8 @@ ul.information li {
 }
 ul.warning {
     list-style-type: none;
-	background: url(../images/warning.png) no-repeat 0px 0px;
+    min-height: 32px;
+    background: url(../images/warning.png) no-repeat 0px 0px;
 }
 ul.warning li {
 	background: none;
@@ -594,8 +595,9 @@ ul.answer li {
 	background: none;
 }
 ul.thankyou {
+    min-height: 32px;
     list-style-type: none;
-	background: url(../images/thankyou.png) no-repeat 0px 0px;
+    background: url(../images/thankyou.png) no-repeat 0px 0px;
 }
 ul.thankyou li {
 	background: none;

@@ -533,7 +533,7 @@ PM.load_style = function(rootpath, style, cssdir) {
 // Called when an AJAX error occurs
 PM.on_error = function(textstatus) {
     PM.busy_cursor_off();
-    $('#pm').prepend('<ul class="warning pm-warning" ><li class="notification">Error: {0}</li></ul>'.format(textstatus));
+    $('#pm').prepend('<ul class="warning pm-warning" ><li class="notification">{0}</li></ul>'.format(textstatus));
     setTimeout(function() {
                    $('#pm .warning').remove();
                }, 3000);
@@ -551,7 +551,7 @@ PM.notify = function(text) {
 // Called when an AJAX error occurs for backbone
 PM.on_model_error = function(collection, response) {
     PM.busy_cursor_off();
-    $('#pm').prepend('<div style="background-color:  #FFCC33" class="error">Error: {0}</div>'.format(response.statusText));
+    $('#pm').prepend('<div style="background-color:  #FFCC33" class="error">{0}</div>'.format(response.statusText));
     setTimeout(function() {
                    $('#pm .error').remove();
                }, 3000);
