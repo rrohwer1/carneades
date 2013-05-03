@@ -558,6 +558,10 @@ th {
     width: 60%;
 }
 
+.projects th {
+    min-width: 400px;
+}
+
 .outline ul {
     list-style-type: none;
 }

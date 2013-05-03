@@ -106,10 +106,10 @@ AGB.display_argument = function(db, argid)
     PM.ajax_get(IMPACT.wsurl + '/argument-info/' + IMPACT.project + '/' + db + '/' + argid,
                 function(argument_data) {
                     $('#browser').html(AGB.argument_html(db, argument_data));
-                    $('#export').click(function (event){
-                        window.open('/carneadesws/export/{0}/{1}'.format(db, IMPACT.project), 'CAF XML');
-                        return false; 
-                    });
+                    // $('#export').click(function (event){
+                    //     window.open('/carneadesws/export/{0}/{1}'.format(db, IMPACT.project), 'CAF XML');
+                    //     return false; 
+                    // });
                     AGB.enable_argument_edition(db, argid);
                 },
                 PM.on_error);
