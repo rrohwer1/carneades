@@ -83,7 +83,9 @@ PM.display_arguments = function(project, db, type, id) {
                 PM.export_ag(db);
                 AGB.display_argumentgraph(db);
             } else if (type == "evaluate") {
-                AGB.evaluate(_.bind(PM.display_arguments, PM, project, db));
+                AGB.evaluate(function () {
+                    PM.set_arguments_url(db);
+                });
             } else if (type == "copy-case") {
                 PM.copy_case(db);
             } else { // outline
