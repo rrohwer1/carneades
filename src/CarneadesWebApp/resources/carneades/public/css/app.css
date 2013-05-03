@@ -573,3 +573,48 @@ th {
 .outline a:hover, .issue a:hover {
     cursor: pointer;
 }
+
+ul.information {
+	background: url(../images/information.png) no-repeat 0px 0px;
+}
+ul.information li {
+	background: none;
+}
+ul.warning {
+    list-style-type: none;
+	background: url(../images/warning.png) no-repeat 0px 0px;
+}
+ul.warning li {
+	background: none;
+}
+ul.answer {
+	background: url(../images/answer.png) no-repeat 0px 0px;
+}
+ul.answer li {
+	background: none;
+}
+ul.thankyou {
+    list-style-type: none;
+	background: url(../images/thankyou.png) no-repeat 0px 0px;
+}
+ul.thankyou li {
+	background: none;
+}
+ul.marker {
+	background: url(../images/marker.png) no-repeat 0px 0px;
+}
+ul.marker li {
+	background: none;
+}
+ul.comment {
+	background: url(../images/comment.png) no-repeat 0px 0px;
+}
+ul.comment li {
+	background: none;
+}
+ul.question {
+	background: url(../images/question.png) no-repeat 0px 0px;
+}
+ul.question li {
+	background: none;
+}

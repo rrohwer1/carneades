@@ -25,7 +25,9 @@ PM.agb_menu = function (db) {
             {text: 'pmt_ag_menu_copy'
              ,link: "#/arguments/copy-case/" + PM.project.id},
             {text: 'pmt_ag_menu_export'
-             ,link: "#/arguments/export/" + PM.project.id + '/' + db}
+             ,link: "#/arguments/export/" + PM.project.id + '/' + db},
+            {text: 'pmt_ag_menu_evaluate'
+             ,link: "#/arguments/evaluate/" + PM.project.id + '/' + db}
             
            ];
 };
@@ -80,7 +82,9 @@ PM.display_arguments = function(project, db, type, id) {
             } else if(type == "export") { 
                 PM.export_ag(db);
                 AGB.display_argumentgraph(db);
-            }else if (type == "copy-case") {
+            } else if (type == "evaluate") {
+                AGB.evaluate(_.bind(PM.display_arguments, PM, project, db));
+            } else if (type == "copy-case") {
                 PM.copy_case(db);
             } else { // outline
                 AGB.display_argumentgraph(db);        
