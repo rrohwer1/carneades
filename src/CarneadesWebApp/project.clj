@@ -26,29 +26,26 @@
   :hooks [leiningen.cljsbuild]
   :cljsbuild {:builds
               [{:id "dev",
-                :source-paths ["src-cljs" "src-js"],
-                :compiler
-                {:pretty-print true,
-                 :libs ["libs"]
-                 :output-to "resources/carneades/public/js/compiled-app.js",
-                 :optimizations :whitespace},
+                :source-paths ["src-cljs"],
+                :compiler {:pretty-print true,
+                           :libs ["src-js/libs"]
+                           :output-to "resources/carneades/public/js/compiled-app.js",
+                           :optimizations :whitespace},
                 :jar true}
-               {:id "test",
-                :source-paths ["test-cljs"],
-                :compiler
-                {:pretty-print true,
-                 :output-to "resources/carneades/private/js/unit-test.js",
-                 :optimizations :whitespace}}
+               ;; {:id "test",
+               ;;  :source-paths ["test-cljs"],
+               ;;  :compiler {:pretty-print true,
+               ;;             :output-to "resources/carneades/private/js/unit-test.js",
+               ;;             :optimizations :whitespace}}
                {:id "prod",
-                :source-paths ["src-cljs" "src-js"]
-                :compiler
-                {:pretty-print false,
-                 :output-to "resources/carneades/public/js/compiled-app.js",
-                 :libs ["libs"]
-                 ;; there are more work to do in the JS files
-                 ;; to get :advanced mode working... There is a branch
-                 ;; in github for this work.
-                 :optimizations :simple}}],
+                :source-paths ["src-cljs"]
+                :compiler {:pretty-print false,
+                           :output-to "resources/carneades/public/js/compiled-app.js",
+                           :libs ["src-js/libs"]
+                           ;; there are more work to do in the JS files
+                           ;; to get :advanced mode working... There is a branch
+                           ;; in github for this work.
+                           :optimizations :simple}}],
               
               :test-commands
               {;; lein cljsbuild test questions
