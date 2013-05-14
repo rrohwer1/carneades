@@ -506,17 +506,19 @@
                                  :main-issues main-issues
                                  :outline outline}}))))
 
+  (GET "/statement-info/:project/:db" [project db]
+       (let [dbconn (db/make-connection project db "guest" "")]
+         (db/with-db dbconn
+           (let [stmtsinfo (doall (map (fn [s]
+                                         (let [stmtinfo (info/stmt-info (:id s))]
+                                           stmtinfo))
+                                       (ag-db/list-statements)))]
+            {:body stmtsinfo}))))
+
   (GET "/statement-info/:project/:db/:id" [project db id]
        (let [dbconn (db/make-connection project db "guest" "")]
          (db/with-db dbconn
-           (let [stmt (pack-statement (ag-db/read-statement id))
-                 pro-data (doall (map argument-data (:pro stmt)))
-                 con-data (doall (map argument-data (:con stmt)))
-                 premise-of-data (doall (map argument-data (:premise-of stmt)))]
-             {:body             (assoc stmt 
-                                  :pro-data pro-data 
-                                  :con-data con-data
-                                  :premise-of-data premise-of-data)}))))
+           {:body (info/stmt-info id)})))
 
   (GET "/argument-info/:project/:db" [project db]
        (let [dbconn (db/make-connection project db "guest" "")]
