@@ -21,7 +21,8 @@ var PM = {
     stmts_info: [],
     args_info: [],
     stmts: [],
-    args: []
+    args: [],
+    projects: []
 };
 
 // argument browser
@@ -288,13 +289,14 @@ PM.common_post_load = function() {
 PM.load_project_data = function (id) {
     console.log('Loading project');
     
-    if(!_.isNil(PM.project)) {
+    if(!_.isNil(PM.projects[id])) {
         // already loaded
         return;
     }        
     
     PM.project = new PM.Project({id: id});
     PM.project.fetch({async:false});
+    PM.projects[id] = PM.project;
 
     if(!_.isNil(PM.project.get('schemes'))) {
         var normalized_scheme_path = PM.normalized_theory_path(PM.project,
