@@ -61,7 +61,7 @@ AGB.argument_html = function(db, argument_data)
     argument_data.scheme_text = PM.scheme_text(argument_data.scheme);
     AGB.set_argument_title_text(argument_data);
     argument_data.direction_text = argument_data.pro ? "pro" : "con";
-    argument_data.conclusion.statement_text = AGB.statement_text(argument_data.conclusion);
+    argument_data.conclusion.statement_text = AGB.statement_raw_text(argument_data.conclusion);
     AGB.set_premises_text(argument_data); 
     argument_data.haspremises = argument_data.premises.length > 0;
     AGB.set_undercutters_text(argument_data);
@@ -103,23 +103,17 @@ AGB.argument_html = function(db, argument_data)
 
 AGB.display_argument = function(db, argid)
 {
-    PM.ajax_get(IMPACT.wsurl + '/argument-info/' + IMPACT.project + '/' + db + '/' + argid,
-                function(argument_data) {
-                    $('#browser').html(AGB.argument_html(db, argument_data));
-                    // $('#export').click(function (event){
-                    //     window.open('/carneadesws/export/{0}/{1}'.format(db, IMPACT.project), 'CAF XML');
-                    //     return false; 
-                    // });
-                    AGB.enable_argument_edition(db, argid);
-                },
-                PM.on_error);
+    var info = PM.get_arg_info(db, argid);
+    
+    $('#browser').html(AGB.argument_html(db, info));
+    AGB.enable_argument_edition(db, argid);
 };
 
 AGB.set_premises_text = function(argument_data)
 {
     $.each(argument_data.premises, 
            function(index, premise) {
-               premise.statement.statement_text = AGB.statement_text(premise.statement, index + 1);
+               premise.statement.statement_text = AGB.statement_raw_text(premise.statement, index + 1);
                premise.positive_text = premise.positive ? "" : "neg.";
            });
 };
@@ -183,7 +177,7 @@ AGB.argument_text = function(data, index)
 
 AGB.argument_link = function(db, id, text)
 {
-    return '<a href="/arguments/argument/{0}/{1}/{2}" rel="address:/arguments/argument/{0}/{1}/{2}" class="argument" id="argument{2}">{3}</a>'.format(IMPACT.project, db, id, text);
+    return '<a href="/carneades/#/arguments/argument/{0}/{1}/{2}" rel="address:/arguments/argument/{0}/{1}/{2}" class="argument" id="argument{2}">{3}</a>'.format(IMPACT.project, db, id, text);
 };
 
 
@@ -217,9 +211,10 @@ AGB.delete_argument = function(db, argid) {
 };
 
 AGB.edit_argument = function(db, argid) {
-    var argument = PM.arguments.get(argid);
+    // PM.arguments_info.fetch({async: false});
+    var argument = PM.get_args(argid);
     var argumentcandidate = new PM.ArgumentCandidate({argument: argument,
-                                                      statements: PM.statements,
+                                                      statements: PM.get_stmts(),
                                                       schemes: PM.schemes,
                                                       current_lang: IMPACT.lang});
     var argumenteditorview = new PM.ArgumentEditorView({model: argumentcandidate,

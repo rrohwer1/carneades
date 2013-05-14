@@ -105,16 +105,13 @@ AGB.statement_html = function(db, info, lang)
 
 AGB.display_statement = function(db, stmtid)
 {
-    PM.ajax_get(IMPACT.wsurl + '/statement-info/' + IMPACT.project + '/' + db + '/' + stmtid,
-                function(info) {
-                    $('#browser').html(AGB.statement_html(db, info, IMPACT.lang));
-                    $('#export').click(function (event){
-                                           window.open('/carneadesws/export/{0}/{1}'.format(db, IMPACT.project), 'CAF XML');
-                        return false; 
-                    });
-                    AGB.enable_statement_edition(db, info);
-                },
-                PM.on_error);;
+    var info = PM.get_stmt_info(db, stmtid);
+    $('#browser').html(AGB.statement_html(db, info, IMPACT.lang));
+    $('#export').click(function (event){
+        window.open('/carneadesws/export/{0}/{1}'.format(db, IMPACT.project), 'CAF XML');
+        return false; 
+    });
+    AGB.enable_statement_edition(db, info);
 }
 
 AGB.set_statement_title_text = function(info)
@@ -241,7 +238,7 @@ AGB.statement_text = function(statement)
 
 AGB.statement_link = function(db, id, text)
 {
-    return '<a href="/arguments/statement/{0}/{1}/{1}" rel="address:/arguments/statement/{0}/{1}/{2}" class="statement" id="statement{2}">{3}</a>'.format(IMPACT.project, db, id, text);
+    return '<a href="/carneades/#/arguments/statement/{0}/{1}/{1}" rel="address:/arguments/statement/{0}/{1}/{2}" class="statement" id="statement{2}">{3}</a>'.format(IMPACT.project, db, id, text);
 };
 
 AGB.statement_in = function(statement)
@@ -265,7 +262,7 @@ AGB.enable_statement_edition = function(db, info) {
     $('#edit-statement').click(_.bind(AGB.edit_statement, AGB, db, info));
     $('.evaluate').click(_.bind(AGB.evaluate, AGB, _.bind(AGB.display_statement, AGB, db, info.id)));
     
-    var current_statement = PM.statements.get(info.id);
+    var current_statement = PM.get_stmt(db, info.id);
     $('#new-argument').click(_.bind(AGB.new_argument, AGB, current_statement));
     
     return false;

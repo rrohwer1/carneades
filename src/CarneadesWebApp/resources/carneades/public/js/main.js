@@ -1,10 +1,8 @@
-
-// Copyright (c) 2012 Fraunhofer Gesellschaft
+// Copyright (c) 2012-2013 Fraunhofer Gesellschaft
 // Licensed under the EUPL V.1.1
 
 // goog.provide('carneades.policy-analysis.web.main');
 
-// This object contains the global variables for the app
 var IMPACT = {
     user: "root",
     password: "pw1", // TODO real auth
@@ -19,8 +17,11 @@ var IMPACT = {
     rootpath: null
 };
 
-// This object contains the functions and acts as a kind of namespace.
 var PM = {
+    stmts_info: [],
+    args_info: [],
+    stmts: [],
+    args: []
 };
 
 // argument browser
@@ -287,6 +288,11 @@ PM.common_post_load = function() {
 PM.load_project_data = function (id) {
     console.log('Loading project');
     
+    if(!_.isNil(PM.project)) {
+        // already loaded
+        return;
+    }        
+    
     PM.project = new PM.Project({id: id});
     PM.project.fetch({async:false});
 
@@ -307,16 +313,22 @@ PM.load_project_data = function (id) {
         PM.current_policy.fetch({async: false});    
     }
 
-    PM.arguments = new PM.Arguments;
-    PM.statements = new PM.Statements;
-    
+    PM.args_info[IMPACT.debate_db] = new PM.ArgumentsInfo([], {db: IMPACT.debate_db});
+    PM.stmts_info[IMPACT.debate_db] = new PM.StatementsInfo([], {db: IMPACT.debate_db});
 
-    PM.debate_arguments = new PM.Arguments([], {db: IMPACT.debate_db});
-    PM.debate_statements = new PM.Statements([], {db: IMPACT.debate_db});
+    PM.args_info[IMPACT.debate_db].fetch({async: false});
+    PM.stmts_info[IMPACT.debate_db].fetch({async: false});
+    
+    PM.args[IMPACT.debate_db] = new PM.Arguments([], {db: IMPACT.debate_db});
+    PM.stmts[IMPACT.debate_db] = new PM.Statements([], {db: IMPACT.debate_db});
+
+    PM.args[IMPACT.debate_db].fetch({async: false});
+    PM.stmts[IMPACT.debate_db].fetch({async: false});
+
+    PM.debate_arguments = PM.args[IMPACT.debate_db];
+    PM.debate_statements = PM.stmts[IMPACT.debate_db];
     PM.debate_metadata = new PM.MetadataList([], {db: IMPACT.debate_db});
     
-    PM.debate_arguments.fetch();
-    PM.debate_statements.fetch();
     PM.debate_metadata.fetch({async: false});
     
     PM.debate_info = new PM.AgInfo({db: IMPACT.debate_db});
@@ -329,6 +341,68 @@ PM.load_project_data = function (id) {
                          metadata: PM.debate_metadata});
 
 };
+
+PM.get_arg_info = function (db, id) {
+    var args_info = PM.args_info[db];
+    if(_.isNil(args_info)) {
+        PM.args_info[db] =  new PM.ArgumentsInfo([], {db: db});
+        args_info = PM.args_info[db];
+    }
+    
+    var arg = args_info.get(id);
+    if(_.isNil(arg)) {
+        args_info.fetch({async: false});
+    }
+    
+    return arg.toJSON() || args_info.get(id).toJSON();    
+};
+
+/// Returns the statement information
+PM.get_stmt_info = function (db, id) {
+    var stmts_info = PM.stmts_info[db];
+    if(_.isNil(stmts_info)) {
+        PM.stmts_info[db] =  new PM.StatementsInfo([], {db: db});
+        stmts_info = PM.stmts_info[db];
+    }
+    
+    var stmt = stmts_info.get(id);
+    if(_.isNil(stmt)) {
+        stmts_info.fetch({async: false});
+    }
+    
+    return stmt.toJSON() || stmts_info.get(id).toJSON();
+};
+
+
+/// Returns the statement object
+PM.get_stmt = function (db, id) {
+    var stmts = PM.stmts[db];
+    if(_.isNil(stmts)) {
+        PM.stmts[db] =  new PM.Statements([], {db: db});
+        stmts = PM.stmts[db];
+    }
+    
+    var stmt = stmts.get(id);
+    if(_.isNil(stmt)) {
+        stmts.fetch({async: false});
+    }
+    
+    return stmt.toJSON() || stmts.get(id).toJSON();
+};
+
+/// Returns a collection of all the statements
+/// of the current database
+PM.get_stmts = function () {
+    var stmts = PM.stmts[IMPACT.db];
+
+    if(_.isNil(stmts)) {
+        PM.stmts[IMPACT.db] = new PM.Statements([], {db: db});
+        stmts = PM.stmts;
+        stmts.fetch({async: false});
+    }
+ 
+    return stmts;
+}
 
 PM.markdown_add_hooks = function () {
     var converter = Markdown.getSanitizingConverter(); 

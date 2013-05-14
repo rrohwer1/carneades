@@ -46,9 +46,6 @@ AGB.argumentgraph_html = function(db, data)
 // Displays the argument graph page
 AGB.display_argumentgraph = function(db)
 {
-    PM.arguments.fetch();
-    PM.statements.fetch();
-    
     if($.address.value() == "/arguments") {
         // forces URL with specified argument graph without pushing
         // a new value in the history

@@ -126,7 +126,7 @@ AGB.save_statement = function(config) {
                                   return _.isNil(config.save_callback) ? AGB.statement_created() : config.save_callback(data);
                               },
                               error: PM.on_error});
-    PM.statements.add(new_statement);
+    PM.get_stmts().add(new_statement);
     // PM.ajax_post(IMPACT.wsurl + '/statement/' + IMPACT.db, stmt,
     //              _.isNil(config.save_callback) ? AGB.statement_created : config.save_callback,
     //              IMPACT.user, IMPACT.password, PM.on_error);
