@@ -285,6 +285,8 @@ PM.common_post_load = function() {
 
 // Loads the arguments, statements, schemes and policies of a project
 PM.load_project_data = function (id) {
+    console.log('Loading project');
+    
     PM.project = new PM.Project({id: id});
     PM.project.fetch({async:false});
 

@@ -27,6 +27,7 @@
             [clojure.string :as str]
             [carneades.maps.lacij :as lacij]
             [carneades.web.vote :as vote]
+            [carneades.web.info :as info]
             ))
 
 ;; To Do: 
@@ -517,19 +518,19 @@
                                   :con-data con-data
                                   :premise-of-data premise-of-data)}))))
 
-  (GET "/argument-info/:project/:db/:id" [project db id]
-       (prn "argument-info")
+  (GET "/argument-info/:project/:db" [project db]
        (let [dbconn (db/make-connection project db "guest" "")]
          (db/with-db dbconn
-           (let [arg (ag-db/read-argument id)
-                 arg (pack-argument arg)
-                 undercutters-data (doall (map argument-data (:undercutters arg)))
-                 rebuttals-data (doall (map argument-data (:rebuttals arg)))
-                 dependents-data (doall (map argument-data (:dependents arg)))]
-             {:body             (assoc arg
-                                  :undercutters-data undercutters-data
-                                  :rebuttals-data rebuttals-data
-                                  :dependents-data dependents-data)}))))
+           (let [argsinfo (doall (map (fn [a]
+                                        (let [arginfo (info/arg-info (:id a))]
+                                          arginfo))
+                                      (ag-db/list-arguments)))]
+             {:body argsinfo}))))
+
+  (GET "/argument-info/:project/:db/:id" [project db id]
+       (let [dbconn (db/make-connection project db "guest" "")]
+         (db/with-db dbconn
+           {:body  (info/arg-info id)})))
   
   
   ;; XML
