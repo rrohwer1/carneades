@@ -212,7 +212,7 @@ AGB.delete_argument = function(db, argid) {
 
 AGB.edit_argument = function(db, argid) {
     // PM.arguments_info.fetch({async: false});
-    var argument = PM.get_args(argid);
+    var argument = PM.get_arg(db, argid);
     var argumentcandidate = new PM.ArgumentCandidate({argument: argument,
                                                       statements: PM.get_stmts(),
                                                       schemes: PM.schemes,

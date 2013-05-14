@@ -368,9 +368,10 @@ PM.get_stmt_info = function (db, id) {
     var stmt = stmts_info.get(id);
     if(_.isNil(stmt)) {
         stmts_info.fetch({async: false});
+        stmt = stmts_info.get(id);
     }
     
-    return stmt.toJSON() || stmts_info.get(id).toJSON();
+    return stmt.toJSON();
 };
 
 
@@ -385,9 +386,27 @@ PM.get_stmt = function (db, id) {
     var stmt = stmts.get(id);
     if(_.isNil(stmt)) {
         stmts.fetch({async: false});
+        stmt = stmts.get(id);
     }
     
-    return stmt.toJSON() || stmts.get(id).toJSON();
+    return stmt;
+};
+
+/// Returns the argument object
+PM.get_arg = function (db, id) {
+    var args = PM.args[db];
+    if(_.isNil(args)) {
+        PM.args[db] =  new PM.Arguments([], {db: db});
+        args = PM.args[db];
+    }
+    
+    var arg = args.get(id);
+    if(_.isNil(arg)) {
+        args.fetch({async: false});
+        arg = args.get(id);
+    }
+    
+    return arg;
 };
 
 /// Returns a collection of all the statements
