@@ -148,7 +148,7 @@ AGB.new_argument = function(conclusion) {
     }
 
     var argument_candidate = new PM.ArgumentCandidate({argument: argument,
-                                                       statements: PM.statements,
+                                                       statements: PM.get_stmts(),
                                                        schemes: PM.schemes,
                                                        current_lang: IMPACT.lang});
 

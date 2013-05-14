@@ -12,8 +12,8 @@ PM.set_policies_url = function() {
 };
 
 PM.current_issue = function() {
-    if(PM.statements.length > 0) {
-        return PM.statements.filter(function(s) { return s.get('main'); })[0].toJSON();
+    if(PM.get_stmts().length > 0) {
+        return PM.get_stmts().filter(function(s) { return s.get('main'); })[0].toJSON();
     }
 
     return undefined;
@@ -22,7 +22,7 @@ PM.current_issue = function() {
 PM.get_issue_text = function() {
     var issue_text = $.i18n.prop('pmt_issue_not_selected');
 
-    if(PM.statements.length > 0) {
+    if(PM.get_stmts().length > 0) {
         var issue = PM.current_issue();
         return AGB.statement_raw_text(issue);
     }
