@@ -14,7 +14,7 @@ PM.set_arguments_url = function(db) {
 // this is the main entry point to display
 // either the outline, the map, an argument or a statement
 PM.display_arguments = function(project, db, type, id) {
-    PM.load_project_data(project);
+    PM.load_project(project);
 
     if(_.isNil(db)) {
         db = IMPACT.db;

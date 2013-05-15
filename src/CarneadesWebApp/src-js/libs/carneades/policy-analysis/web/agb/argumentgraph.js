@@ -73,32 +73,30 @@ AGB.display_argumentgraph = function(db)
         return;
     }
 
-    PM.ajax_get(IMPACT.wsurl + '/argumentgraph-info/' + IMPACT.project + '/' + db,
-                function(data) {
-                    PM.show_menu({text: PM.project.get('title'),
-                                  link: "#/project/" + PM.project.id},
-                                 PM.agb_outline_menu(db));
+    var data = PM.get_ag_info(db);
 
-                    $('#browser').html(AGB.argumentgraph_html(db, data));
-                    $('#export').click(
-                        function (event){
-                            window.open('/carneadesws/export/{0}/{1}'.format(IMPACT.project, db),
-                                        'CAF XML');
-                            return false; 
-                        });
-                    
-                    if(PM.on_statement_edit()) {
-                        AGB.show_statement_editor({save_callback: function() {
-                            $.address.queryString('');
-                            return false;
-                        }});
-                    }
-                    
-                    if(PM.on_argument_edit()) {
-                        AGB.new_argument();
-                        }
-                },
-                PM.on_error);
+    PM.show_menu({text: PM.project.get('title'),
+                  link: "#/project/" + PM.project.id},
+                 PM.agb_outline_menu(db));
+
+    $('#browser').html(AGB.argumentgraph_html(db, data));
+    $('#export').click(
+        function (event){
+            window.open('/carneadesws/export/{0}/{1}'.format(IMPACT.project, db),
+                        'CAF XML');
+            return false; 
+        });
+    
+    if(PM.on_statement_edit()) {
+        AGB.show_statement_editor({save_callback: function() {
+            $.address.queryString('');
+            return false;
+        }});
+    }
+    
+    if(PM.on_argument_edit()) {
+        AGB.new_argument();
+    }
 };
 
 // Formats the text for the main issues

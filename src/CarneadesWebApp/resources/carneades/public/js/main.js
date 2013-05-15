@@ -20,6 +20,7 @@ var IMPACT = {
 var PM = {
     stmts_info: [],
     args_info: [],
+    ag_info: [],
     stmts: [],
     args: [],
     projects: []
@@ -286,7 +287,7 @@ PM.common_post_load = function() {
 
 
 // Loads the arguments, statements, schemes and policies of a project
-PM.load_project_data = function (id) {
+PM.load_project = function (id) {
     console.log('Loading project');
     
     if(!_.isNil(PM.projects[id])) {
@@ -315,6 +316,13 @@ PM.load_project_data = function (id) {
         PM.current_policy.fetch({async: false});    
     }
 
+    // Reinitializes
+    PM.stmts_info = [];
+    PM.args_info = [];
+    PM.ag_info = [];
+    PM.stmts = [];
+    PM.args = [];
+
     PM.args_info[IMPACT.debate_db] = new PM.ArgumentsInfo([], {db: IMPACT.debate_db});
     PM.stmts_info[IMPACT.debate_db] = new PM.StatementsInfo([], {db: IMPACT.debate_db});
 
@@ -334,7 +342,9 @@ PM.load_project_data = function (id) {
     PM.debate_metadata.fetch({async: false});
     
     PM.debate_info = new PM.AgInfo({db: IMPACT.debate_db});
-    PM.debate_info.fetch();
+    PM.debate_info.fetch({async: false});
+    
+    PM.ag_info[IMPACT.debate_db] = PM.debate_info;
     
     PM.sct = new PM.Sct({db: IMPACT.debate_db,
                          lang: IMPACT.lang,
@@ -377,6 +387,17 @@ PM.get_stmt_info = function (db, id) {
     return stmt.toJSON();
 };
 
+/// Returns the argument graph information
+PM.get_ag_info = function (db) {
+    var ag_info = PM.ag_info[db];
+    if(_.isNil(ag_info)) {
+        PM.ag_info[db] =  new PM.AgInfo({db: db});
+        ag_info = PM.ag_info[db];
+        ag_info.fetch({async: false});
+    }
+    
+    return ag_info.toJSON();
+};
 
 /// Returns the statement object
 PM.get_stmt = function (db, id) {
@@ -642,7 +663,7 @@ PM.notify = function(text) {
      $('#pm').prepend('<ul class="thankyou pm-thankyou"><li class="notification">{0}</li></ul>'.format(text));
     setTimeout(function() {
                    $('#pm .thankyou').remove();
-               }, 3000);
+               }, 4000);
     PM.scroll_to_top();
 };
 

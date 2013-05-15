@@ -4,7 +4,8 @@
 (ns carneades.analysis.web.views.project
   (:use [jayq.core :only [$ inner]]
         [jayq.util :only [log]]
-        [carneades.analysis.web.views.core :only [json]])
+        [carneades.analysis.web.views.core :only [json]]
+        [carneades.analysis.web.i18n :only [i18n]])
   (:require [carneades.analysis.web.template :as tp]
             [carneades.analysis.web.views.header :as header]))
 
@@ -12,7 +13,6 @@
   [project]
   (let [proj (.get js/PM.projects project)
         pdata (json proj)]
-    (js/PM.load_project_data project)
     (header/show {:text (.-title pdata) :link (str "#/project/" project)}
                  [{:text :arguments
                    :link (format "#/arguments/outline/%s/%s" project "main")}
@@ -20,5 +20,9 @@
                    :link (format "#/tour/%s" project)}
                   {:text :policies
                    :link (format "#/policies/%s" project)}])
-    (inner ($ ".content") (tp/get "project"
-                                  {:introduction (js/PM.markdown_to_html (aget (.-introduction pdata) js/IMPACT.lang))}))))
+    (js/PM.notify (i18n "loading_project"))
+    (js/PM.load_project project)
+    (inner ($ ".content")
+           (tp/get "project"
+                   {:introduction
+                    (js/PM.markdown_to_html (aget (.-introduction pdata) js/IMPACT.lang))}))))
