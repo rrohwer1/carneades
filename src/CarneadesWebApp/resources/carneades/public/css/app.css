@@ -403,8 +403,8 @@
 }
 
 .section-menu {
-   -webkit-flex: 1;
-    flex: 1;
+   /* -webkit-flex: 1; */
+   /*  flex: 1; */
     /* background-color: cyan; */
     margin-right: 0%;
     text-align: right;

@@ -54,8 +54,10 @@ PM.agb_outline_menu = function (db) {
              ,link: "#/arguments/export/" + PM.project.id + '/' + db},
             {text: 'pmt_ag_menu_evaluate'
              ,link: "#/arguments/evaluate/" + PM.project.id + '/' + db},
-            {text: 'pmt_ag_menu_newstatement'
-             ,link: "#/arguments/evaluate/" + PM.project.id + '/' + db}
+            {text: 'pmt_new_statement'
+             ,link: "#/arguments/outline/" + PM.project.id + '/' + db + '?edit=true&entity=statement'},
+            {text: 'pmt_new_argument'
+             ,link: "#/arguments/evaluate/" + PM.project.id + '/' + db + '?edit=true&entity=argument'}
            ];
 };
 
@@ -85,6 +87,12 @@ AGB.display_argumentgraph = function(db)
                             return false; 
                         });
                     // AGB.enable_ag_edition(db);
+                    if(PM.on_statement_edit()) {
+                        AGB.show_statement_editor({save_callback: function() {
+                            $.address.queryString('');
+                            return false;
+                        }});
+                    }
                 },
                 PM.on_error);
 };
