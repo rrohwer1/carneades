@@ -103,15 +103,43 @@ AGB.statement_html = function(db, info, lang)
     return statement_html.filter('#statement');
 };
 
+PM.agb_statement_menu = function (db, stmtid) {
+    return [{text: 'pmt_ag_menu_map'
+             ,link: '#/arguments/map/' + PM.project.id + '/main'},
+            {text: 'pmt_ag_menu_vote'
+             ,link: "#/arguments/vote/" + PM.project.id},
+            {text: 'pmt_ag_menu_copy'
+             ,link: "#/arguments/copy-case/" + PM.project.id},
+            {text: 'pmt_ag_menu_export'
+             ,link: "#/arguments/export/" + PM.project.id + '/' + db},
+            {text: 'pmt_ag_menu_evaluate'
+             ,link: "#/arguments/evaluate/" + PM.project.id + '/' + db},
+            {text: 'pmt_edit_statement'
+             ,link: "#/arguments/statement/" + PM.project.id + '/' + db + '/' + stmtid + '?edit=true&entity=statement'},
+            {text: 'pmt_new_argument'
+             ,link: "#/arguments/outline/" + PM.project.id + '/' + db + '?edit=true&entity=argument'}
+           ];
+};
+
 AGB.display_statement = function(db, stmtid)
 {
+    console.log('Display statement...');
     var info = PM.get_stmt_info(db, stmtid);
+    
+    PM.show_menu({text: PM.project.get('title'),
+                  link: "#/project/" + PM.project.id},
+                 PM.agb_statement_menu(db, stmtid));
+    
     $('#browser').html(AGB.statement_html(db, info, IMPACT.lang));
     $('#export').click(function (event){
         window.open('/carneadesws/export/{0}/{1}'.format(db, IMPACT.project), 'CAF XML');
         return false; 
     });
     AGB.enable_statement_edition(db, info);
+    
+    if(PM.on_statement_edit()) {
+        AGB.edit_statement(db, info);
+    }
 }
 
 AGB.set_statement_title_text = function(info)
@@ -287,8 +315,11 @@ AGB.delete_statement = function(db, stmtid) {
 
 AGB.edit_statement = function(db, info) {
     AGB.show_statement_editor({update: true,
-                              statement: info,
-                              save_callback: _.bind(AGB.display_statement, AGB, db, info.id) 
+                               statement: PM.get_stmt(db, info.id).toJSON(),
+                               save_callback: function() {
+                                   $.address.queryString('');
+                                   $.address.update();
+                               }
                               });
     return false;
 };
