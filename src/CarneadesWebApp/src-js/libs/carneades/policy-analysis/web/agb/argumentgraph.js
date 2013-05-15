@@ -57,7 +57,7 @@ PM.agb_outline_menu = function (db) {
             {text: 'pmt_new_statement'
              ,link: "#/arguments/outline/" + PM.project.id + '/' + db + '?edit=true&entity=statement'},
             {text: 'pmt_new_argument'
-             ,link: "#/arguments/evaluate/" + PM.project.id + '/' + db + '?edit=true&entity=argument'}
+             ,link: "#/arguments/outline/" + PM.project.id + '/' + db + '?edit=true&entity=argument'}
            ];
 };
 
@@ -93,6 +93,10 @@ AGB.display_argumentgraph = function(db)
                             return false;
                         }});
                     }
+                    
+                    if(PM.on_argument_edit()) {
+                        AGB.new_argument();
+                        }
                 },
                 PM.on_error);
 };

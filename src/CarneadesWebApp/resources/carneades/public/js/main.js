@@ -354,6 +354,7 @@ PM.get_arg_info = function (db, id) {
     var arg = args_info.get(id);
     if(_.isNil(arg)) {
         args_info.fetch({async: false});
+        arg = args_info.get(id);
     }
     
     return arg.toJSON() || args_info.get(id).toJSON();    
