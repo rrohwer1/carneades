@@ -550,7 +550,8 @@ tr {
 }
 
 th {
-    padding-bottom: 15px;
+    /* padding-bottom: 15px; */
+    min-width: 200px;
 }
 
 .projects {
