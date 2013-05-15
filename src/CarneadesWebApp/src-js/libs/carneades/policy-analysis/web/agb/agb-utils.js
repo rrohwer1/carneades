@@ -46,4 +46,6 @@ PM.on_argument_edit = function () {
     return PM.on_edit() && PM.on_argument_entity();
 }
 
-
+PM.on_statement_delete = function () {
+    return $.address.queryString().indexOf('delete=true') != -1;
+}

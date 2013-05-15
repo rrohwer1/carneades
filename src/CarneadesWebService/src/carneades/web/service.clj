@@ -228,11 +228,12 @@
                     (ag-db/update-statement id (dissoc m :id))
                     (pack-statement (ag-db/read-statement id)))})))
   
-  (DELETE "/statement/:db/:id" request
+  (DELETE "/statement/:project/:db/:id" request
           (let [[username password] (get-username-and-password request)
                 db (:db (:params request))
                 id (:id (:params request))
-                db2 (db/make-connection db username password)]
+                project (:project (:params request))
+                db2 (db/make-connection project db username password)]
             (db/with-db db2 {:body
                              (let [stmt (ag-db/read-statement id)]
                                (doseq [id (ag-db/premises-for-statement id)]

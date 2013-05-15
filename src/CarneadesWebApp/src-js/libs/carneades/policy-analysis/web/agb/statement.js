@@ -114,10 +114,12 @@ PM.agb_statement_menu = function (db, stmtid) {
              ,link: "#/arguments/export/" + PM.project.id + '/' + db},
             {text: 'pmt_ag_menu_evaluate'
              ,link: "#/arguments/evaluate/" + PM.project.id + '/' + db},
-            {text: 'pmt_edit_statement'
+            {text: 'edit'
              ,link: "#/arguments/statement/" + PM.project.id + '/' + db + '/' + stmtid + '?edit=true&entity=statement'},
+            {text: 'pmt_menu_delete'
+             ,link: "#/arguments/statement/" + PM.project.id + '/' + db + '/' + stmtid + '?delete=true&entity=statement'},
             {text: 'pmt_new_argument'
-             ,link: "#/arguments/outline/" + PM.project.id + '/' + db + '?edit=true&entity=argument'}
+             ,link: "#/arguments/statement/" + PM.project.id + '/' + db + '/' + stmtid + '?edit=true&entity=argument'}
            ];
 };
 
@@ -135,10 +137,18 @@ AGB.display_statement = function(db, stmtid)
         window.open('/carneadesws/export/{0}/{1}'.format(db, IMPACT.project), 'CAF XML');
         return false; 
     });
-    AGB.enable_statement_edition(db, info);
+    // AGB.enable_statement_edition(db, info);
     
     if(PM.on_statement_edit()) {
         AGB.edit_statement(db, info);
+    }
+    
+    if(PM.on_argument_edit()) {
+        AGB.new_argument(PM.get_stmt(db, info.id).toJSON());
+    }
+    
+    if(PM.on_statement_delete()) {
+        AGB.delete_statement(db, stmtid);
     }
 }
 
@@ -279,30 +289,28 @@ AGB.statement_out = function(statement)
     return (statement.value != null) && (statement.value < 0.001);
 };
 
-AGB.enable_statement_edition = function(db, info) {
-    $('#menus').append(ich.statementeditormenu({
-        pmt_new_statement: $.i18n.prop('pmt_new_statement'),
-        pmt_menu_edit: $.i18n.prop('pmt_menu_edit'),
-        pmt_menu_delete: $.i18n.prop('pmt_menu_delete'),
-        pmt_new_argument: $.i18n.prop('pmt_new_argument')
-    }));
-    $('#delete-statement').click(_.bind(AGB.delete_statement, AGB, db, info.id));
-    $('#edit-statement').click(_.bind(AGB.edit_statement, AGB, db, info));
-    $('.evaluate').click(_.bind(AGB.evaluate, AGB, _.bind(AGB.display_statement, AGB, db, info.id)));
+// AGB.enable_statement_edition = function(db, info) {
+//     $('#menus').append(ich.statementeditormenu({
+//         pmt_new_statement: $.i18n.prop('pmt_new_statement'),
+//         pmt_menu_edit: $.i18n.prop('pmt_menu_edit'),
+//         pmt_menu_delete: $.i18n.prop('pmt_menu_delete'),
+//         pmt_new_argument: $.i18n.prop('pmt_new_argument')
+//     }));
+//     $('#delete-statement').click(_.bind(AGB.delete_statement, AGB, db, info.id));
+//     $('#edit-statement').click(_.bind(AGB.edit_statement, AGB, db, info));
+//     $('.evaluate').click(_.bind(AGB.evaluate, AGB, _.bind(AGB.display_statement, AGB, db, info.id)));
     
-    var current_statement = PM.get_stmt(db, info.id);
-    $('#new-argument').click(_.bind(AGB.new_argument, AGB, current_statement));
+//     var current_statement = PM.get_stmt(db, info.id);
+//     $('#new-argument').click(_.bind(AGB.new_argument, AGB, current_statement));
     
-    return false;
-};
+//     return false;
+// };
 
 AGB.delete_statement = function(db, stmtid) {
     if(confirm('Delete this statement?')) {
         PM.ajax_delete(IMPACT.wsurl + '/statement/' + IMPACT.project + '/' + db + '/' + stmtid,
                        function(e) {
-                           console.log('statement deleted');
-                           console.log(e);
-                           
+                           PM.ag_info[db].fetch({async: false});
                            AGB.set_argumentgraph_url(db);
                        },
                        IMPACT.user, 
