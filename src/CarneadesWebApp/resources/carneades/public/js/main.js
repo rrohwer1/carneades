@@ -596,7 +596,7 @@ PM.load_templates = function(toolboxState) {
 // Loads some generic styles when the app is used
 // outside of the UID toolbox
 PM.load_carneades_styles = function() {
-    // PM.load_style(undefined, 'impact-ui/jquery-ui-1.8.11.custom.css', 'toolbox/css');
+    PM.load_style(undefined, 'impact-ui/jquery-ui-1.8.11.custom.css', 'toolbox/css');
     // PM.load_style(undefined, 'impact-ui/impact-green.css', 'toolbox/css');
     // PM.load_style(undefined, 'main.css', 'toolbox/css');
     // PM.load_style(undefined, 'carneades/style.css', 'toolbox/css');
