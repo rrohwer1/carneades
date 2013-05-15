@@ -286,7 +286,7 @@ PM.ArgumentEditorView = Backbone.View.extend(
                            success : function() {
                                // manually redisplay argument page since it is not yet
                                // a backbone view
-                               AGB.display_argument(IMPACT.db, argument.id);
+                               AGB.set_argument_url(IMPACT.db, argument.id);
                                
                            }})) {
              this.model = undefined;
