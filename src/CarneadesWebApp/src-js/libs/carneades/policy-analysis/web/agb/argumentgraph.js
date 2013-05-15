@@ -43,6 +43,22 @@ AGB.argumentgraph_html = function(db, data)
     return argumentgraph_html.filter('#argumentgraph');
 };
 
+PM.agb_outline_menu = function (db) {
+    return [{text: 'pmt_ag_menu_map'
+             ,link: '#/arguments/map/' + PM.project.id + '/main'},
+            {text: 'pmt_ag_menu_vote'
+             ,link: "#/arguments/vote/" + PM.project.id},
+            {text: 'pmt_ag_menu_copy'
+             ,link: "#/arguments/copy-case/" + PM.project.id},
+            {text: 'pmt_ag_menu_export'
+             ,link: "#/arguments/export/" + PM.project.id + '/' + db},
+            {text: 'pmt_ag_menu_evaluate'
+             ,link: "#/arguments/evaluate/" + PM.project.id + '/' + db},
+            {text: 'pmt_ag_menu_newstatement'
+             ,link: "#/arguments/evaluate/" + PM.project.id + '/' + db}
+           ];
+};
+
 // Displays the argument graph page
 AGB.display_argumentgraph = function(db)
 {
@@ -57,6 +73,10 @@ AGB.display_argumentgraph = function(db)
 
     PM.ajax_get(IMPACT.wsurl + '/argumentgraph-info/' + IMPACT.project + '/' + db,
                 function(data) {
+                    PM.show_menu({text: PM.project.get('title'),
+                                  link: "#/project/" + project},
+                                 PM.agb_outline_menu(db));
+
                     $('#browser').html(AGB.argumentgraph_html(db, data));
                     $('#export').click(
                         function (event){

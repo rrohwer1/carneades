@@ -2,7 +2,7 @@
 ;;; Licensed under the EUPL V.1.1
 
 (ns carneades.analysis.web.backbone.core
-  (:use [jayq.util :only [log clj->js]])
+  (:use [jayq.util :only [log]])
   (:refer-clojure :exclude [get-in]))
 
 (defprotocol IHtml

@@ -2,7 +2,7 @@
 ;;; Licensed under the EUPL V.1.1
 
 (ns carneades.policy-analysis.web.views.pmt.vote
-  (:use [jayq.util :only [log clj->js]]
+  (:use [jayq.util :only [log]]
         [jayq.core :only [$ inner attr]]
         [carneades.analysis.web.views.core :only [template]])
   (:require [carneades.analysis.web.backbone.core :as bb])

@@ -3,7 +3,7 @@
 
 (ns ^{:doc "Displays questions to the user to collect facts."}
   carneades.policy-analysis.web.views.pmt.questions
-  (:use [jayq.util :only [log clj->js]]
+  (:use [jayq.util :only [log]]
         [jayq.core :only [$ append empty inner]]
         [carneades.analysis.web.i18n :only [i18n]]
         [carneades.analysis.web.views.core :only [template]])

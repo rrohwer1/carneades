@@ -3,7 +3,7 @@
 
 (ns carneades.analysis.web.views.header
   (:use [jayq.core :only [$ inner]]
-        [jayq.util :only [log clj->js]]
+        [jayq.util :only [log]]
         [carneades.analysis.web.i18n :only [i18n]])
   (:require [carneades.analysis.web.template :as tp]))
 

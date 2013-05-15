@@ -6,7 +6,7 @@
         [carneades.policy-analysis.web.views.core :only [score-agreed?]]
         [carneades.policy-analysis.web.models.core :only [get-metadata]]
         [jayq.core :only [$ css inner attr val]]
-        [jayq.util :only [log clj->js]])
+        [jayq.util :only [log]])
   (:require [carneades.analysis.web.backbone.core :as bb]
             [carneades.policy-analysis.web.models.core :as model])
   (:require-macros [carneades.analysis.web.backbone.macros :as bb]))

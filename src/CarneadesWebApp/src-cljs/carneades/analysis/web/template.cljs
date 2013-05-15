@@ -3,7 +3,7 @@
 
 ;; TODO this should be moved the views directory
 (ns carneades.analysis.web.template
-  (:use [jayq.util :only [log clj->js]])
+  (:use [jayq.util :only [log]])
   (:require [carneades.analysis.web.icanhaz.core :as ich])
   (:refer-clojure :exclude [get]))
 

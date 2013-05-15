@@ -2,7 +2,7 @@
 ;;; Licensed under the EUPL V.1.1
 
 (ns carneades.analysis.web.icanhaz.core
-  (:use [jayq.util :only [log clj->js]])
+  (:use [jayq.util :only [log]])
   (:require [clojure.string :as str])
   (:refer-clojure :exclude [get]))
 

@@ -2,7 +2,7 @@
 ;;; Licensed under the EUPL V.1.1
 
 (ns carneades.policy-analysis.web.views.pmt.submitted-facts
-  (:use [jayq.util :only [log clj->js]]
+  (:use [jayq.util :only [log]]
         [jayq.core :only [$ inner attr append]]
         [carneades.analysis.web.views.core :only [template]]
         [cljs.reader :only [read-string]]

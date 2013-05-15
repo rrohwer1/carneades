@@ -8,7 +8,7 @@
                                                          pro-answered con-answered
                                                          get-arg]]
         [jayq.core :only [$ css inner attr val]]
-        [jayq.util :only [log clj->js]])
+        [jayq.util :only [log]])
   (:require [carneades.analysis.web.backbone.core :as bb])
   (:require-macros [carneades.analysis.web.backbone.macros :as bb])
   (:refer-clojure :exclude [val]))

@@ -2,7 +2,7 @@
 ;;; Licensed under the EUPL V.1.1
 
 (ns carneades.policy-analysis.web.views.core
-  (:use [jayq.util :only [log clj->js]]
+  (:use [jayq.util :only [log]]
         [carneades.policy-analysis.web.models.core :only [get-stmt get-arg]]
         [carneades.analysis.web.views.core :only [json]]))
 
