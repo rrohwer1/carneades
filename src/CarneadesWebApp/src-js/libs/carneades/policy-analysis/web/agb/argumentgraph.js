@@ -76,7 +76,7 @@ AGB.display_argumentgraph = function(db)
     PM.ajax_get(IMPACT.wsurl + '/argumentgraph-info/' + IMPACT.project + '/' + db,
                 function(data) {
                     PM.show_menu({text: PM.project.get('title'),
-                                  link: "#/project/" + project},
+                                  link: "#/project/" + PM.project.id},
                                  PM.agb_outline_menu(db));
 
                     $('#browser').html(AGB.argumentgraph_html(db, data));
