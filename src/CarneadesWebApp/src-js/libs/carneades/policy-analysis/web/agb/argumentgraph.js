@@ -86,7 +86,7 @@ AGB.display_argumentgraph = function(db)
                                         'CAF XML');
                             return false; 
                         });
-                    // AGB.enable_ag_edition(db);
+                    
                     if(PM.on_statement_edit()) {
                         AGB.show_statement_editor({save_callback: function() {
                             $.address.queryString('');
@@ -141,24 +141,6 @@ AGB.outline_text = function(tree, db, index)
     text += "</ul>";
 
     return text;
-};
-
-// Activates the edition of the argument graph
-AGB.enable_ag_edition = function(db) {
-    // $('#ageditormenu').remove();
-    // $('#menus').append(ich.ageditormenuon({'new_statement_text': $.i18n.prop('pmt_new_statement'),
-    //                                        'new_argument_text': $.i18n.prop('pmt_new_argument')
-    //                                       }));
-    // $('#newstatement').click(_.bind(AGB.show_statement_editor, AGB,
-    //                                 {save_callback: function() {
-    //                                      AGB.display_argumentgraph(IMPACT.db);
-    //                                      return false;
-    //                                  }}));
-    // $('#newargument').click(AGB.new_argument);
-    // $('.evaluate').click(_.bind(AGB.evaluate, AGB, _.bind(AGB.display_argumentgraph, AGB, db)));
-    // $('.vote').click(catb.views.pmt.vote.vote);
-    
-    return false;
 };
 
 // Returns true if the atom represented as a string is grounded
