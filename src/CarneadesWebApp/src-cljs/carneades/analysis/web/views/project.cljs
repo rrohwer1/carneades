@@ -20,8 +20,9 @@
                    :link (format "#/tour/%s" project)}
                   {:text :policies
                    :link (format "#/policies/%s" project)}])
-    (js/PM.notify (i18n "loading_project"))
+    (js/PM.busy_cursor_on)
     (js/PM.load_project project)
+    (js/PM.busy_cursor_off)
     (inner ($ ".content")
            (tp/get "project"
                    {:introduction

@@ -447,6 +447,20 @@ PM.get_stmts = function () {
     return stmts;
 }
 
+/// Returns a collection of all the arguments
+/// of the current database
+PM.get_args = function () {
+    var args = PM.args[IMPACT.db];
+
+    if(_.isNil(args)) {
+        PM.args[IMPACT.db] = new PM.Arguments([], {db: db});
+        args = PM.args;
+        args.fetch({async: false});
+    }
+ 
+    return args;
+}
+
 PM.markdown_add_hooks = function () {
     var converter = Markdown.getSanitizingConverter(); 
     converter.hooks.chain("preConversion", PM.citation_to_url); 

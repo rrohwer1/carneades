@@ -49,3 +49,7 @@ PM.on_argument_edit = function () {
 PM.on_statement_delete = function () {
     return $.address.queryString().indexOf('delete=true') != -1;
 }
+
+PM.on_argument_delete =  function () {
+    return $.address.queryString().indexOf('delete=true') != -1;
+}

@@ -123,6 +123,8 @@ PM.agb_argument_menu = function (db, argid) {
 
 AGB.display_argument = function(db, argid)
 {
+    console.log('display argument');
+
     var info = PM.get_arg_info(db, argid);
     
     PM.show_menu({text: PM.project.get('title'),
@@ -130,7 +132,18 @@ AGB.display_argument = function(db, argid)
                  PM.agb_argument_menu(db, argid));
     
     $('#browser').html(AGB.argument_html(db, info));
-    AGB.enable_argument_edition(db, argid);
+    // AGB.enable_argument_edition(db, argid);
+    if(PM.on_argument_edit()) {
+        AGB.edit_argument(db, info);
+    }
+    
+    // if(PM.on_argument_edit()) {
+    //     AGB.new_argument(PM.get_stmt(db, info.id).toJSON());
+    // }
+    
+    // if(PM.on_statement_delete()) {
+    //     AGB.delete_statement(db, stmtid);
+    // }
 };
 
 AGB.set_premises_text = function(argument_data)
@@ -205,17 +218,17 @@ AGB.argument_link = function(db, id, text)
 };
 
 
-AGB.enable_argument_edition = function(db, argid) {
-    $('#menus').append(ich.argumenteditormenu({
-        pmt_menu_edit: $.i18n.prop('pmt_menu_edit'),
-        pmt_menu_delete: $.i18n.prop('pmt_menu_delete')
-    }));
-    $('#delete-argument').click(_.bind(AGB.delete_argument, AGB, db, argid));
-    $('#edit-argument').click(_.bind(AGB.edit_argument, AGB, db, argid));
-    $('.evaluate').click(_.bind(AGB.evaluate, AGB, _.bind(AGB.display_argument, AGB, db, argid)));
+// AGB.enable_argument_edition = function(db, argid) {
+//     $('#menus').append(ich.argumenteditormenu({
+//         pmt_menu_edit: $.i18n.prop('pmt_menu_edit'),
+//         pmt_menu_delete: $.i18n.prop('pmt_menu_delete')
+//     }));
+//     $('#delete-argument').click(_.bind(AGB.delete_argument, AGB, db, argid));
+//     $('#edit-argument').click(_.bind(AGB.edit_argument, AGB, db, argid));
+//     $('.evaluate').click(_.bind(AGB.evaluate, AGB, _.bind(AGB.display_argument, AGB, db, argid)));
     
-    return false;
-};
+//     return false;
+// };
 
 AGB.delete_argument = function(db, argid) {
     if(confirm('Delete this argument?')) {

@@ -284,10 +284,11 @@ PM.ArgumentEditorView = Backbone.View.extend(
                           {error: PM.on_model_error,
                            wait: true,
                            success : function() {
-                               // manually redisplay argument page since it is not yet
-                               // a backbone view
-                               AGB.set_argument_url(IMPACT.db, argument.id);
+                               var arg = PM.get_args().get(argument.id);
+                               PM.get_args().add([arg], {merge: true});
+                               PM.args_info[IMPACT.db].add([arg], {merge: true});
                                
+                               $.address.queryString('');
                            }})) {
              this.model = undefined;
              this.premises_candidates_view.remove();
