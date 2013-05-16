@@ -661,10 +661,10 @@ PM.on_error = function(textstatus) {
 
 PM.notify = function(text) {
      $('.notification-area').prepend('<ul class="thankyou pm-thankyou"><li class="notification">{0}</li></ul>'.format(text));
-    // setTimeout(function() {
-    //                $('.notification-area .thankyou').remove();
-    //            }, 4000);
-    // PM.scroll_to_top();
+    setTimeout(function() {
+                   $('.notification-area .thankyou').remove();
+               }, 4000);
+    PM.scroll_to_top();
 };
 
 // Called when an AJAX error occurs for backbone
