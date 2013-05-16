@@ -289,23 +289,6 @@ AGB.statement_out = function(statement)
     return (statement.value != null) && (statement.value < 0.001);
 };
 
-// AGB.enable_statement_edition = function(db, info) {
-//     $('#menus').append(ich.statementeditormenu({
-//         pmt_new_statement: $.i18n.prop('pmt_new_statement'),
-//         pmt_menu_edit: $.i18n.prop('pmt_menu_edit'),
-//         pmt_menu_delete: $.i18n.prop('pmt_menu_delete'),
-//         pmt_new_argument: $.i18n.prop('pmt_new_argument')
-//     }));
-//     $('#delete-statement').click(_.bind(AGB.delete_statement, AGB, db, info.id));
-//     $('#edit-statement').click(_.bind(AGB.edit_statement, AGB, db, info));
-//     $('.evaluate').click(_.bind(AGB.evaluate, AGB, _.bind(AGB.display_statement, AGB, db, info.id)));
-    
-//     var current_statement = PM.get_stmt(db, info.id);
-//     $('#new-argument').click(_.bind(AGB.new_argument, AGB, current_statement));
-    
-//     return false;
-// };
-
 AGB.delete_statement = function(db, stmtid) {
     if(confirm('Delete this statement?')) {
         PM.ajax_delete(IMPACT.wsurl + '/statement/' + IMPACT.project + '/' + db + '/' + stmtid,

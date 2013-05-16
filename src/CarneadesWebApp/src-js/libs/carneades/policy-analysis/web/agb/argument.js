@@ -101,9 +101,33 @@ AGB.argument_html = function(db, argument_data)
     return argument_html.filter('#argument');
 };
 
+PM.agb_argument_menu = function (db, argid) {
+    return [{text: 'pmt_ag_menu_map'
+             ,link: '#/arguments/map/' + PM.project.id + '/main'},
+            {text: 'pmt_ag_menu_vote'
+             ,link: "#/arguments/vote/" + PM.project.id},
+            {text: 'pmt_ag_menu_copy'
+             ,link: "#/arguments/copy-case/" + PM.project.id},
+            {text: 'pmt_ag_menu_export'
+             ,link: "#/arguments/export/" + PM.project.id + '/' + db},
+            {text: 'pmt_ag_menu_evaluate'
+             ,link: "#/arguments/evaluate/" + PM.project.id + '/' + db},
+            {text: 'edit'
+             ,link: "#/arguments/argument/" + PM.project.id + '/' + db + '/' + argid + '?edit=true&entity=argument'},
+            {text: 'pmt_menu_delete'
+             ,link: "#/arguments/argument/" + PM.project.id + '/' + db + '/' + argid + '?delete=true&entity=argument'},
+            {text: 'pmt_new_statement'
+             ,link: "#/arguments/argument/" + PM.project.id + '/' + db + '/' + argid + '?edit=true&entity=statement'}
+           ];
+};
+
 AGB.display_argument = function(db, argid)
 {
     var info = PM.get_arg_info(db, argid);
+    
+    PM.show_menu({text: PM.project.get('title'),
+                  link: "#/project/" + PM.project.id},
+                 PM.agb_argument_menu(db, argid));
     
     $('#browser').html(AGB.argument_html(db, info));
     AGB.enable_argument_edition(db, argid);

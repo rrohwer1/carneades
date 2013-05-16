@@ -425,7 +425,7 @@
 
 .content {
     position:absolute;
-    top: 60px;
+    top: 75px;
     /* width: 700px; */
     margin: 0 auto;
     padding-left: 15%;
@@ -620,4 +620,8 @@ ul.question {
 }
 ul.question li {
 	background: none;
+}
+
+.notification-area {
+    margin-left: 30%;
 }

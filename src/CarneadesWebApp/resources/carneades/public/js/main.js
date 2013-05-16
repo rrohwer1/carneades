@@ -288,12 +288,12 @@ PM.common_post_load = function() {
 
 // Loads the arguments, statements, schemes and policies of a project
 PM.load_project = function (id) {
-    console.log('Loading project');
-    
     if(!_.isNil(PM.projects[id])) {
         // already loaded
         return;
     }        
+   
+    PM.notify($.i18n.prop('loading_project'));
     
     PM.project = new PM.Project({id: id});
     PM.project.fetch({async:false});
@@ -652,27 +652,27 @@ PM.load_style = function(rootpath, style, cssdir) {
 // Called when an AJAX error occurs
 PM.on_error = function(textstatus) {
     PM.busy_cursor_off();
-    $('#pm').prepend('<ul class="warning pm-warning" ><li class="notification">{0}</li></ul>'.format(textstatus));
+    $('.notification-area').prepend('<ul class="warning pm-warning" ><li class="notification">{0}</li></ul>'.format(textstatus));
     setTimeout(function() {
-                   $('#pm .warning').remove();
+                   $('.notification-area .warning').remove();
                }, 3000);
     PM.scroll_to_top();
 };
 
 PM.notify = function(text) {
-     $('#pm').prepend('<ul class="thankyou pm-thankyou"><li class="notification">{0}</li></ul>'.format(text));
-    setTimeout(function() {
-                   $('#pm .thankyou').remove();
-               }, 4000);
-    PM.scroll_to_top();
+     $('.notification-area').prepend('<ul class="thankyou pm-thankyou"><li class="notification">{0}</li></ul>'.format(text));
+    // setTimeout(function() {
+    //                $('.notification-area .thankyou').remove();
+    //            }, 4000);
+    // PM.scroll_to_top();
 };
 
 // Called when an AJAX error occurs for backbone
 PM.on_model_error = function(collection, response) {
     PM.busy_cursor_off();
-    $('#pm').prepend('<div style="background-color:  #FFCC33" class="error">{0}</div>'.format(response.statusText));
+    $('.notification-area').prepend('<div style="background-color:  #FFCC33" class="error">{0}</div>'.format(response.statusText));
     setTimeout(function() {
-                   $('#pm .error').remove();
+                   $('.notification-area .error').remove();
                }, 3000);
 };
 
