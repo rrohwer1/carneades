@@ -10,7 +10,7 @@
         [jayq.core :only [$ css inner attr val]]
         [jayq.util :only [log]])
   (:require [carneades.analysis.web.backbone.core :as bb])
-  (:require-macros [carneades.analysis.web.backbone.macros :as bb])
+  (:require-macros [carneades.analysis.web.backbone.macros :as bbm])
   (:refer-clojure :exclude [val]))
 
 (defn init-radio-buttons
@@ -59,12 +59,12 @@
     (.set statement-poll "votes" votes)
     (bb/save statement-poll nil {:wait true})))
 
-(bb/defview ClaimEditor
+(bbm/defview ClaimEditor
   :className "sct-claim-editor"
   :events {"click .save" :save-score}
   :render
   ([]
-     (bb/with-attrs [:claim :arguments :statement-poll :argument-poll]
+     (bbm/with-attrs [:claim :arguments :statement-poll :argument-poll]
        (let [argument-votes (bb/get-in argument-poll [:votes])
              statement-votes (bb/get-in statement-poll [:votes])
              claim (json claim)
@@ -79,7 +79,7 @@
 
   :save-score
   ([]
-     (bb/with-attrs [:claim :arguments :statement-poll :argument-poll :parent]
+     (bbm/with-attrs [:claim :arguments :statement-poll :argument-poll :parent]
        (let [argument-votes (bb/get-in argument-poll [:votes])
              statement-votes (bb/get-in statement-poll [:votes])
              claim (json claim)

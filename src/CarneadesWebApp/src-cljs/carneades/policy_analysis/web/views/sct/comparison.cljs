@@ -9,17 +9,14 @@
         [jayq.util :only [log]])
   (:require [carneades.analysis.web.backbone.core :as bb]
             [carneades.policy-analysis.web.models.core :as model])
-  (:require-macros [carneades.analysis.web.backbone.macros :as bb]))
+  (:require-macros [carneades.analysis.web.backbone.macros :as bbm])
+  )
 
 (defn build-metadata
   "Builds the metadata from the similarity map"
   [sources metadata]
   (reduce (fn [m [k v]]
-            (log "v =")
-            (log v)
             (let [md (map (partial get-metadata metadata) v)
-                  _ (log "md")
-                  _ (log (clj->js md))
                   md_data (map (fn [m]
                                  {:metadata_text (js/AGB.format_linear_metadata m)})
                                md)]
@@ -35,11 +32,11 @@
                    :has-much (contains? metadata :much)
                    :has-very-much (contains? metadata :very-much)}))
 
-(bb/defview Comparison
+(bbm/defview Comparison
   :className "sct-comparison"
   :render
   ([]
-     (bb/with-attrs [:statement-poll :statements :arguments :issue :metadata]
+     (bbm/with-attrs [:statement-poll :statements :arguments :issue :metadata]
        (let [votes (bb/get-in statement-poll [:votes])
              accepted-statements (set (map first
                                            (filter (fn [[id score]]

@@ -132,11 +132,15 @@ AGB.display_argument = function(db, argid)
                  PM.agb_argument_menu(db, argid));
     
     $('#browser').html(AGB.argument_html(db, info));
-    // AGB.enable_argument_edition(db, argid);
+ 
     if(PM.on_argument_edit()) {
         AGB.edit_argument(db, info);
     }
-    
+ 
+    if(PM.on_argument_delete()) {
+        AGB.delete_argument(db, info);
+    }
+ 
     // if(PM.on_argument_edit()) {
     //     AGB.new_argument(PM.get_stmt(db, info.id).toJSON());
     // }

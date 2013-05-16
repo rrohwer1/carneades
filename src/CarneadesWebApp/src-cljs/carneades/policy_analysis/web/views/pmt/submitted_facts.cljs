@@ -9,7 +9,7 @@
         [carneades.policy-analysis.web.views.pmt.questions :only [show-facts]])
   (:require [carneades.analysis.web.backbone.core :as bb]
             [carneades.analysis.web.template :as template])
-  (:require-macros [carneades.analysis.web.backbone.macros :as bb]
+  (:require-macros ;; [carneades.analysis.web.backbone.macros :as bb]
                    [carneades.policy-analysis.web.views.menu :as menu]))
 
 (defn show-facts-for-modification

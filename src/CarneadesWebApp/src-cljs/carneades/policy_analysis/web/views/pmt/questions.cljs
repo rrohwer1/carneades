@@ -10,7 +10,7 @@
   (:require [clojure.string :as s]
             [carneades.analysis.web.backbone.core :as bb]
             [carneades.analysis.web.dispatch :as dispatch])
-  (:require-macros [carneades.analysis.web.backbone.macros :as bb]
+  (:require-macros [carneades.analysis.web.backbone.macros :as bbm]
                    [carneades.policy-analysis.web.views.menu :as menu]))
 
 (defn current-fact-value

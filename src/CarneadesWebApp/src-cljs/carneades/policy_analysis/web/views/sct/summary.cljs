@@ -9,7 +9,7 @@
         [jayq.util :only [log]])
   (:require [carneades.analysis.web.backbone.core :as bb]
             [carneades.policy-analysis.web.views.sct.claim-editor :as claim])
-  (:require-macros [carneades.analysis.web.backbone.macros :as bb])
+  (:require-macros [carneades.analysis.web.backbone.macros :as bbm])
   (:refer-clojure :exclude [val]))
 
 (defn assign-claim-ids
@@ -21,14 +21,14 @@
         claims
         (.$ this ".change-score"))))
 
-(bb/defview Summary
+(bbm/defview Summary
   :className "sct-summary"
   :events {"click .change-score" :edit-claim
            "click .compare" :jump-to-comparison}
   :render
   ([]
-     (bb/with-attrs [:statements]
-       (let [votes (bb/get-in model [:statement-poll :votes])
+     (bbm/with-attrs [:statements]
+       (let [votes (bbm/get-in model [:statement-poll :votes])
              votes (js->clj votes)
              claims-ids (keys votes) 
              claims (map (comp json (partial get-stmt statements)) claims-ids)
@@ -42,7 +42,7 @@
   
   :edit-claim
   ([event]
-     (bb/with-attrs [:statements :arguments :statement-poll :argument-poll]
+     (bbm/with-attrs [:statements :arguments :statement-poll :argument-poll]
       (let [target (.-target event)
             parent (.parents ($ target) "li")
             id (.data ($ target) "id")

@@ -4,7 +4,7 @@
 (defproject carneades-webapp/carneades-webapp "1.0.0-SNAPSHOT"
   :description "The Carneades Web Application"
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [org.clojure/data.json "0.1.1"]
+                 [org.clojure/data.json "0.2.2"]
                  [compojure "1.0.4" :exclusion [clojure]]
                  [hiccup "0.3.6"]
                  [enlive "1.0.0"]
@@ -17,7 +17,7 @@
                  [lein-ring "0.5.4"]
                  [org.clojure/tools.logging "0.2.3"]]
   :plugins [[lein-ring "0.7.1"]
-            [lein-cljsbuild "0.3.0"]
+            [lein-cljsbuild "0.3.2"]
             [lein-sub "0.2.3"]]
   ;; sub projects
   :sub ["../CarneadesEngine" "../CarneadesWebService" "../CarneadesExamples"]

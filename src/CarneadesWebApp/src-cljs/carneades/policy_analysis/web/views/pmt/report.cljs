@@ -7,10 +7,10 @@
         [carneades.analysis.web.views.core :only [template]]
         [carneades.policy-analysis.web.views.pmt.vote :only [round-score]])
   (:require [carneades.analysis.web.backbone.core :as bb])
-  (:require-macros [carneades.analysis.web.backbone.macros :as bb]
+  (:require-macros [carneades.analysis.web.backbone.macros :as bbm]
                    [carneades.policy-analysis.web.views.menu :as menu]))
 
-(bb/defview Report
+(bbm/defview Report
   :className "pmt-report"
   :render
   ([]
