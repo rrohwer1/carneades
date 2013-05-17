@@ -183,5 +183,7 @@ AGB.create_statement_editor = function(data) {
 // Removes the statement editor from the page
 AGB.remove_statement_editor = function() {
     $('#statementeditor').empty();
+    $.address.queryString('');
+    
     return false;
 };

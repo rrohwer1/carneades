@@ -17,7 +17,7 @@
                  [lein-ring "0.5.4"]
                  [org.clojure/tools.logging "0.2.3"]]
   :plugins [[lein-ring "0.7.1"]
-            [lein-cljsbuild "0.3.2"]
+            [lein-cljsbuild "0.3.0"]
             [lein-sub "0.2.3"]]
   ;; sub projects
   :sub ["../CarneadesEngine" "../CarneadesWebService" "../CarneadesExamples"]

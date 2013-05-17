@@ -141,13 +141,13 @@ AGB.display_argument = function(db, argid)
         AGB.delete_argument(db, info);
     }
  
-    // if(PM.on_argument_edit()) {
-    //     AGB.new_argument(PM.get_stmt(db, info.id).toJSON());
-    // }
-    
-    // if(PM.on_statement_delete()) {
-    //     AGB.delete_statement(db, stmtid);
-    // }
+    if(PM.on_statement_edit()) {
+        AGB.show_statement_editor({save_callback: function() {
+            $.address.queryString('');
+            return false;
+        }});
+    }
+
 };
 
 AGB.set_premises_text = function(argument_data)

@@ -310,6 +310,9 @@ PM.ArgumentEditorView = Backbone.View.extend(
          
          this.metadata_editor_view.remove();
          
+         // not really clean...
+         $.address.queryString('');
+         
          return false;
      } 
 
