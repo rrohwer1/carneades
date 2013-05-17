@@ -504,7 +504,7 @@ Returns the answers indexed by question's id."
   [db]
   (set! js/IMPACT.db db)
   (reset! questions (create-questions-map))
-  (js/PM.set_arguments_url db))
+  (js/PM.set_policies_url))
 
 (defn show-facts
   "Shows facts for modification."

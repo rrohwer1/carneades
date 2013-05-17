@@ -19,7 +19,7 @@
                   {:text :guidedtour
                    :link (format "#/tour/%s" project)}
                   {:text :policies
-                   :link (format "#/policies/%s" project)}])
+                   :link (format "#/policies/introduction/%s" project)}])
     (js/PM.busy_cursor_on)
     (js/PM.load_project project)
     (js/PM.busy_cursor_off)

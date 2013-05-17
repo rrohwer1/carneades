@@ -4,7 +4,7 @@
 goog.provide('carneades.policy_analysis.web.policies');
 
 PM.policies_url = function() {
-    return 'policies';    
+    return 'policies/policies/' + IMPACT.project;    
 };
 
 PM.set_policies_url = function() {
@@ -62,7 +62,13 @@ PM.find_available_lang = function(current_policy) {
 
 // sectionid, optional, is the section to jump to
 // subset, optional, is a subset of policies to show
-PM.display_policies = function(sectionid, subset) {
+PM.display_policies = function(project, sectionid, subset) {
+    PM.load_project(project);
+    
+    PM.show_menu({text: PM.project.get('title'),
+                  link: "#/project/" + PM.project.id},
+                 PM.policies_menu(IMPACT.db));
+    
     PM.current_policy.fetch({success: 
                              function() {
                                  var ids = [];

@@ -5,7 +5,7 @@ goog.provide('carneades.policy_analysis.web.facts');
 
 // Returns the relative url of the facts page
 PM.facts_url = function() {
-    return 'facts';
+    return '/policies/facts/' + IMPACT.project;
 };
 
 // Sets the current URL to the facts URL.
@@ -15,7 +15,13 @@ PM.set_facts_url = function() {
 };
 
 // Displays the questions
-PM.display_facts = function() {
+PM.display_facts = function(project) {
+    PM.load_project(project);
+    
+    PM.show_menu({text: PM.project.get('title'),
+                  link: "#/project/" + PM.project.id},
+                 PM.policies_menu(undefined));
+
     if(IMPACT.db == undefined) {
         var facts_html = ich.facts(PM.merge_menu_props({}));
         $('#pm').html(facts_html.filter("#facts"));

@@ -34,7 +34,8 @@
           (js/PM.attach_lang_listener))))))
 
 (defn ^:export display
-  []
+  [project]
+  (js/PM.load_project project)
   (let [report-view (bb/new
                      Report
                      {:model (bb/new-model
