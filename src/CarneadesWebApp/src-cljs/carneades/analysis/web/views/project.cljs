@@ -17,7 +17,7 @@
                  [{:text :arguments
                    :link (format "#/arguments/outline/%s/%s" project "main")}
                   {:text :guidedtour
-                   :link (format "#/tour/%s" project)}
+                   :link (format "#/tour/intro/%s" project)}
                   {:text :policies
                    :link (format "#/policies/introduction/%s" project)}])
     (js/PM.busy_cursor_on)

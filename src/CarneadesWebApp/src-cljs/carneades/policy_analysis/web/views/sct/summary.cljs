@@ -28,9 +28,9 @@
   :render
   ([]
      (bbm/with-attrs [:statements]
-       (let [votes (bbm/get-in model [:statement-poll :votes])
+       (let [votes (bb/get-in model [:statement-poll :votes])
              votes (js->clj votes)
-             claims-ids (keys votes) 
+             claims-ids (keys votes)
              claims (map (comp json (partial get-stmt statements)) claims-ids)
              claims (map (partial prepare-claim votes) claims)]
          (template this :sct-summary {:claims claims})
@@ -39,7 +39,7 @@
   :jump-to-comparison
   ([]
      (js/PM.set_sct_comparison_url))
-  
+
   :edit-claim
   ([event]
      (bbm/with-attrs [:statements :arguments :statement-poll :argument-poll]

@@ -73,7 +73,17 @@ PM.dispatch_url = function(sections) {
     } else if(sections[1] == "project") {
         carneades.analysis.web.views.project.show(sections[2]);
     } else if(sections[1] == "arguments") {
-        PM.display_arguments(sections[3], sections[4], sections[2], sections[5]); 
+        PM.display_arguments(sections[3], sections[4], sections[2], sections[5]);
+    } else if(sections[1] == "tour" && sections[2] == "intro") {
+        PM.display_sct_intro(sections[3]);
+    } else if(sections[1] == "tour" && sections[2] == "issues") {
+        PM.display_sct_issues();
+    } else if(sections[1] == "tour" && sections[2] == "question") {
+        PM.display_sct_question();
+    } else if(sections[1] == "tour" && sections[2] == "summary") {
+        PM.display_sct_summary();
+    } else if(sections[1] == "tour" && sections[2] == "comparison") {
+        PM.display_sct_comparison();
     } else if(sections[1] == "policies" && sections[2] == "introduction") {
         PM.display_introduction(sections[3]);
     } else if(sections[1] == "policies" && sections[2] == "issues") {
@@ -110,7 +120,7 @@ PM.dispatch_sct_url = function(section) {
 };
 
 // ImpactToolbox = {
-   
+
 // };
 
 PM.in_uid_toolbox = function() {
@@ -153,14 +163,14 @@ PM.init = function(toolboxState) {
             });
 
     IMPACT.rootpath = rootpath;
-    
+
     if(PM.in_uid_toolbox()) {
         PM.load_scripts(rootpath, true, _.bind(PM.post_load_uid, PM, toolboxState));
     } else {
         PM.load_scripts(rootpath, false, PM.post_load);
     }
 
- 
+
 };
 
 // attachs a listener to the 'select' language
@@ -218,9 +228,9 @@ PM.post_load_uid = function(toolboxState) {
     PM.load_templates(toolboxState);
     PM.add_address_listener();
     PM.load_app_styles(toolboxState.pmt.path);
-    
+
     PM.common_post_load();
-    
+
     // Forces update.
     $.address.update();
 };
@@ -230,9 +240,9 @@ PM.post_load = function() {
     PM.load_app_styles(null);
     PM.load_templates();
     PM.add_address_listener();
-    
+
     PM.common_post_load();
-    
+
     // Forces update.
     $.address.update();
 
@@ -245,7 +255,7 @@ PM.init_i18n = function(callbackfn) {
         {name:'Messages',
          path: site_path,
          mode:'both',
-         language: IMPACT.lang, 
+         language: IMPACT.lang,
          async: false,
          callback: function() {
                  if(_.isFunction(callbackfn)) {
@@ -257,7 +267,7 @@ PM.init_i18n = function(callbackfn) {
 
 PM.normalized_theory_path = function(project, path) {
     if(path.indexOf('/') != -1) {
-        return path; 
+        return path;
     }
 
     return project.id + '/' + path;
@@ -265,9 +275,9 @@ PM.normalized_theory_path = function(project, path) {
 
 PM.common_post_load = function() {
     $.ajaxSetup({beforeSend: PM.simple_auth});
-    
+
     PM.init_i18n();
-    
+
     PM.projects = new PM.Projects;
     PM.projects.fetch({async: false});
 
@@ -280,10 +290,10 @@ PM.load_project = function (id) {
     if(!_.isNil(PM.projects[id])) {
         // already loaded
         return;
-    }        
-   
+    }
+
     PM.notify($.i18n.prop('loading_project'));
-    
+
     PM.project = new PM.Project({id: id});
     PM.project.fetch({async:false});
     PM.projects[id] = PM.project;
@@ -293,16 +303,16 @@ PM.load_project = function (id) {
                                                                PM.project.get('schemes'));
         PM.current_theory = new PM.Theory({theory_path: normalized_scheme_path});
         PM.current_theory.fetch();
-        
+
         PM.schemes = new PM.Schemes();
         PM.schemes.fetch();
     }
-       
+
     if(!_.isNil(PM.project.get('policies'))) {
         var normalized_policy_path = PM.normalized_theory_path(PM.project,
                                                                PM.project.get('policies'));
         PM.current_policy = new PM.Theory({theory_path: normalized_policy_path});
-        PM.current_policy.fetch({async: false});    
+        PM.current_policy.fetch({async: false});
     }
 
     // Reinitializes
@@ -317,7 +327,7 @@ PM.load_project = function (id) {
 
     PM.args_info[IMPACT.debate_db].fetch({async: false});
     PM.stmts_info[IMPACT.debate_db].fetch({async: false});
-    
+
     PM.args[IMPACT.debate_db] = new PM.Arguments([], {db: IMPACT.debate_db});
     PM.stmts[IMPACT.debate_db] = new PM.Statements([], {db: IMPACT.debate_db});
 
@@ -327,14 +337,14 @@ PM.load_project = function (id) {
     PM.debate_arguments = PM.args[IMPACT.debate_db];
     PM.debate_statements = PM.stmts[IMPACT.debate_db];
     PM.debate_metadata = new PM.MetadataList([], {db: IMPACT.debate_db});
-    
+
     PM.debate_metadata.fetch({async: false});
-    
+
     PM.debate_info = new PM.AgInfo({db: IMPACT.debate_db});
     PM.debate_info.fetch({async: false});
-    
+
     PM.ag_info[IMPACT.debate_db] = PM.debate_info;
-    
+
     PM.sct = new PM.Sct({db: IMPACT.debate_db,
                          lang: IMPACT.lang,
                          arguments: PM.debate_arguments,
@@ -349,14 +359,14 @@ PM.get_arg_info = function (db, id) {
         PM.args_info[db] =  new PM.ArgumentsInfo([], {db: db});
         args_info = PM.args_info[db];
     }
-    
+
     var arg = args_info.get(id);
     if(_.isNil(arg)) {
         args_info.fetch({async: false});
         arg = args_info.get(id);
     }
-    
-    return arg.toJSON() || args_info.get(id).toJSON();    
+
+    return arg.toJSON() || args_info.get(id).toJSON();
 };
 
 /// Returns the statement information
@@ -366,13 +376,13 @@ PM.get_stmt_info = function (db, id) {
         PM.stmts_info[db] =  new PM.StatementsInfo([], {db: db});
         stmts_info = PM.stmts_info[db];
     }
-    
+
     var stmt = stmts_info.get(id);
     if(_.isNil(stmt)) {
         stmts_info.fetch({async: false});
         stmt = stmts_info.get(id);
     }
-    
+
     return stmt.toJSON();
 };
 
@@ -384,7 +394,7 @@ PM.get_ag_info = function (db) {
         ag_info = PM.ag_info[db];
         ag_info.fetch({async: false});
     }
-    
+
     return ag_info.toJSON();
 };
 
@@ -395,13 +405,13 @@ PM.get_stmt = function (db, id) {
         PM.stmts[db] =  new PM.Statements([], {db: db});
         stmts = PM.stmts[db];
     }
-    
+
     var stmt = stmts.get(id);
     if(_.isNil(stmt)) {
         stmts.fetch({async: false});
         stmt = stmts.get(id);
     }
-    
+
     return stmt;
 };
 
@@ -412,13 +422,13 @@ PM.get_arg = function (db, id) {
         PM.args[db] =  new PM.Arguments([], {db: db});
         args = PM.args[db];
     }
-    
+
     var arg = args.get(id);
     if(_.isNil(arg)) {
         args.fetch({async: false});
         arg = args.get(id);
     }
-    
+
     return arg;
 };
 
@@ -432,7 +442,7 @@ PM.get_stmts = function () {
         stmts = PM.stmts[IMPACT.db];
         stmts.fetch({async: false});
     }
- 
+
     return stmts;
 }
 
@@ -446,13 +456,13 @@ PM.get_args = function () {
         args = PM.args[IMPACT.db];
         args.fetch({async: false});
     }
- 
+
     return args;
 }
 
 PM.markdown_add_hooks = function () {
-    var converter = Markdown.getSanitizingConverter(); 
-    converter.hooks.chain("preConversion", PM.citation_to_url); 
+    var converter = Markdown.getSanitizingConverter();
+    converter.hooks.chain("preConversion", PM.citation_to_url);
 };
 
 // http://www.lockencreations.com/2011/07/02/cant-debug-imported-js-files-when-using-jquery-getscript/
@@ -490,9 +500,9 @@ PM.load_scripts_helper = function(rootpath, scripts, callback) {
     if(scripts.length > 1) {
         var script = scripts.pop();
         if(rootpath == undefined) {
-            PM.get_script(script, _.bind(PM.load_scripts_helper, PM, rootpath, scripts, callback));    
+            PM.get_script(script, _.bind(PM.load_scripts_helper, PM, rootpath, scripts, callback));
         } else {
-            PM.get_script(rootpath + '/' + script, _.bind(PM.load_scripts_helper, PM, rootpath, scripts, callback));    
+            PM.get_script(rootpath + '/' + script, _.bind(PM.load_scripts_helper, PM, rootpath, scripts, callback));
         }
     } else if(scripts.length == 1) {
         var script = scripts.pop();
@@ -525,14 +535,14 @@ PM.load_scripts = function(rootpath, is_in_toolbox, callback) {
                    'js/lib/parallel.js',
                    'js/lib/select2.js',
                    'js/lib/sprintf-0.7-beta1.js',
-                   'js/compiled-app.js' 
+                   'js/compiled-app.js'
                   ];
-    
+
     if(!is_in_toolbox) {
-      scripts = scripts.concat('js/lib/jquery.address-1.4.js', 
+      scripts = scripts.concat('js/lib/jquery.address-1.4.js',
                                'js/lib/jquery-ui-1.8.23.custom.min.js');
     }
-    
+
     scripts.reverse();
     PM.load_scripts_helper(rootpath, scripts, callback);
 };
