@@ -55,5 +55,5 @@ associated to the keyword is used."
      (let [title (build-title title-data)]
        (inner ($ ".topheader") (tp/get "header" {}))
        (inner ($ ".section-title") title)
-       (show-menu menu))))
-
+       (show-menu menu)
+       (js/PM.attach_lang_listener))))
