@@ -3,8 +3,21 @@
 
 goog.provide('carneades.policy_analysis.web.views.sct_helper');
 
+PM.sct_menu = function() {
+    return [{text: 'arguments',
+            link: '#/arguments/outline/' + PM.project.id + '/main'},
+            {text: 'guidedtour',
+             link: '#/tour/intro/' + PM.project.id},
+            {text: 'policies',
+             link: '#/policies/introduction/' + PM.project.id}
+           ];
+};
+
 PM.display_sct_intro = function(project) {
     PM.load_project(project);
+    PM.show_menu({text: PM.project.get('title'),
+                  link: "#/project/" + PM.project.id},
+                 PM.sct_menu());
 
     var sct_intro = new PM.SctIntro({model: PM.sct});
     sct_intro.render();
