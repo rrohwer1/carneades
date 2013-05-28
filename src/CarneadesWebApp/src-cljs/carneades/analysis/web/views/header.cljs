@@ -45,6 +45,12 @@
           (:link title-data)
           (get-title (:text title-data))))
 
+(defn attach-listeners
+  [menu]
+  (doseq [m menu]
+    (when-let [on (:on m)]
+      (.click ($ (format "a[href=\"%s\"]" (:link m))) on))))
+
 (defn show
   "Title-data is a map with a :text and a :link keys. If text is a
 string it is used directly, if it is a keyword the translation
@@ -56,4 +62,5 @@ associated to the keyword is used."
        (inner ($ ".topheader") (tp/get "header" {}))
        (inner ($ ".section-title") title)
        (show-menu menu)
+       (attach-listeners menu)
        (js/PM.attach_lang_listener))))

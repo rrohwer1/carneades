@@ -1,0 +1,17 @@
+<table class="projects">
+  <thead><tr>
+      <th>{{selected}}</th>
+      <th>{{project}}</th>
+      <th>{{created}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#projects}}
+    <tr>
+      <td><input id="{{id}}" type="checkbox"/></td>
+      <td><a href="#/project/{{id}}">{{title}}</a></td>
+      <td>{{creation-date}}</td>
+    </tr>
+    {{/projects}}
+  </tbody>
+</table>
