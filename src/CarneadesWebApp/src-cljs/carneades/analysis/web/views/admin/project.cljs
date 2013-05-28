@@ -9,15 +9,9 @@
 
 (def state (atom {:selected nil}))
 
-(defn on-export-clicked
-  []
-  (when-let [project (:selected (deref state))]
-    (dispatch/fire :admin-export {:project project})))
-
 (defn export
   [project]
-  (log "to export=" project)
-  )
+  (.open js/window (str js/IMPACT.wsurl "/export/" project ".zip")))
 
 (dispatch/react-to #{:admin-export}
                    (fn [_ msg]
@@ -33,6 +27,13 @@
     (if checked
       (swap! state assoc-in [:selected] id)
       (swap! state assoc-in [:selected] nil))))
+
+(defn on-export-clicked
+  [event]
+  (.stopPropagation event)
+  (when-let [project (:selected (deref state))]
+    (dispatch/fire :admin-export {:project project}))
+  false)
 
 (defn attach-listeners
   []
