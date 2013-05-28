@@ -9,9 +9,13 @@
             [clojure.java.io :as io])
   (:import java.security.MessageDigest
            java.util.zip.ZipOutputStream
+           java.util.zip.ZipInputStream
            java.util.zip.ZipEntry
            java.io.ByteArrayInputStream
            java.io.ByteArrayOutputStream
+           java.io.ByteArrayInputStream
+           java.io.BufferedOutputStream
+           java.io.FileOutputStream
            java.io.InputStreamReader))
 
 (defn boolean? [x]
@@ -335,3 +339,38 @@ ByteArrayInputStream is returned."
      (with-open [stream (ByteArrayOutputStream.)]
        (zip-dir-helper dirpath stream)
        (ByteArrayInputStream. (.toByteArray stream)))))
+
+(defn pathify
+  [paths]
+  (str/join file-separator paths))
+
+(defn write-zip-entry
+  [zip-stream entry out-file]
+  (let [out (BufferedOutputStream. (FileOutputStream. out-file) 1024)
+        data (byte-array 1024)]
+    (loop [len (.read zip-stream data 0 1024)]
+      (if (not (= -1 len))
+        (do (.write out data 0 len)
+            (recur (.read zip-stream data 0 1024)))))
+    (.flush out)
+    (.close out)))
+
+(defn copy-zip-entry
+  [zip-stream entry destination]
+  (let [out-file (file (pathify [destination (.getName entry)]))]
+    (if (.isDirectory entry)
+      (.mkdirs out-file)
+      (write-zip-entry zip-stream entry out-file))
+    (.getNextEntry zip-stream)))
+
+(defn unzip-stream
+  [zip-stream destination]
+  (loop [entry (.getNextEntry zip-stream)]
+    (if entry
+      (recur (copy-zip-entry zip-stream entry destination))))
+  (.close zip-stream))
+
+(defn unzip
+  [zippath destination]
+  (let [zip-stream (ZipInputStream. (io/input-stream zippath))]
+    (unzip-stream zip-stream destination)))
