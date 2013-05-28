@@ -1,4 +1,5 @@
-(ns carneades.analysis.web.views.admin.project
+(ns ^{:doc "Display the projects on the admin page"}
+  carneades.analysis.web.views.admin.project
   (:use [jayq.core :only [$ inner attr append]]
         [jayq.util :only [log]]
         [carneades.analysis.web.views.core :only [json]])
@@ -6,22 +7,37 @@
             [carneades.analysis.web.template :as tp]
             [carneades.analysis.web.dispatch :as dispatch]))
 
+(def state (atom {:selected nil}))
+
 (defn on-export-clicked
   []
-  (log "export clicked")
-  (let [project "copyright"]
+  (when-let [project (:selected (deref state))]
     (dispatch/fire :admin-export {:project project})))
 
 (defn export
   [project]
-  (log "exporting project")
-  (log project))
+  (log "to export=" project)
+  )
 
-(dispatch/react-to #{:admin-export} (fn [_ msg] (export (:project msg))))
+(dispatch/react-to #{:admin-export}
+                   (fn [_ msg]
+                     (export (:project msg))))
+
+(defn on-project-checked
+  "Changes the state of the selection when the user selects one or
+  more projects "
+  [event]
+  (let [input ($ (.-target event))
+        id (.-id (.-target event))
+        checked (attr input "checked")]
+    (if checked
+      (swap! state assoc-in [:selected] id)
+      (swap! state assoc-in [:selected] nil))))
 
 (defn attach-listeners
   []
-  )
+  (doseq [input ($ "input[type=radio]")]
+    (.change ($ input) on-project-checked)))
 
 (defn ^:export show
   []

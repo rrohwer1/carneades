@@ -11,7 +11,7 @@
         carneades.database.import
         carneades.xml.caf.export
         ring.util.codec
-        [carneades.engine.utils :only [sha256]]
+        [carneades.engine.utils :only [sha256 zip-dir-str]]
         [carneades.database.evaluation :only [evaluate-graph]]
         [carneades.web.project :only [init-projects-data!]]
         [ring.middleware.format-response :only [wrap-restful-response]]
@@ -30,7 +30,7 @@
             [carneades.web.info :as info]
             ))
 
-;; To Do: 
+;; To Do:
 ;; - search operations, including full text search
 ;; - CAF import
 ;; - OPML export
@@ -48,19 +48,19 @@
 (def ^{:dynamic true} *debatedb-name* "debates")
 
 (defroutes carneades-web-service-routes
-  
+
   ;; Projects
-  
-  (GET "/project" [] 
+
+  (GET "/project" []
        {:body
         (let [s (deref state)]
-          
+
           (reduce (fn [projects id]
                     (let [props (get-in s [:projects-data id :properties])]
                      (conj projects (merge props {:id id}))))
                   []
                   (:projects s)))})
-  
+
   (GET "/project/:id" [id]
        {:body
         (merge (get-in (deref state) [:projects-data id :properties])
@@ -71,7 +71,7 @@
              [username password] (get-username-and-password request)]
          ;; TODO
          ))
-  
+
   (POST "/project" request
         (let [m (json/read-json (slurp (:body request)))
               [username password] (get-username-and-password request)
@@ -88,8 +88,8 @@
             :body "File not found"}
            {:body
             (io/input-stream path)})))
-  
-  (PUT "/debate/:id" request   
+
+  (PUT "/debate/:id" request
        (let [m (json/read-json (slurp (:body request)))
              [username password] (get-username-and-password request)
              db (db/make-connection *debatedb-name* username password)
@@ -99,7 +99,7 @@
   (GET "/debate-poll/:project/:debateid" [project debateid]
        (db/with-db (db/make-connection project *debatedb-name* "guest" "")
          {:body (case/list-polls debateid)}))
-  
+
   (GET "/debate-poll/:project/:debateid/:id" request
        (let [id (get-in request [:params :id])
              project (get-in request [:params :project])
@@ -132,7 +132,7 @@
           (db/with-db dbconn
             (let [id (case/create-poll debateid m policies)]
               {:body {:id id}}))))
-  
+
   (PUT "/debate-poll/:project/:debateid" request
        ;; TODO: users can modify the vote of the others!
        {:status 404}
@@ -148,23 +148,23 @@
   ;; poll results for the PMT (not for the SCT)
   (GET "/poll-results/:project/:debateid/:casedb" [project debateid casedb]
        {:body (vote/vote-stats project debateid casedb)})
-  
+
   (GET "/aggregated-poll-results/:project/:debateid" [project debateid]
        {:body (vote/aggregated-vote-stats project debateid)})
-  
+
   ;; To Do: Deleting debates, poll-debate
-  
-  ;; Metadata        
-  (GET "/metadata/:project/:db" [project db] 
+
+  ;; Metadata
+  (GET "/metadata/:project/:db" [project db]
        (let [db2 (db/make-connection project db "guest" "")]
          (db/with-db db2 {:body (ag-db/list-metadata)})))
-  
+
   (GET "/metadata/:project/:db/:id" [project db id]
        (let [db2 (db/make-connection db "guest" "")]
          (db/with-db db2 {:body
                           (unzip-metadata
                            (ag-db/read-metadata id))})))
-  
+
   (POST "/metadata/:project/:db" request
         (let [db (:db (:params request))
               m (json/read-json (slurp (:body request)))
@@ -175,7 +175,7 @@
                                     (zip-metadata
                                      (map->metadata m)))}})))
 
-  (PUT "/metadata/:project/:db/:id" request   
+  (PUT "/metadata/:project/:db/:id" request
        (let [m (json/read-json (slurp (:body request)))
              m (zip-metadata m)
              [username password] (get-username-and-password request)
@@ -186,26 +186,26 @@
                                  (let [data (ag-db/read-metadata id)
                                        x (unzip-metadata data)]
                                    x))})))
-  
+
   (DELETE "/metadata/:project/:db/:id" request
           (let [[username password] (get-username-and-password request)
                 dbname (:db (:params request))
                 dbconn (db/make-connection dbname username password)
                 id (:id (:params request))]
             (db/with-db dbconn {:body (ag-db/delete-metadata (Integer/parseInt id))})))
-  
+
   ;; Statements
-  
-  (GET "/statement/:project/:db" [project db] 
+
+  (GET "/statement/:project/:db" [project db]
        (let [db2 (db/make-connection project db "guest" "")]
-         (db/with-db db2 {:body (map pack-statement (ag-db/list-statements))})))  
-  
-  (GET "/statement/:project/:db/:id" [project db id] 
+         (db/with-db db2 {:body (map pack-statement (ag-db/list-statements))})))
+
+  (GET "/statement/:project/:db/:id" [project db id]
        (let [db2 (db/make-connection project db "guest" "")]
-         (db/with-db db2 
+         (db/with-db db2
            {:body (pack-statement (ag-db/read-statement id))})))
-  
-  (POST "/statement/:project/:db" request  
+
+  (POST "/statement/:project/:db" request
         (let [m (json/read-json (slurp (:body request)))
               s (unpack-statement m)
               [username password] (get-username-and-password request)
@@ -213,8 +213,8 @@
               db (db/make-connection project db username password)]
           (db/with-db db
             {:body {:id (ag-db/create-statement s)}})))
-  
-  (PUT "/statement/:project/:db" request  
+
+  (PUT "/statement/:project/:db" request
        (let [m (json/read-json (slurp (:body request)))
              ;; s (unpack-statement m)
              m (dissoc m :pro :con :premise-of)
@@ -227,7 +227,7 @@
            {:body (do
                     (ag-db/update-statement id (dissoc m :id))
                     (pack-statement (ag-db/read-statement id)))})))
-  
+
   (DELETE "/statement/:project/:db/:id" request
           (let [[username password] (get-username-and-password request)
                 db (:db (:params request))
@@ -243,10 +243,10 @@
                                (doseq [con (:con stmt)]
                                  (ag-db/delete-argument con))
                                (ag-db/delete-statement id))})))
-  
+
   (GET "/main-issues/:db" [db]
        (let [db2 (db/make-connection db "guest" "")]
-         (db/with-db db2 {:body (map pack-statement (ag-db/main-issues))})))               
+         (db/with-db db2 {:body (map pack-statement (ag-db/main-issues))})))
 
   (POST "/matching-statements/:db" request
         ;; returns a vector of {:substitutions :statement} records for the statements
@@ -259,7 +259,7 @@
                                           ;; (prn "unifying s1 against s2: " s1 " " (:atom  s2))
                                           (let [subs (unify s1 (:atom s2))]
                                             ;; (prn "subs = " subs)
-                                            (when subs 
+                                            (when subs
                                               [{:substitutions subs
                                                 :statement (pack-statement s2)}])))
                                         (ag-db/list-statements))})))
@@ -267,24 +267,24 @@
   (GET "/premise-of/:db/:id" [db id]
                                         ; returns a vector of arguments in which the statement with the given id
                                         ; is a premise
-       (let [db2 (db/make-connection db "guest" "")]  
-         (db/with-db db2 
+       (let [db2 (db/make-connection db "guest" "")]
+         (db/with-db db2
            {:body           (map (fn [arg-id] (pack-argument (ag-db/read-argument arg-id)))
                                  (:premise-of (ag-db/read-statement id)))})))
 
-  
-  ;; Arguments  
-  
+
+  ;; Arguments
+
   (GET "/argument/:project/:db" [project db]
-       (let [db2 (db/make-connection project db "guest" "")] 
+       (let [db2 (db/make-connection project db "guest" "")]
          (db/with-db db2 {:body (map pack-argument (ag-db/list-arguments))})))
-  
+
   (GET "/argument/:project/:db/:id" [project db id]
-       (let [db2 (db/make-connection project db "guest" "")]  
+       (let [db2 (db/make-connection project db "guest" "")]
          (db/with-db db2 {:body (pack-argument (ag-db/read-argument
                                                 id))})))
 
-  (POST "/argument/:project/:db" request  
+  (POST "/argument/:project/:db" request
         (let [m (json/read-json (slurp (:body request)))
               arg (unpack-argument m)
               [username password] (get-username-and-password request)
@@ -302,7 +302,7 @@
                                  (map (fn [undercutter]
                                         (ag-db/create-argument undercutter))
                                       undercutters))}}))))
-  
+
   (PUT "/argument/:project/:db" request
        (let [m (json/read-json (slurp (:body request)))
              [username password] (get-username-and-password request)
@@ -325,7 +325,7 @@
               ;; since backbone.js expects the argument record to be returned...
               (ag-db/update-argument id arg2)
               (argument-data id))})))
-  
+
   (DELETE "/argument/:db/:id" request
           (let [[username password] (get-username-and-password request)
                 id (:id (:params request))
@@ -334,55 +334,55 @@
             (db/with-db db2
               {:body              (ag-db/delete-argument id)})))
 
-  
+
   (GET "/pro-arguments/:db/:id" [db id]
-       (let [db2 (db/make-connection db "guest" "")]  
+       (let [db2 (db/make-connection db "guest" "")]
          (db/with-db db2 {:body (ag-db/get-pro-arguments id)})))
-  
+
   (GET "/con-arguments/:db/:id" [db id]
-       (let [db2 (db/make-connection db "guest" "")]  
+       (let [db2 (db/make-connection db "guest" "")]
          (db/with-db db2 {:body (ag-db/get-con-arguments id)})))
-  
+
   (GET "/rebuttals/:db/:id" [db id]
-       (let [db2 (db/make-connection db "guest" "")]  
+       (let [db2 (db/make-connection db "guest" "")]
          (db/with-db db2 {:body (ag-db/get-rebuttals id)})))
 
   (GET "/undercutters/:db/:id" [db id]
-       (let [db2 (db/make-connection db "guest" "")]  
+       (let [db2 (db/make-connection db "guest" "")]
          (db/with-db db2 {:body (ag-db/get-undercutters id)})))
-  
+
   (GET "/dependents/:db/:id" [db id]
                                         ; returns a vector of arguments in which the conclusion of the argument
                                         ; with the given id is a premise
-       (let [db2 (db/make-connection db "guest" "")]  
-         (db/with-db db2 
-           {:body           (map (fn [arg-id] (pack-argument (ag-db/read-argument arg-id))) 
+       (let [db2 (db/make-connection db "guest" "")]
+         (db/with-db db2
+           {:body           (map (fn [arg-id] (pack-argument (ag-db/read-argument arg-id)))
                                  (ag-db/get-dependents id))})))
-  
+
   ;; Namespaces
-  
+
   (GET "/namespace/:db" [db]
-       (let [db2 (db/make-connection db "guest" "")] 
+       (let [db2 (db/make-connection db "guest" "")]
          (db/with-db db2 {:body (ag-db/list-namespaces)})))
-  
+
   (GET "/namespace/:db/:prefix" [db prefix]
-       (let [db2 (db/make-connection db "guest" "")]  
+       (let [db2 (db/make-connection db "guest" "")]
          (db/with-db db2 {:body (ag-db/read-namespace prefix)})))
 
-  (POST "/namespace/" request  
+  (POST "/namespace/" request
         (let [prefix (:prefix (:params request)),
               uri (json/read-json (slurp (:body request))),
               [username password] (get-username-and-password request)
               db (db/make-connection (:db (:params request)) username password)]
           (db/with-db db {:body (ag-db/create-namespace db prefix uri)})))
-  
-  (PUT "/namespace/:db" request  
+
+  (PUT "/namespace/:db" request
        (let [prefix (:prefix (:params request)),
              uri (json/read-json (slurp (:body request))),
              [username password] (get-username-and-password request)
              db (db/make-connection (:db (:params request)) username password)]
          (db/with-db db {:body (ag-db/update-namespace prefix uri)})))
-  
+
   (DELETE "/namespace/:db/:prefix" request
           (let [[username password] (get-username-and-password request)
                 db (:db (:params request))
@@ -390,9 +390,9 @@
                 db2 (db/make-connection db username password)]
             (db/with-db db2
               {:body              (ag-db/delete-namespace prefix)})))
-  
+
   ;; Statement Polls
-  
+
   (GET "/statement-poll/:project/:db" request
        (let [[username password] (get-username-and-password request)
              db (:db (:params request))
@@ -405,15 +405,15 @@
                          ()
                          polls)]
              {:body             polls}))))
-  
+
   (GET "/statement-poll/:project/:db/:id" request
        (let [[username password] (get-username-and-password request)
              db (:db (:params request))
              project (:project (:params request))
-             dbconn (db/make-connection db username password)]  
+             dbconn (db/make-connection db username password)]
          (db/with-db dbconn {:body (ag-db/read-statement-poll (:id (:params request)))})))
 
-  (POST "/statement-poll/:project/:db" request  
+  (POST "/statement-poll/:project/:db" request
         (let [poll (json/read-json (slurp (:body request))),
               [username password] (get-username-and-password request)
               db (:db (:params request))
@@ -423,8 +423,8 @@
             (do
               (ag-db/create-statement-poll poll)
               {:body              (ag-db/read-statement-poll (:id poll))}))))
-  
-  (PUT "/statement-poll/:project/:db" request  
+
+  (PUT "/statement-poll/:project/:db" request
        (let [poll (json/read-json (slurp (:body request)))
              [username password] (get-username-and-password request)
              db (:db (:params request))
@@ -434,22 +434,22 @@
            (do
              (ag-db/update-statement-poll poll)
              {:body             (ag-db/read-statement-poll (:id poll))}))))
-  
+
   (DELETE "/statement-poll/:db/:id" request
           (let [[username password] (get-username-and-password request)
                 db (:db (:params request))
                 id (:id (:params request))
                 db2 (db/make-connection db username password)]
             (db/with-db db2
-              {:body              (ag-db/delete-statement-poll (Integer/parseInt id))}))) 
-  
+              {:body              (ag-db/delete-statement-poll (Integer/parseInt id))})))
+
   ;; Argument Polls
-  
+
   (GET "/argument-poll/:project/:db" request
        (let [[username password] (get-username-and-password request)
              db (:db (:params request))
              project (:project (:params request))
-             dbconn (db/make-connection project db username password)] 
+             dbconn (db/make-connection project db username password)]
          (db/with-db dbconn
            (let [ids (set (map :userid (ag-db/list-argument-poll)))
                  polls (map ag-db/read-argument-poll ids)
@@ -457,17 +457,17 @@
                          ()
                          polls)]
              {:body                        polls}))))
-  
+
   (GET "/argument-poll/:project/:db/:id" request
        (let [[username password] (get-username-and-password request)
              db (:db (:params request))
              id (:id (:params request))
              project (:project (:params request))
-             dbconn (db/make-connection project db username password)]  
+             dbconn (db/make-connection project db username password)]
          (db/with-db dbconn
            {:body (ag-db/read-argument-poll (Integer/parseInt id))})))
 
-  (POST "/argument-poll/:project/:db" request  
+  (POST "/argument-poll/:project/:db" request
         (let [poll (json/read-json (slurp (:body request))),
               [username password] (get-username-and-password request)
               db (:db (:params request))
@@ -476,8 +476,8 @@
           (db/with-db db
             (do (ag-db/create-argument-poll poll)
                 {:body (ag-db/read-argument-poll (:id poll))}))))
-  
-  (PUT "/argument-poll/:project/:db" request  
+
+  (PUT "/argument-poll/:project/:db" request
        (let [poll (json/read-json (slurp (:body request)))
              [username password] (get-username-and-password request)
              db (:db (:params request))
@@ -486,7 +486,7 @@
          (db/with-db dbconn
            (do (ag-db/update-argument-poll poll)
                {:body (ag-db/read-argument-poll (:id poll))}))))
-  
+
   (DELETE "/argument-poll/:project/:db/:id" request
           (let [[username password] (get-username-and-password request)
                 project (:project (:params request))
@@ -497,7 +497,7 @@
               {:body (ag-db/delete-argument-poll (Integer/parseInt id))})))
 
   ;; Aggregated information
-  
+
   (GET "/argumentgraph-info/:project/:db" [project db]
        (let [dbconn (db/make-connection project db "guest" "")]
          (db/with-db dbconn
@@ -535,10 +535,15 @@
        (let [dbconn (db/make-connection project db "guest" "")]
          (db/with-db dbconn
            {:body  (info/arg-info id)})))
-  
-  
+
+  ;; Zip
+  (GET "/export/:project.zip" [project]
+       (let [projectpath (str project/projects-directory file-separator project)]
+        {:body (zip-dir projectpath)
+         :content "application/zip"}))
+
   ;; XML
-  
+
   (GET "/export/:project/:db" [project db]
        (let [dbconn (db/make-connection project db "guest" "")]
          (db/with-db dbconn
@@ -572,7 +577,7 @@
              {:status 200
               :headers {"Content-Type" "image/svg+xml;charset=UTF-8"}
               :body svg}))))
-  
+
   ;; Theory
   (GET "/theory/:project/:theory" [project theory]
        {:body
@@ -587,17 +592,17 @@
                                        project
                                        :properties
                                        :schemes])))})
-  
+
   ;; (GET "/scheme/:id" [id]  ;; return the scheme with the given id
   ;;      {:body       (get schemes-by-id (symbol id))})
-  
+
   ;; (POST "/matching-schemes" request ; return all schemes with conclusions matching a goal
   ;;       (let [goal (unpack-statement (json/read-json (slurp (:body request))))]
   ;;         {:body          (get-schemes schemes-by-predicate goal {} true)}))
-  
-  ;; (POST "/apply-scheme/:db/:id" request 
+
+  ;; (POST "/apply-scheme/:db/:id" request
   ;;       ;; apply the scheme with the given id to the substitutions in the body
-  ;;       ;; and add the resulting arguments, if they are ground, to the 
+  ;;       ;; and add the resulting arguments, if they are ground, to the
   ;;       ;; database. Returns a list of the ids of the new arguments.
   ;;       (let [data (json/read-json (slurp (:body request)))
   ;;             subs (unpack-subs (:subs data))
@@ -608,7 +613,7 @@
   ;;               dbconn (db/make-connection (:db (:params request)) username password)]
   ;;           (prn "attributes: " attributes)
   ;;           (db/with-db dbconn
-  ;;             {:body              
+  ;;             {:body
   ;;              (reduce (fn [ids response]
   ;;                        (ag-db/assume (:assumptions response))
   ;;                        (if (seq ids)
@@ -630,7 +635,7 @@
           (prn subs)
           (prn statement)
           {:body          (apply-substitutions subs statement)}))
-  
+
   (GET "/evaluate-policy/:project/:db/:policykey/:qid/:policyid"
        [project db policykey qid policyid]
        (let [dbconn (db/make-connection project db "guest" "")]
@@ -672,7 +677,7 @@
              {:body             {:policies policies}}))))
 
   ;; Argument Evaluation
-  
+
   (POST "/evaluate-argument-graph/:project/:db" request
         (let [[username password] (get-username-and-password request)
               db (:db (:params request))
@@ -686,12 +691,12 @@
               dbname (-> request :params :db)]
           {:body {:db (db/make-copy project dbname username password)}}))
 
-  ;; Other 
-  
-  (GET "/" [] 
+  ;; Other
+
+  (GET "/" []
        "<h1>Carneades Web Service</h1>
             <p>This web service is part of the <a href=\"http://carneades.github.com\">
-            Carneades Argumentation System</a></p>")                                                                
+            Carneades Argumentation System</a></p>")
   (route/resources "/")
   (route/not-found "Page not found."))
 
@@ -700,7 +705,7 @@
       (wrap-restful-response)
       (wrap-cookies)))
 
-;;; utilities functions to test the service 
+;;; utilities functions to test the service
 (defn get-request [resource web-app & params]
   (web-app {:request-method :get :uri resource :params (first params)}))
 
@@ -712,4 +717,3 @@
 
 (defn delete-request [resource web-app headers body & params]
   (web-app {:request-method :delete :uri resource :headers headers :body (char-array body) :params (first params)}))
-

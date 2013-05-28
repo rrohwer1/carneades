@@ -8,7 +8,7 @@
   <tbody>
     {{#projects}}
     <tr>
-      <td><input id="{{id}}" type="checkbox"/></td>
+      <td><input type="radio" name="selection" id="{{id}}"/></td>
       <td><a href="#/project/{{id}}">{{title}}</a></td>
       <td>{{creation-date}}</td>
     </tr>
