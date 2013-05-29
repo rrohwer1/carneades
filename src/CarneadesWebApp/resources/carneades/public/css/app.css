@@ -626,8 +626,6 @@ ul.question li {
     margin-left: 30%;
 }
 
-/* #dropzone  { */
-/*     min-width: 200px; */
-/*     min-height: 200px; */
-/*     background-color: lightyellow; */
-/* } */
+.dropzone  {
+    min-height: 200px;
+}

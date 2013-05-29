@@ -536,6 +536,9 @@
          (db/with-db dbconn
            {:body  (info/arg-info id)})))
 
+  (GET "/import" request
+       (prn "uploaded..."))
+
   ;; Zip
   (GET "/export/:project.zip" [project]
        (let [projectpath (str project/projects-directory file-separator project)]
