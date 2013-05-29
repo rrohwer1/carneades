@@ -340,11 +340,11 @@ ByteArrayInputStream is returned."
        (zip-dir-helper dirpath stream)
        (ByteArrayInputStream. (.toByteArray stream)))))
 
-(defn pathify
+(defn- pathify
   [paths]
   (str/join file-separator paths))
 
-(defn write-zip-entry
+(defn- write-zip-entry
   [zip-stream entry out-file]
   (let [out (BufferedOutputStream. (FileOutputStream. out-file) 1024)
         data (byte-array 1024)]
@@ -355,7 +355,7 @@ ByteArrayInputStream is returned."
     (.flush out)
     (.close out)))
 
-(defn copy-zip-entry
+(defn- copy-zip-entry
   [zip-stream entry destination]
   (let [out-file (file (pathify [destination (.getName entry)]))]
     (if (.isDirectory entry)
@@ -363,7 +363,7 @@ ByteArrayInputStream is returned."
       (write-zip-entry zip-stream entry out-file))
     (.getNextEntry zip-stream)))
 
-(defn unzip-stream
+(defn- unzip-stream
   [zip-stream destination]
   (loop [entry (.getNextEntry zip-stream)]
     (if entry
