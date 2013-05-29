@@ -11,7 +11,7 @@
         carneades.database.import
         carneades.xml.caf.export
         ring.util.codec
-        [carneades.engine.utils :only [sha256 zip-dir-str]]
+        [carneades.engine.utils :only [sha256 zip-dir]]
         [carneades.database.evaluation :only [evaluate-graph]]
         [carneades.web.project :only [init-projects-data!]]
         [ring.middleware.format-response :only [wrap-restful-response]]
@@ -539,7 +539,7 @@
   ;; Zip
   (GET "/export/:project.zip" [project]
        (let [projectpath (str project/projects-directory file-separator project)]
-        {:body (zip-dir projectpath)
+         {:body (zip-dir projectpath)
          :content "application/zip"}))
 
   ;; XML
