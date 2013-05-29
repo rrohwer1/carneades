@@ -72,8 +72,10 @@ PM.dispatch_url = function(sections) {
         carneades.analysis.web.views.home.show();
     } else if(sections[1] == "project") {
         carneades.analysis.web.views.project.show(sections[2]);
-    } else if(sections[1] == "admin") {
+    } else if(sections[1] == "admin" && sections[2] == "project") {
         carneades.analysis.web.views.admin.project.show();
+    } else if(sections[1] == "admin" && sections[2] == "import") {
+        carneades.analysis.web.views.admin.imports.show();
     } else if(sections[1] == "arguments") {
         PM.display_arguments(sections[3], sections[4], sections[2], sections[5]);
     } else if(sections[1] == "tour" && sections[2] == "intro") {
@@ -276,6 +278,8 @@ PM.normalized_theory_path = function(project, path) {
 };
 
 PM.common_post_load = function() {
+    Dropzone.autoDiscover = false;
+
     $.ajaxSetup({beforeSend: PM.simple_auth});
 
     PM.init_i18n();
@@ -518,26 +522,28 @@ PM.load_scripts_helper = function(rootpath, scripts, callback) {
 
 PM.load_scripts = function(rootpath, is_in_toolbox, callback) {
     var head = $('head');
-    var scripts = [ // JS libraries must be listed here, JS carneades libraries are listed in project.clj
-                    // and compiled by the Google Closure Compiler
-                   'js/lib/ICanHaz.js',
-                   'js/lib/Markdown.Converter.js',
-                   'js/lib/Markdown.Editor.js',
-                   'js/lib/Markdown.Sanitizer.js',
-                   'js/lib/backbone.js',
-                   'js/lib/backbone.memento.min.js',
-                   'js/lib/crypto.js',
-                   'js/lib/html5slider.js',
-                   'js/lib/jquery.i18n.properties-min-1.0.9.js',
-                   'js/lib/jquery.scrollTo-1.4.2-min.js',
-                   'js/lib/jquery.svg.js',
-                   'js/lib/jquery.validate.js',
-                   'js/lib/markitup/jquery.markitup.js',
-                   'js/lib/markitup/sets/markdown/set.js',
-                   'js/lib/parallel.js',
-                   'js/lib/select2.js',
-                   'js/lib/sprintf-0.7-beta1.js',
-                   'js/compiled-app.js'
+    var scripts = [
+        // JS libraries must be listed here, JS carneades libraries are listed in project.clj
+        // and compiled by the Google Closure Compiler
+        'js/lib/ICanHaz.js',
+        'js/lib/Markdown.Converter.js',
+        'js/lib/Markdown.Editor.js',
+        'js/lib/Markdown.Sanitizer.js',
+        'js/lib/backbone.js',
+        'js/lib/backbone.memento.min.js',
+        'js/lib/crypto.js',
+        'js/lib/html5slider.js',
+        'js/lib/dropzone.js',
+        'js/lib/jquery.i18n.properties-min-1.0.9.js',
+        'js/lib/jquery.scrollTo-1.4.2-min.js',
+        'js/lib/jquery.svg.js',
+        'js/lib/jquery.validate.js',
+        'js/lib/markitup/jquery.markitup.js',
+        'js/lib/markitup/sets/markdown/set.js',
+        'js/lib/parallel.js',
+        'js/lib/select2.js',
+        'js/lib/sprintf-0.7-beta1.js',
+        'js/compiled-app.js'
                   ];
 
     if(!is_in_toolbox) {
@@ -571,6 +577,7 @@ PM.load_templates = function(toolboxState) {
     // loads templates
     _.each(['admin',
             'admin_project',
+            'admin_import',
             'argumentgraph',
             'argument',
             'argumentlink',
@@ -645,6 +652,7 @@ PM.load_carneades_styles = function() {
 // They are loaded even when used inside the UID toolbox
 PM.load_app_styles = function(rootpath) {
     PM.load_style(rootpath, 'app.css');
+    PM.load_style(rootpath, 'dropzone.css');
     PM.load_style(rootpath, 'style.css', 'js/lib/markitup/skins/markitup');
     PM.load_style(rootpath, 'style.css', 'js/lib/markitup/sets/markdown');
 };

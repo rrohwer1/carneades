@@ -1,4 +1,7 @@
-(ns ^{:doc "Display the projects on the admin page"}
+;;; Copyright (c) 2013 Fraunhofer Gesellschaft
+;;; Licensed under the EUPL V.1.1
+
+(ns ^{:doc "Displays the projects on the admin page"}
   carneades.analysis.web.views.admin.project
   (:use [jayq.core :only [$ inner attr append]]
         [jayq.util :only [log]]
@@ -43,7 +46,7 @@
 (defn ^:export show
   []
   (header/show {:text :admin
-                :link "#/home"}
+                :link "#/admin/project"}
                [{:text :menu_import
                  :link "#/admin/import"}
                 {:text :menu_export

@@ -98,7 +98,7 @@
 }
 
 .premise-candidate:hover {
-    border: 1px dashed; 
+    border: 1px dashed;
 }
 
 .premise-candidate:hover .delete {
@@ -231,7 +231,7 @@
 }
 
 .sct-question-text {
-    font-weight: bold;   
+    font-weight: bold;
 }
 
 .change-score {
@@ -247,7 +247,7 @@
 }
 
 .agreement-status {
-    font-weight: bold;   
+    font-weight: bold;
 }
 
 .rule-body ul {
@@ -625,3 +625,9 @@ ul.question li {
 .notification-area {
     margin-left: 30%;
 }
+
+/* #dropzone  { */
+/*     min-width: 200px; */
+/*     min-height: 200px; */
+/*     background-color: lightyellow; */
+/* } */
