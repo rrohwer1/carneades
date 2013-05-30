@@ -6,7 +6,8 @@
   (:use [carneades.engine.utils :only [file-separator exists? file-separator]])
   (:require [carneades.config.config :as config]
             [carneades.engine.scheme :as theory]
-            [clojure.string :as s]))
+            [clojure.string :as s]
+            [me.raynes.fs :as fs]))
 
 (def projects-directory (config/properties :projects-directory
                                            (str (System/getProperty "user.dir")
@@ -79,3 +80,8 @@ representing the project."
         policy-properties (:policies project-properties)
         policy (load-policy project project-properties)]
     {:properties project-properties}))
+
+(defn delete-project
+  "Permanently delete project from the disk."
+  [project]
+  (fs/delete-dir (str projects-directory file-separator project)))

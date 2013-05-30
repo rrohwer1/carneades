@@ -76,12 +76,12 @@
          ;; TODO
          ))
 
-  (POST "/project" request
-        (let [m (json/read-json (slurp (:body request)))
-              [username password] (get-username-and-password request)
-              ;; TODO enforces Admin role here
-              ]
-          (throw (ex-info "NYI" {}))))
+  (DELETE "/project/:id" request
+          (let [id (-> request :params :id)
+                [username password] (get-username-and-password request)]
+            (project/delete-project id)
+            (reset! state (init-projects-data))
+            {:status 200}))
 
   ;; documents for projects
   (GET "/documents/:project/:doc" [project doc]
@@ -540,6 +540,7 @@
          (db/with-db dbconn
            {:body  (info/arg-info id)})))
 
+  ;; Import project
   (POST "/import" [file]
         (let [tempfile (:tempfile file)
               content-type (:content-type file)]

@@ -5,7 +5,8 @@
   carneades.analysis.web.views.admin.project
   (:use [jayq.core :only [$ inner attr append]]
         [jayq.util :only [log]]
-        [carneades.analysis.web.views.core :only [json]])
+        [carneades.analysis.web.views.core :only [json]]
+        [carneades.analysis.web.i18n :only [i18n]])
    (:require [carneades.analysis.web.views.header :as header]
             [carneades.analysis.web.template :as tp]
             [carneades.analysis.web.dispatch :as dispatch]))
@@ -16,9 +17,20 @@
   [project]
   (.open js/window (str js/IMPACT.wsurl "/export/" project ".zip")))
 
-(dispatch/react-to #{:admin-export}
-                   (fn [_ msg]
-                     (export (:project msg))))
+(dispatch/react-to #{:admin-export} (fn [_ msg]  (log "msg=" msg) (export (:project msg))))
+
+(defn delete-successful
+  []
+  (.fetch js/PM.projects (clj->js {:async false})))
+
+(defn delete
+  [project]
+  (when (and (js/confirm (i18n "delete_confirmation1"))
+             (js/confirm (i18n "delete_confirmation2")))
+    (.destroy (.get js/PM.projects project)
+              (clj->js {:success show}))))
+
+(dispatch/react-to #{:admin-delete} (fn [_ msg] (delete (:project msg))))
 
 (defn on-project-checked
   "Changes the state of the selection when the user selects one or
@@ -38,6 +50,14 @@
     (dispatch/fire :admin-export {:project project}))
   false)
 
+(defn on-delete-clicked
+  [event]
+  (.stopPropagation event)
+  (when-let [project (:selected (deref state))]
+    (log "project =" project)
+    (dispatch/fire :admin-delete {:project project}))
+  false)
+
 (defn attach-listeners
   []
   (doseq [input ($ "input[type=radio]")]
@@ -55,7 +75,8 @@
                 {:text :edit
                  :link "#/admin/edit/"}
                 {:text :menu_delete
-                 :link "#/admin/delete"}])
+                 :link "#/admin/delete"
+                 :on on-delete-clicked}])
   (inner ($ ".content")
          (tp/get "admin_project"
                  {:projects (json js/PM.projects)}))
