@@ -13,15 +13,26 @@
             [carneades.analysis.web.template :as tp]
             [carneades.analysis.web.dispatch :as dispatch]))
 
-(defn on-upload-complete
+(defn on-upload-success
   []
-  (log "upload finished"))
+  (.fetch js/PM.projects (clj->js {:async false}))
+  (js/PM.notify (i18n "import_successful")))
+
+(dispatch/react-to #{:import-success} on-upload-success)
+
+(defn on-upload-error
+  []
+  (js/PM.on_error (i18n "import_error")))
+
+(dispatch/react-to #{:import-error} on-upload-error)
 
 (defn attach-listeners
   []
-  (js/Dropzone. "div#dropzone" (clj->js {:url (str js/IMPACT.wsurl "/import")
-                                         :dictDefaultMessage (i18n "drop_or_click")
-                                         :complete on-upload-complete })))
+  (doto (js/Dropzone. "div#dropzone"
+                      (clj->js {:url (str js/IMPACT.wsurl "/import")
+                                :dictDefaultMessage (i18n "drop_or_click")}))
+    (.on "success" (fn [] (dispatch/fire :import-success {})))
+    (.on "error" (fn [] (dispatch/fire :import-error {})))))
 
 (defn ^:export show
   []
