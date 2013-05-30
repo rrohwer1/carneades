@@ -8,8 +8,9 @@
         [carneades.analysis.web.views.core :only [json]]
         [carneades.analysis.web.i18n :only [i18n]])
    (:require [carneades.analysis.web.views.header :as header]
-            [carneades.analysis.web.template :as tp]
-            [carneades.analysis.web.dispatch :as dispatch]))
+             [carneades.analysis.web.template :as tp]
+             [carneades.analysis.web.dispatch :as dispatch]
+             [carneades.analysis.web.views.admin.properties :as properties]))
 
 (def state (atom {:selected nil}))
 
@@ -23,6 +24,8 @@
   []
   (.fetch js/PM.projects (clj->js {:async false})))
 
+(declare show)
+
 (defn delete
   [project]
   (when (and (js/confirm (i18n "delete_confirmation1"))
@@ -31,6 +34,12 @@
               (clj->js {:success show}))))
 
 (dispatch/react-to #{:admin-delete} (fn [_ msg] (delete (:project msg))))
+
+(defn edit
+  [project]
+  (properties/set-url project))
+
+(dispatch/react-to #{:admin-edit} (fn [_ msg] (edit (:project msg))))
 
 (defn on-project-checked
   "Changes the state of the selection when the user selects one or
@@ -54,8 +63,14 @@
   [event]
   (.stopPropagation event)
   (when-let [project (:selected (deref state))]
-    (log "project =" project)
     (dispatch/fire :admin-delete {:project project}))
+  false)
+
+(defn on-edit-clicked
+  [event]
+  (.stopPropagation event)
+  (when-let [project (:selected (deref state))]
+    (dispatch/fire :admin-edit {:project project}))
   false)
 
 (defn attach-listeners
@@ -73,7 +88,8 @@
                  :link "#/admin/export"
                  :on on-export-clicked}
                 {:text :edit
-                 :link "#/admin/edit/"}
+                 :link "#/admin/edit/"
+                 :on on-edit-clicked}
                 {:text :menu_delete
                  :link "#/admin/delete"
                  :on on-delete-clicked}])
