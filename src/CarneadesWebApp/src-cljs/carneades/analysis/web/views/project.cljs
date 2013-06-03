@@ -25,5 +25,5 @@
     (js/PM.busy_cursor_off)
     (inner ($ ".content")
            (tp/get "project"
-                   {:introduction
-                    (js/PM.markdown_to_html (aget (.-introduction pdata) js/IMPACT.lang))}))))
+                   {:description
+                    (js/PM.markdown_to_html (aget (.-description pdata) js/IMPACT.lang))}))))
