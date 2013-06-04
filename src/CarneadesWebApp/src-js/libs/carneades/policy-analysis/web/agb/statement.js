@@ -276,7 +276,7 @@ AGB.statement_text = function(statement)
 
 AGB.statement_link = function(db, id, text)
 {
-    return '<a href="/carneades/#/arguments/statement/{0}/{1}/{1}" rel="address:/arguments/statement/{0}/{1}/{2}" class="statement" id="statement{2}">{3}</a>'.format(IMPACT.project, db, id, text);
+    return '<a href="/carneades/#/arguments/statement/{0}/{1}/{2}" rel="address:/arguments/statement/{0}/{1}/{2}" class="statement" id="statement{2}">{3}</a>'.format(IMPACT.project, db, id, text);
 };
 
 AGB.statement_in = function(statement)
