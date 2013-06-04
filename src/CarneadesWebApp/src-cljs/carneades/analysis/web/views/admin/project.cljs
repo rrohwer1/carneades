@@ -78,6 +78,16 @@
   (doseq [input ($ "input[type=radio]")]
     (.change ($ input) on-project-checked)))
 
+
+(defn get-url
+  []
+  (str "admin/project"))
+
+(defn set-url
+  []
+  (js/jQuery.address.value (get-url)))
+
+
 (defn ^:export show
   []
   (header/show {:text :admin
