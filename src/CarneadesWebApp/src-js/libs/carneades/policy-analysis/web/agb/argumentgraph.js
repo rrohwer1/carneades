@@ -7,7 +7,7 @@ goog.provide('carneades.policy_analysis.web.agb.argumentgraph');
 // displayed.
 AGB.set_argumentgraph_url = function(db)
 {
-    $.address.value(AGB.argumentgraph_url(db));    
+    $.address.value(AGB.argumentgraph_url(db));
 };
 
 // Returns the relative URL of the argument graph page
@@ -17,7 +17,7 @@ AGB.argumentgraph_url = function(db)
 };
 
 // Returns the HTML content of the argument graph page
-AGB.argumentgraph_html = function(db, data) 
+AGB.argumentgraph_html = function(db, data)
 {
     AGB.normalize(data);
     data.db = db;
@@ -35,17 +35,17 @@ AGB.argumentgraph_html = function(db, data)
     data.pmt_references = $.i18n.prop('pmt_references');
 
     data = PM.merge_menu_props(data);
-    data = PM.merge_ag_menu_props(data); 
+    data = PM.merge_ag_menu_props(data);
 
     data.lang = IMPACT.lang;
-    
+
     var argumentgraph_html = ich.argumentgraph(data);
     return argumentgraph_html.filter('#argumentgraph');
 };
 
 PM.agb_outline_menu = function (db) {
     return [{text: 'pmt_ag_menu_map'
-             ,link: '#/arguments/map/' + PM.project.id + '/main'},
+             ,link: '#/arguments/map/' + PM.project.id + '/' + db},
             {text: 'pmt_ag_menu_vote'
              ,link: "#/arguments/vote/" + PM.project.id},
             {text: 'pmt_ag_menu_copy'
@@ -84,16 +84,16 @@ AGB.display_argumentgraph = function(db)
         function (event){
             window.open('/carneadesws/export/{0}/{1}'.format(IMPACT.project, db),
                         'CAF XML');
-            return false; 
+            return false;
         });
-    
+
     if(PM.on_statement_edit()) {
         AGB.show_statement_editor({save_callback: function() {
             $.address.queryString('');
             return false;
         }});
     }
-    
+
     if(PM.on_argument_edit()) {
         AGB.new_argument();
     }
@@ -102,7 +102,7 @@ AGB.display_argumentgraph = function(db)
 // Formats the text for the main issues
 AGB.set_mainissues_text = function(mainissues)
 {
-    $.each(mainissues, 
+    $.each(mainissues,
            function(index, issue) {
                issue.statement_nb = index + 1;
                issue.statement_text = AGB.statement_text(issue);
@@ -113,7 +113,7 @@ AGB.set_mainissues_text = function(mainissues)
 // Formats the text for the references
 AGB.set_references_text = function(metadata)
 {
-    $.each(metadata, 
+    $.each(metadata,
            function(index, md) {
                md.metadata_text = AGB.format_metadata(md);
            });
@@ -125,7 +125,7 @@ AGB.outline_text = function(tree, db, index)
     var text = "";
     var node = tree[0];
     var children = tree[1];
-    
+
     if(node === "root") {
         text = "<ul>";
     } else if (node.hasOwnProperty('premises')) {
@@ -166,10 +166,10 @@ AGB.new_argument = function(conclusion) {
 
     var argument_editor_view = new PM.ArgumentEditorView({model: argument_candidate,
                                                           title: 'New Argument'});
-    
+
     argument_editor_view.render();
     $('#argumenteditor').html(argument_editor_view.$el);
-    
+
     return false;
 };
 
@@ -178,9 +178,9 @@ AGB.evaluate = function(callback) {
     PM.ajax_post(IMPACT.wsurl + '/evaluate-argument-graph/' + IMPACT.project + '/' + IMPACT.db, {},
                 function(data) {
                     if(_.isFunction(callback)) {
-                        callback(); 
+                        callback();
                         PM.notify('Evaluation finished');
                     }
                 },
-                IMPACT.user, IMPACT.password, PM.on_error);    
+                IMPACT.user, IMPACT.password, PM.on_error);
 };
