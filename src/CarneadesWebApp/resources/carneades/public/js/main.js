@@ -72,6 +72,8 @@ PM.dispatch_url = function(sections) {
         carneades.analysis.web.views.home.show();
     } else if(sections[1] == "project") {
         carneades.analysis.web.views.project.show(sections[2]);
+    } else if (sections[1] == "facts" && sections[2] == "modify") {
+        carneades.policy_analysis.web.views.pmt.submitted_facts.display();
     } else if(sections[1] == "admin" && sections[2] == "project") {
         carneades.analysis.web.views.admin.project.show();
     } else if(sections[1] == "admin" && sections[2] == "import") {

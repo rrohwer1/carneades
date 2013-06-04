@@ -18,14 +18,15 @@
   (inner ($ "#pm") (template/get "submitted_facts" {}))
   (show-facts questions))
 
-(defn ^:export display-facts
+(defn ^:export display
   "Displays the facts submitted by the user for verification and correction."
   []
   (js/PM.ajax_post js/IMPACT.simulation_url
-                   (clj->js {:modifiable-facts {:policies
-                                                js/IMPACT.current_policy
-                                                :project js/IMPACT.project
-                                                :db js/IMPACT.db}})
+                   (clj->js {:modifiable-facts
+                             {:policies
+                              (.get (aget js/PM.projects js/IMPACT.project) "policies")
+                              :project js/IMPACT.project
+                              :db js/IMPACT.db}})
                    show-facts-for-modification
                    js/IMPACT.user
                    js/IMPACT.password

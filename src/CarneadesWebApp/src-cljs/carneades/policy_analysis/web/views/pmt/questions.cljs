@@ -24,7 +24,7 @@
   "Generates a radio widget HTML code for a question"
   [question fact-number]
   (let [inputid (gensym (format "input-q%s-" (:id question)))]
-   (apply str 
+   (apply str
           (map (fn [formalanswer answer]
                  (let [checked (if (= (current-fact-value question fact-number) formalanswer)
                                  "checked"
@@ -95,10 +95,10 @@
   [question fact-number]
   (cond (coll? (:type question))
         (select-widget question fact-number)
-        
+
         (or (= (:type question ) "symbol") (= (:type question ) "string"))
         (input-widget question fact-number)
-        
+
         :else (throw "NYI")))
 
 (defn create-questions-map
@@ -453,7 +453,7 @@ Returns the answers indexed by question's id."
   (when (.valid ($ "#questionsform"))
     (let [answers (fetch-latest-questions-answers)]
       (log "sending answers...")
-      (log (clj->js answers)) 
+      (log (clj->js answers))
       (js/PM.busy_cursor_on)
       (js/PM.ajax_post js/IMPACT.simulation_url
                        (clj->js {:answers answers})
@@ -474,17 +474,17 @@ Returns the answers indexed by question's id."
   (when (.valid ($ "#questionsform"))
     (let [answers (fetch-latest-questions-answers)]
       (log "sending answers for modification...")
-      (log (clj->js answers)) 
+      (log (clj->js answers))
       (js/PM.busy_cursor_on)
       (let [{:keys [questions deleted]} (deref questions)]
        (js/PM.ajax_post js/IMPACT.simulation_url
-                        (clj->js {:modify-facts {:facts (vals
-                                                         questions)
-                                                 :project
-                                                 js/IMPACT.project
-                                                 :policies js/IMPACT.current_policy
-                                                 :deleted deleted
-                                                 :db js/IMPACT.db}})
+                        (clj->js {:modify-facts
+                                  {:facts (vals questions)
+                                   :project
+                                   js/IMPACT.project
+                                   :policies (.get (aget js/PM.projects js/IMPACT.project) "policies")
+                                   :deleted deleted
+                                   :db js/IMPACT.db}})
                         (fn [data]
                           (js/PM.busy_cursor_off)
                           (show-ag (.-db data)))
@@ -524,7 +524,7 @@ all questions have been answered."
 (defn ^:export init-show-questions
   "Initialize the questions and begins the process of showing them."
   []
-  (swap! questions assoc :submit-listener send-answers) 
+  (swap! questions assoc :submit-listener send-answers)
   (js/PM.ajax_post js/IMPACT.simulation_url
                    (clj->js {:request {:question js/IMPACT.question
                                        :project (.toJSON js/PM.project)}})
