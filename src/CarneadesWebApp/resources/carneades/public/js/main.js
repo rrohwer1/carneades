@@ -73,8 +73,6 @@ PM.dispatch_url = function(sections) {
         carneades.analysis.web.views.home.show();
     } else if(sections[1] == "project") {
         carneades.analysis.web.views.project.show(sections[2]);
-    } else if (sections[1] == "facts" && sections[2] == "modify") {
-        carneades.policy_analysis.web.views.pmt.submitted_facts.display();
     } else if(sections[1] == "admin" && sections[2] == "project") {
         carneades.analysis.web.views.admin.project.show();
     } else if(sections[1] == "admin" && sections[2] == "import") {
@@ -97,6 +95,8 @@ PM.dispatch_url = function(sections) {
         PM.display_introduction(sections[3]);
     } else if(sections[1] == "policies" && sections[2] == "issues") {
         PM.display_issues(sections[3]);
+    } else if (sections[1] == "policies" && sections[2] == "facts" && sections[3] == "modify") {
+        carneades.policy_analysis.web.views.pmt.submitted_facts.display();
     } else if(sections[1] == "policies" && sections[2] == "facts") {
         PM.display_facts(sections[3]);
     } else if(sections[1] == "policies" && sections[2] == "policies") {
