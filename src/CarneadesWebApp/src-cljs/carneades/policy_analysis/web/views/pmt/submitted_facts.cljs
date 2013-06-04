@@ -24,7 +24,7 @@
   (js/PM.ajax_post js/IMPACT.simulation_url
                    (clj->js {:modifiable-facts
                              {:policies
-                              (.get (aget js/PM.projects js/IMPACT.project) "policies")
+                              (.get js/PM.project "policies")
                               :project js/IMPACT.project
                               :db js/IMPACT.db}})
                    show-facts-for-modification

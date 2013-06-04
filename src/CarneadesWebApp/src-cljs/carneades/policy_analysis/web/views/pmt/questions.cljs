@@ -482,7 +482,7 @@ Returns the answers indexed by question's id."
                                   {:facts (vals questions)
                                    :project
                                    js/IMPACT.project
-                                   :policies (.get (aget js/PM.projects js/IMPACT.project) "policies")
+                                   :policies (.get js/PM.project "policies")
                                    :deleted deleted
                                    :db js/IMPACT.db}})
                         (fn [data]

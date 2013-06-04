@@ -18,6 +18,7 @@ var IMPACT = {
 };
 
 var PM = {
+    project: undefined,
     stmts_info: [],
     args_info: [],
     ag_info: [],
