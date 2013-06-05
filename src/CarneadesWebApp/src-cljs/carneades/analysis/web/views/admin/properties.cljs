@@ -43,5 +43,10 @@
                  :link "#/admin/edit/theories"}
                 {:text :documents
                  :link "#/admin/edit/documents"}])
-  (inner ($ ".content")
-         (tp/get "admin_properties" {})))
+  (let [properties (js->clj (json js/PM.project) :keywordize-keys true)]
+    (inner ($ ".content")
+           (tp/get "admin_properties" {:title_input (:title properties)
+                                       ;; TODO: multi-lingual
+                                       :description_input (:en (:description properties))
+                                       :schemes_input (:schemes properties)
+                                       :policies_input (:policies properties)}))))

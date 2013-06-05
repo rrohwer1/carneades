@@ -629,3 +629,12 @@ ul.question li {
 .dropzone  {
     min-height: 200px;
 }
+
+.project-properties input, .project-properties textarea {
+    width: 100%;
+    height: 100%;
+}
+
+.project-properties textarea {
+    min-height: 150px;
+}
