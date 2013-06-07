@@ -4,7 +4,8 @@
 (ns ^{:doc "Management functions for the projects."}
   carneades.project.admin
   (:use [carneades.engine.utils :only [file-separator exists? file-separator]])
-  (:require [carneades.config.config :as config]
+  (:require [clojure.pprint :as pp]
+            [carneades.config.config :as config]
             [carneades.engine.scheme :as theory]
             [clojure.string :as s]
             [me.raynes.fs :as fs]))
@@ -15,6 +16,8 @@
                                                 "projects")))
 
 (def theories-directory "theories")
+
+(def projects-lock (Object.))
 
 (defn- project?
   "Returns true if the director is a project."
@@ -29,11 +32,17 @@
         projects (filter project? dirs)]
     (map (memfn getName) projects)))
 
-(defn load-project-properties
-  "Returns the project properties as a map."
+(defn- get-properties-path
+  "Returns the path of the project's properties"
   [project]
   (let [project-path (str projects-directory file-separator project)
-        properties-path (str project-path file-separator "properties.clj")
+        properties-path (str project-path file-separator "properties.clj")]
+    properties-path))
+
+(defn- load-project-properties
+  "Returns the project properties as a map."
+  [project]
+  (let [properties-path (get-properties-path project)
         project-properties (config/read-properties properties-path)]
     project-properties))
 
@@ -76,12 +85,25 @@ can be of the form \"theory\" or \"project/theory\". The former refers
   "Loads the configuration of a project and its policy. Returns a map
 representing the project."
   [project]
-  (let [project-properties (load-project-properties project)
-        policy-properties (:policies project-properties)
-        policy (load-policy project project-properties)]
-    {:properties project-properties}))
+  (locking projects-lock
+   (let [project-properties (load-project-properties project)
+         policy-properties (:policies project-properties)
+         policy (load-policy project project-properties)]
+     {:properties project-properties})))
 
 (defn delete-project
   "Permanently delete project from the disk."
   [project]
   (fs/delete-dir (str projects-directory file-separator project)))
+
+(defn update-project-properties
+  "Update the properties file of the project."
+  [project properties]
+  {:pre [(map? properties)
+         (not (:id properties))
+         (not (some #(and (string? %) (empty? %)) (vals properties)))]}
+  (locking projects-lock
+    (let [old-properties (load-project-properties project)
+          new-properties (merge old-properties properties)
+          properties-path (get-properties-path project)]
+      (spit properties-path (pp/write new-properties :stream nil)))))

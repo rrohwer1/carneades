@@ -13,7 +13,7 @@
         ring.util.codec
         [carneades.engine.utils :only [sha256 zip-dir unzip]]
         [carneades.database.evaluation :only [evaluate-graph]]
-        [carneades.web.project :only [init-projects-data!]]
+        [carneades.web.project :only [init-projects-data! get-project-properties]]
         [ring.middleware.format-response :only [wrap-restful-response]]
         [ring.middleware.cookies :only [wrap-cookies]])
   (:require [clojure.data.json :as json]
@@ -66,15 +66,21 @@
                   (:projects s)))})
 
   (GET "/project/:id" [id]
-       {:body
-        (merge (get-in (deref state) [:projects-data id :properties])
-               {:id id})})
+       {:body (get-project-properties id state)})
 
   (PUT "/project/:id" request
        (let [m (json/read-json (slurp (:body request)))
-             [username password] (get-username-and-password request)]
-         ;; TODO
-         ))
+             id (-> request :params :id)
+             [username password] (get-username-and-password request)
+             m (dissoc m :id)
+             accepted-keys (filter (fn [k] (not (and (string? (k m))
+                                                     (empty? (k m)))))
+                                   (keys m))
+             m (select-keys m accepted-keys)]
+         (project/update-project-properties id m)
+         (reset! state (init-projects-data))
+         {:status 200
+          :body (get-project-properties id state)}))
 
   (DELETE "/project/:id" request
           (let [id (-> request :params :id)

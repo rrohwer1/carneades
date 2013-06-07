@@ -13,7 +13,13 @@
 
 (defn on-save-properties
   []
-  (log "save properties"))
+  (let [project js/PM.project]
+    (.set project (clj->js {:title (.val ($ ".title"))
+                            :description {:en (.val ($ ".description"))}
+                            :schemes (.val ($ ".schemes"))
+                            :policies (.val ($ ".policies"))}))
+    (.save project))
+  false)
 
 (defn on-cancel-properties
   []
@@ -31,8 +37,7 @@
   [project]
   (js/PM.load_project project)
   (header/show {:text :admin
-                :link "#/admin/project"
-                :on on-save-properties}
+                :link "#/admin/project"}
                [{:text :save
                  :link "#/admin/edit/properties/save"
                  :on on-save-properties}
