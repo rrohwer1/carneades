@@ -9,7 +9,8 @@
         [carneades.analysis.web.i18n :only [i18n]])
   (:require [carneades.analysis.web.views.header :as header]
             [carneades.analysis.web.template :as tp]
-            [carneades.analysis.web.dispatch :as dispatch]))
+            [carneades.analysis.web.dispatch :as dispatch]
+            [carneades.analysis.web.views.description-editor :as description]))
 
 (defn on-save-properties
   []
@@ -54,4 +55,5 @@
                                        ;; TODO: multi-lingual
                                        :description_input (:en (:description properties))
                                        :schemes_input (:schemes properties)
-                                       :policies_input (:policies properties)}))))
+                                       :policies_input (:policies properties)}))
+    (description/show ".description-editor")))

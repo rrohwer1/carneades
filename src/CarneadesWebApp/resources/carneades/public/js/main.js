@@ -569,6 +569,7 @@ PM.load_templates = function(toolboxState) {
             {name: 'metadata', url: 'site/metadata.html'},
             {name: 'statementlink', url: 'site/statementlink.html'},
             {name: 'argumentlink', url: 'site/argumentlink.html'},
+            {name: 'description_editor', url: 'site/description_editor.html'},
             {name: 'premise', url: 'site/premise.html'}],
            function(template) {
                var url = toolboxState == undefined ?
