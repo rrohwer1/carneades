@@ -10,16 +10,21 @@
   (:require [carneades.analysis.web.views.header :as header]
             [carneades.analysis.web.template :as tp]
             [carneades.analysis.web.dispatch :as dispatch]
-            [carneades.analysis.web.views.description-editor :as description]))
+            [carneades.analysis.web.views.description-editor :as description]
+            ))
 
 (defn on-save-properties
   []
   (let [project js/PM.project]
-    (.set project (clj->js {:title (.val ($ ".title"))
-                            :description {:en (.val ($ ".description"))}
-                            :schemes (.val ($ ".schemes"))
-                            :policies (.val ($ ".policies"))}))
-    (.save project))
+    (.save project
+           (clj->js {:title (.val ($ ".title"))
+                     :description (description/get)
+                     :schemes (.val ($ ".schemes"))
+                     :policies (.val ($ ".policies"))})
+           (clj->js {:success (fn [& args]
+                                (js/jQuery.address.value "admin/project"))
+                     :error (fn [& args]
+                              (js/PM.on_error (i18n "error_while_saving")))})))
   false)
 
 (defn on-cancel-properties
@@ -56,4 +61,4 @@
                                        :description_input (:en (:description properties))
                                        :schemes_input (:schemes properties)
                                        :policies_input (:policies properties)}))
-    (description/show ".description-editor")))
+    (description/show ".description-editor" (:description properties))))

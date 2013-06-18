@@ -7,8 +7,12 @@
   (:refer-clojure :exclude [get])
   (:require [carneades.analysis.web.dispatch :as dispatch]))
 
-(def state (atom {:lang :en
-                  :value {}}))
+(defn- initial-state
+  []
+  {:lang :en
+   :value {}})
+
+(def state (atom (initial-state)))
 
 (defn update-state
   ;; assigns selected lang to the new selected language
@@ -56,8 +60,6 @@
 
 (defn- on-tab-selected
   [event ui]
-  (log "tab-selected: ")
-  (log ui)
   (let [tab (.-tab ui)
         lang (get-lang tab)]
     (dispatch/fire ::description-tab-changed
@@ -66,7 +68,10 @@
   false)
 
 (defn show
-  [selector]
+  [selector description]
+  (reset! state (initial-state))
+  (swap! state assoc-in [:value] description)
+  (.val ($ ".description") (:en description))
   (.tabs ($ selector) (clj->js {:select on-tab-selected
                                :selected 0}))
   (.markItUp ($ (str selector " .description")) js/mySettings))
