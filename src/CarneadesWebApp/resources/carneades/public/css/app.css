@@ -638,3 +638,7 @@ ul.question li {
 .project-properties textarea {
     min-height: 150px;
 }
+
+.project-property {
+    margin-bottom: 10px;
+}

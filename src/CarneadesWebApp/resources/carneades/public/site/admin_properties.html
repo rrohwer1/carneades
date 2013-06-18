@@ -1,8 +1,19 @@
 <div class="project-properties">
-  <span>{{title}}</span> <input type="text" class="title" value="{{title_input}}"> <br/>
-  <span>{{description}}</span>
-  {{>description_editor}}
-  <br/>
-  {{schemes}} <input type="text" class="schemes" value="{{schemes_input}}"> <br/>
-  {{policies}} <input type="text" class="policies" value="{{policies_input}}"> <br/>
+
+  <div class="project-property">
+    <span>{{title}}</span> <input type="text" class="title" value="{{title_input}}">
+  </div>
+
+  <div class="project-property">
+    <span>{{description}}</span>
+    {{>description_editor}}
+  </div>
+
+  <div class="project-property">
+    {{schemes}} <input type="text" class="schemes" value="{{schemes_input}}"> <br/>
+  </div>
+
+  <div class="project-property">
+    {{policies}} <input type="text" class="policies" value="{{policies_input}}"> </div>
+
 </div>
