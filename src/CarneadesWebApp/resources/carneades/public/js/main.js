@@ -544,11 +544,13 @@ PM.load_scripts = function(rootpath, is_in_toolbox, callback) {
         'js/lib/jquery.svg.js',
         'js/lib/jquery.validate.js',
         'js/lib/markitup/jquery.markitup.js',
-        'js/lib/markitup/sets/markdown/set.js',
         'js/lib/parallel.js',
         'js/lib/select2.js',
         'js/lib/sprintf-0.7-beta1.js',
-        'js/compiled-app.js'
+        'js/compiled-app.js',
+        // sets must be loaded after compiled-app.js
+        // since it references the PM.markdown_to_html function
+        'js/lib/markitup/sets/markdown/set.js',
                   ];
 
     if(!is_in_toolbox) {
