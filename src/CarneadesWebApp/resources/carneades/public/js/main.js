@@ -24,7 +24,8 @@ var PM = {
     ag_info: [],
     stmts: [],
     args: [],
-    projects: []
+    projects: [],
+    projects_theories: []
 };
 
 // argument browser
@@ -294,6 +295,12 @@ PM.common_post_load = function() {
     PM.projects = new PM.Projects;
     PM.projects.fetch({async: false});
 
+    PM.projects.each(
+           function(project) {
+               PM.projects_theories[project.id] = new PM.ProjectsTheories([], {project: project.id});
+               PM.projects_theories[project.id].fetch({async: false});
+           });
+
     PM.markdown_add_hooks();
 };
 
@@ -334,6 +341,9 @@ PM.load_project = function (id) {
     PM.ag_info = [];
     PM.stmts = [];
     PM.args = [];
+
+    PM.projects_theories[project.id] = new PM.ProjectsTheories([], {project: project.id});
+    PM.projects_theories[project.id].fetch({async: false});
 
     PM.args_info[IMPACT.debate_db] = new PM.ArgumentsInfo([], {db: IMPACT.debate_db});
     PM.stmts_info[IMPACT.debate_db] = new PM.StatementsInfo([], {db: IMPACT.debate_db});

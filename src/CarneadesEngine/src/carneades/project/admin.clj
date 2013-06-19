@@ -96,12 +96,14 @@ can be of the form \"theory\" or \"project/theory\". The former refers
 representing the project."
   [project]
   (locking projects-lock
-   (let [project-properties (load-project-properties project)
-         policy-properties (:policies project-properties)
-         policy (load-policy project project-properties)
-         theories-files (list-theories-files project)]
-     {:properties project-properties
-      :theories-files theories-files})))
+    (let [remove-extension (fn [f] (subs f 0 (- (count f) 4)))
+          project-properties (load-project-properties project)
+          policy-properties (:policies project-properties)
+          policy (load-policy project project-properties)
+          theories-files (list-theories-files project)
+          theories (map remove-extension theories-files)]
+      {:properties project-properties
+       :available-theories theories})))
 
 (defn delete-project
   "Permanently delete project from the disk."

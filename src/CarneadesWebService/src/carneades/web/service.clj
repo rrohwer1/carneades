@@ -15,7 +15,7 @@
         [carneades.database.evaluation :only [evaluate-graph]]
         [carneades.web.project :only [init-projects-data!
                                       get-project-properties
-                                      get-project-theories-files]]
+                                      get-project-theories]]
         [ring.middleware.format-response :only [wrap-restful-response]]
         [ring.middleware.cookies :only [wrap-cookies]])
   (:require [clojure.data.json :as json]
@@ -71,7 +71,7 @@
        {:body (get-project-properties id state)})
 
   (GET "/project/:id/theories" [id]
-       {:body (get-project-theories-files id state)})
+       {:body {:theories (get-project-theories id state)}})
 
   (PUT "/project/:id" request
        (let [m (json/read-json (slurp (:body request)))
