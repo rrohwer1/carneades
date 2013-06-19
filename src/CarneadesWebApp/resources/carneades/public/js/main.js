@@ -79,6 +79,8 @@ PM.dispatch_url = function(sections) {
         carneades.analysis.web.views.admin.imports.show();
     } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "properties") {
         carneades.analysis.web.views.admin.properties.show(sections[3]);
+    } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "theories") {
+        carneades.analysis.web.views.admin.theories.show(sections[3]);
     } else if(sections[1] == "arguments") {
         PM.display_arguments(sections[3], sections[4], sections[2], sections[5]);
     } else if(sections[1] == "tour" && sections[2] == "intro") {
@@ -587,6 +589,7 @@ PM.load_templates = function(toolboxState) {
             'admin_project',
             'admin_import',
             'admin_properties',
+            'admin_theories',
             'argumentgraph',
             'argument',
             'argumentlink',

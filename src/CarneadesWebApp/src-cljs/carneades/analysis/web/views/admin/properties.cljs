@@ -53,7 +53,7 @@
                  :link "#/admin/edit/properties/cancel"
                  :on on-cancel-properties}
                 {:text :theories
-                 :link "#/admin/edit/theories"}
+                 :link (str "#/admin/edit/" project "/theories")}
                 {:text :documents
                  :link "#/admin/edit/documents"}])
   (let [properties (js->clj (json js/PM.project) :keywordize-keys true)]
