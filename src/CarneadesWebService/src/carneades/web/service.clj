@@ -73,6 +73,16 @@
   (GET "/project/:id/theories" [id]
        {:body {:theories (get-project-theories id state)}})
 
+  (GET "/project/:id/theories/:theoryid.clj" [id theoryid]
+       (let [path (str project/projects-directory file-separator id file-separator
+                       project/theories-directory file-separator theoryid ".clj")]
+         (if (not (exists? path))
+           {:status 404
+            :body "File not found"}
+           {:body (io/input-stream path)
+            :headers {"Content-Type" "application/clojure;charset=UTF-8"}
+            })))
+
   (PUT "/project/:id" request
        (let [m (json/read-json (slurp (:body request)))
              id (-> request :params :id)
