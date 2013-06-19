@@ -22,7 +22,6 @@
             [carneades.policy_analysis.web.collections.arguments_info]
             [carneades.policy_analysis.web.collections.metadata_list]
             [carneades.policy_analysis.web.collections.projects]
-            [carneades.policy_analysis.web.collections.projects_theories]
             [carneades.policy_analysis.web.introduction]
             [carneades.policy_analysis.web.admin]
             [carneades.policy_analysis.web.menu]

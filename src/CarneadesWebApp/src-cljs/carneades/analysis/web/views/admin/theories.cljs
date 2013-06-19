@@ -33,6 +33,6 @@
                  :link "#/admin/edit/theories/edit"}
                 {:text :menu_delete
                  :link "#/admin/edit/theories/delete"}])
-  (let [theories []]
+  (let [theories (.-theories (json (aget js/PM.projects_theories project)))]
     (inner ($ ".content")
            (tp/get "admin_theories" {:theories theories}))))

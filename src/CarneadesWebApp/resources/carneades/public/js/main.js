@@ -285,6 +285,13 @@ PM.normalized_theory_path = function(project, path) {
     return project.id + '/' + path;
 };
 
+PM.load_project_theories = function (project) {
+    var project_theory = new PM.ProjectTheory();
+    project_theory.id = project.id;
+    PM.projects_theories[project.id] = project_theory;
+    project_theory.fetch({async: false});
+}
+
 PM.common_post_load = function() {
     Dropzone.autoDiscover = false;
 
@@ -296,9 +303,8 @@ PM.common_post_load = function() {
     PM.projects.fetch({async: false});
 
     PM.projects.each(
-           function(project) {
-               PM.projects_theories[project.id] = new PM.ProjectsTheories([], {project: project.id});
-               PM.projects_theories[project.id].fetch({async: false});
+        function(project) {
+            PM.load_project_theories(project);
            });
 
     PM.markdown_add_hooks();
@@ -342,8 +348,7 @@ PM.load_project = function (id) {
     PM.stmts = [];
     PM.args = [];
 
-    PM.projects_theories[project.id] = new PM.ProjectsTheories([], {project: project.id});
-    PM.projects_theories[project.id].fetch({async: false});
+    PM.load_project_theories(project);
 
     PM.args_info[IMPACT.debate_db] = new PM.ArgumentsInfo([], {db: IMPACT.debate_db});
     PM.stmts_info[IMPACT.debate_db] = new PM.StatementsInfo([], {db: IMPACT.debate_db});

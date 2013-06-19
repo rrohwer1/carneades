@@ -2,15 +2,13 @@
   <thead><tr>
       <th>{{selected}}</th>
       <th>{{name}}</th>
-      <th>{{title}}</th>
     </tr>
   </thead>
   <tbody>
     {{#theories}}
     <tr>
       <td><input type="radio" name="selection" id="{{id}}"/></td>
-      <td>{{name}}</td>
-      <td>{{title}}</td>
+      <td>{{.}}</td>
     </tr>
     {{/theories}}
   </tbody>
