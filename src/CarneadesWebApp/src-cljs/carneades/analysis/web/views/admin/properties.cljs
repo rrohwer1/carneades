@@ -27,10 +27,6 @@
                               (js/PM.on_error (i18n "error_while_saving")))})))
   false)
 
-(defn on-cancel-properties
-  []
-  (log "cancel properties"))
-
 (defn get-url
   [project]
   (str "admin/edit/" project "/properties"))
@@ -38,6 +34,12 @@
 (defn set-url
   [project]
   (js/jQuery.address.value (get-url project)))
+
+(defn on-cancel-properties
+  []
+  (set-url js/PM.project.id)
+  (js/jQuery.address.update)
+  false)
 
 (defn ^:export show
   [project]
