@@ -3,12 +3,13 @@
 
 (ns ^{:doc "Management functions for the projects."}
   carneades.project.admin
-  (:use [carneades.engine.utils :only [file-separator exists? file-separator]])
+  (:use [carneades.engine.utils :only [file-separator exists? file-separator make-relative]])
   (:require [clojure.pprint :as pp]
-            [carneades.config.config :as config]
-            [carneades.engine.scheme :as theory]
+            [clojure.java.io :as io]
             [clojure.string :as s]
-            [me.raynes.fs :as fs]))
+            [me.raynes.fs :as fs]
+            [carneades.config.config :as config]
+            [carneades.engine.scheme :as theory]))
 
 (def projects-directory (config/properties :projects-directory
                                            (str (System/getProperty "user.dir")
@@ -47,7 +48,7 @@
     project-properties))
 
 (defn relative-theory-path
-  "Returns the absolute path of a theory name. The name of the theory
+  "Returns the relative path of a theory name. The name of the theory
 can be of the form \"theory\" or \"project/theory\". The former refers
   to the current project, the latter to a the theory of project in the
   projects directory."
@@ -81,6 +82,15 @@ can be of the form \"theory\" or \"project/theory\". The former refers
   (when-let [policy (:policies project-properties)]
     (load-theory project policy)))
 
+(defn list-theories-files
+  "Returns a list of available theories files for the project."
+  [project]
+  (let [project-path (str projects-directory file-separator project)
+        theories-dir (str project-path file-separator theories-directory)
+        files (fs/find-files theories-dir #".*\.clj")
+        names (map (memfn getName) files)]
+    names))
+
 (defn load-project
   "Loads the configuration of a project and its policy. Returns a map
 representing the project."
@@ -88,8 +98,10 @@ representing the project."
   (locking projects-lock
    (let [project-properties (load-project-properties project)
          policy-properties (:policies project-properties)
-         policy (load-policy project project-properties)]
-     {:properties project-properties})))
+         policy (load-policy project project-properties)
+         theories-files (list-theories-files project)]
+     {:properties project-properties
+      :theories-files theories-files})))
 
 (defn delete-project
   "Permanently delete project from the disk."

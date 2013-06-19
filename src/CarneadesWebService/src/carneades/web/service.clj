@@ -13,7 +13,9 @@
         ring.util.codec
         [carneades.engine.utils :only [sha256 zip-dir unzip]]
         [carneades.database.evaluation :only [evaluate-graph]]
-        [carneades.web.project :only [init-projects-data! get-project-properties]]
+        [carneades.web.project :only [init-projects-data!
+                                      get-project-properties
+                                      get-project-theories-files]]
         [ring.middleware.format-response :only [wrap-restful-response]]
         [ring.middleware.cookies :only [wrap-cookies]])
   (:require [clojure.data.json :as json]
@@ -67,6 +69,9 @@
 
   (GET "/project/:id" [id]
        {:body (get-project-properties id state)})
+
+  (GET "/project/:id/theories" [id]
+       {:body (get-project-theories-files id state)})
 
   (PUT "/project/:id" request
        (let [m (json/read-json (slurp (:body request)))

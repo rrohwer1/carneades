@@ -27,3 +27,7 @@
   [id state]
   (merge (get-in (deref state) [:projects-data id :properties])
          {:id id}))
+
+(defn get-project-theories-files
+  [id state]
+  (get-in (deref state) [:projects-data id :theories-files]))
