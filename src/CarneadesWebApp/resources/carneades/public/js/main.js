@@ -517,7 +517,7 @@ PM.get_script = function(url, callback) {
 	}
     };
 
-    console.log('Loading ' + url);
+    /// console.log('Loading ' + url);
     head.appendChild(script);
 
     // We handle everything using the script element injection
@@ -659,7 +659,7 @@ PM.load_templates = function(toolboxState) {
                    toolboxState.pmt.path + '/' + 'site/{0}.html'.format(name);
                PM.syncget(url,
                           function(content) {
-                              console.log('Loading template ' + name);
+                              /// console.log('Loading template ' + name);
                               ich.addTemplate(name, content);
                           });
           });

@@ -69,7 +69,7 @@
     width: 600px;
 }
 
-.conclusion-select, .select2-container {
+.argument-editor .select2-container {
     width: 680px;
 }
 
@@ -641,4 +641,12 @@ ul.question li {
 
 .project-property {
     margin-bottom: 10px;
+}
+
+.project-property .title {
+    min-width: 300px;
+}
+
+.project-property .select2-container {
+    min-width: 300px;
 }

@@ -19,7 +19,7 @@
     (.save project
            (clj->js {:title (.val ($ ".title"))
                      :description (description/get)
-                     :schemes (.val ($ ".schemes"))
+                     :schemes (.select2 ($ ".schemes") "val")
                      :policies (.val ($ ".policies"))})
            (clj->js {:success (fn [& args]
                                 (js/jQuery.address.value "admin/project"))
@@ -40,6 +40,31 @@
   (set-url js/PM.project.id)
   (js/jQuery.address.update)
   false)
+
+(defn- get-all-available-theories
+  "Calculates all available schemes"
+  []
+  (map (fn [project]
+         (let [id (.-id project)
+               theories (.-theories (json (aget js/PM.projects_theories id)))
+               canonical-path (str id "/" theories)]
+           {:id canonical-path
+            :text canonical-path}))
+       (json js/PM.projects)))
+
+(defn activate-schemes-selection
+  "Activates the schemes input selection field."
+  []
+  (let [schemes ($ ".schemes")
+        current-schemes {:id (.get js/PM.project "schemes")
+                         :text (.get js/PM.project "schemes")}
+        all-schemes (get-all-available-theories)]
+    (.select2 schemes (clj->js
+                       {:data all-schemes
+                        :initSelection (fn [element callback]
+                                         (let [found (first (filter #(= (:id %) (.val element)) all-schemes))]
+                                           (callback (clj->js found))))}))
+    (.selecT2 schemes "val "(:id current-schemes))))
 
 (defn ^:export show
   [project]
@@ -63,4 +88,5 @@
                                        :description_input (:en (:description properties))
                                        :schemes_input (:schemes properties)
                                        :policies_input (:policies properties)}))
-    (description/show ".description-editor" (:description properties))))
+    (description/show ".description-editor" (:description properties))
+    (activate-schemes-selection)))
