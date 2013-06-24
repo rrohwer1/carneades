@@ -121,3 +121,12 @@ representing the project."
           new-properties (merge old-properties properties)
           properties-path (get-properties-path project)]
       (spit properties-path (pp/write new-properties :stream nil)))))
+
+(defn import-theories
+  "Imports the theories stored at pathname into project as name."
+  [project pathname name]
+  (let [dest (str projects-directory file-separator
+                  project file-separator
+                  theories-directory file-separator
+                  name)]
+    (fs/copy pathname dest)))

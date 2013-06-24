@@ -11,14 +11,15 @@
         carneades.database.import
         carneades.xml.caf.export
         ring.util.codec
-        [carneades.engine.utils :only [sha256 zip-dir unzip]]
+        [carneades.engine.utils :only [sha256 zip-dir unzip extension]]
         [carneades.database.evaluation :only [evaluate-graph]]
         [carneades.web.project :only [init-projects-data!
                                       get-project-properties
                                       get-project-theories]]
         [ring.middleware.format-response :only [wrap-restful-response]]
         [ring.middleware.cookies :only [wrap-cookies]])
-  (:require [clojure.data.json :as json]
+  (:require [me.raynes.fs :as fs]
+            [clojure.data.json :as json]
             [clojure.java.io :as io]
             [carneades.database.argument-graph :as ag-db]
             [carneades.database.case :as case]
@@ -82,6 +83,18 @@
            {:body (io/input-stream path)
             :headers {"Content-Type" "application/clojure;charset=UTF-8"}
             })))
+
+  (POST "/project/:id/theories" [id file]
+        (let [tempfile (:tempfile file)
+              filename (:filename file)]
+          (if (not= (extension filename) "clj")
+           {:status 415
+            :body "Invalid format. Clojure file expected."}
+           (do
+             (project/import-theories id (.getPath tempfile) filename)
+             (reset! state (init-projects-data))
+             {:status 200}))
+          {:status 200}))
 
   (PUT "/project/:id" request
        (let [m (json/read-json (slurp (:body request)))

@@ -35,7 +35,7 @@
 (defn attach-listeners
   []
   (doto (js/Dropzone. "div#dropzone"
-                      (clj->js {:url (str js/IMPACT.wsurl "/stuff")
+                      (clj->js {:url (str js/IMPACT.wsurl "/project/" js/PM.project.id "/theories")
                                 :dictDefaultMessage (i18n "drop_or_click_theories")}))
     (.on "addedfile"
          (fn [] (dispatch/fire :admin-theories-upload-file-added {})))
