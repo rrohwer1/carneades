@@ -11,9 +11,7 @@
             [carneades.analysis.web.template :as tp]
             [carneades.analysis.web.dispatch :as dispatch]
             [carneades.analysis.web.views.description-editor :as description]
-            ))
-
-(def state (atom {:selected nil}))
+            [carneades.analysis.web.views.selectable-table :as selectable-table]))
 
 (defn download
   [theories]
@@ -27,28 +25,17 @@
 
 (dispatch/react-to #{:admin-theories-download} (fn [_ msg] (download (:theories msg))))
 
-(defn on-theory-checked
-  "Changes the state of the selection when the user selects one or
-  more projects "
-  [event]
-  (let [input ($ (.-target event))
-        id (.-id (.-target event))
-        checked (attr input "checked")]
-    (if checked
-      (swap! state assoc-in [:selected] id)
-      (swap! state assoc-in [:selected] nil))))
-
 (defn on-download-clicked
   [event]
   (.stopPropagation event)
-  (when-let [name (:selected (deref state))]
+  (when-let [name (selectable-table/selection)]
     (dispatch/fire :admin-theories-download {:theories name}))
   false)
 
-(defn attach-listeners
-  []
-  (doseq [input ($ "input[type=radio]")]
-    (.change ($ input) on-theory-checked)))
+(defn on-delete-clicked
+  [event]
+  (.stopPropagation event)
+  false)
 
 (defn get-url
   [project]
@@ -72,8 +59,9 @@
                 {:text :edit
                  :link "#/admin/edit/theories/edit"}
                 {:text :menu_delete
-                 :link "#/admin/edit/theories/delete"}])
+                 :link "#/admin/edit/theories/delete"
+                 :on on-delete-clicked}])
   (let [theories (.-theories (json (aget js/PM.projects_theories project)))]
     (inner ($ ".content")
            (tp/get "admin_theories" {:theories theories}))
-    (attach-listeners)))
+    (selectable-table/attach ".theories")))

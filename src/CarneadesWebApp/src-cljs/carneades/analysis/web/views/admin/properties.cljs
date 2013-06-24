@@ -65,8 +65,6 @@
                            {:id (canonical-path policies)
                             :text policies})
         all-theories (get-all-available-theories)]
-    (log "all-theories =")
-    (log (clj->js all-theories))
     (.select2 policies (clj->js
                         {:data all-theories
                          :initSelection (fn [element callback]

@@ -10,9 +10,8 @@
    (:require [carneades.analysis.web.views.header :as header]
              [carneades.analysis.web.template :as tp]
              [carneades.analysis.web.dispatch :as dispatch]
-             [carneades.analysis.web.views.admin.properties :as properties]))
-
-(def state (atom {:selected nil}))
+             [carneades.analysis.web.views.admin.properties :as properties]
+             [carneades.analysis.web.views.selectable-table :as selectable-table]))
 
 (defn export
   [project]
@@ -41,43 +40,26 @@
 
 (dispatch/react-to #{:admin-edit} (fn [_ msg] (edit (:project msg))))
 
-(defn on-project-checked
-  "Changes the state of the selection when the user selects one or
-  more projects "
-  [event]
-  (let [input ($ (.-target event))
-        id (.-id (.-target event))
-        checked (attr input "checked")]
-    (if checked
-      (swap! state assoc-in [:selected] id)
-      (swap! state assoc-in [:selected] nil))))
-
 (defn on-export-clicked
   [event]
   (.stopPropagation event)
-  (when-let [project (:selected (deref state))]
+  (when-let [project (selectable-table/selection)]
     (dispatch/fire :admin-export {:project project}))
   false)
 
 (defn on-delete-clicked
   [event]
   (.stopPropagation event)
-  (when-let [project (:selected (deref state))]
+  (when-let [project (selectable-table/selection)]
     (dispatch/fire :admin-delete {:project project}))
   false)
 
 (defn on-edit-clicked
   [event]
   (.stopPropagation event)
-  (when-let [project (:selected (deref state))]
+  (when-let [project (selectable-table/selection)]
     (dispatch/fire :admin-edit {:project project}))
   false)
-
-(defn attach-listeners
-  []
-  (doseq [input ($ "input[type=radio]")]
-    (.change ($ input) on-project-checked)))
-
 
 (defn get-url
   []
@@ -106,4 +88,4 @@
   (inner ($ ".content")
          (tp/get "admin_project"
                  {:projects (json js/PM.projects)}))
-  (attach-listeners))
+  (selectable-table/attach ".projects"))
