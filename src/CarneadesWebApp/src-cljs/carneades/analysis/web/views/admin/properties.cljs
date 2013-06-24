@@ -56,15 +56,19 @@
   "Activates the schemes input selection field."
   []
   (let [schemes ($ ".schemes")
-        current-schemes {:id (.get js/PM.project "schemes")
+        current-schemes {:id (str js/PM.project.id "/" (.get js/PM.project "schemes"))
                          :text (.get js/PM.project "schemes")}
         all-schemes (get-all-available-theories)]
     (.select2 schemes (clj->js
                        {:data all-schemes
                         :initSelection (fn [element callback]
-                                         (let [found (first (filter #(= (:id %) (.val element)) all-schemes))]
+                                         (log "all-elements =")
+                                         (log (clj->js all-schemes))
+                                         (log "element.val =")
+                                         (log (.val element))
+                                         (when-let [found (first (filter #(= (:id %) (.val element)) all-schemes))]
                                            (callback (clj->js found))))}))
-    (.selecT2 schemes "val "(:id current-schemes))))
+    (.select2 schemes "val" (:id current-schemes))))
 
 (defn ^:export show
   [project]
