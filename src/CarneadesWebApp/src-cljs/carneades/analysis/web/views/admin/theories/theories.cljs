@@ -2,7 +2,7 @@
 ;;; Licensed under the EUPL V.1.1
 
 (ns ^{:doc "Displays the theories of a project in the admin page"}
-  carneades.analysis.web.views.admin.theories
+  carneades.analysis.web.views.admin.theories.theories
   (:use [jayq.core :only [$ inner attr append]]
         [jayq.util :only [log]]
         [carneades.analysis.web.views.core :only [json]]
@@ -51,7 +51,7 @@
   (header/show {:text :admin
                 :link (str "#/admin/" project)}
                [{:text :upload
-                 :link "#/admin/edit/theories/upload"}
+                 :link (str "#/admin/edit/" project "/theories/upload")}
                 {:text :download
                  :link "#/admin/edit/theories/download"
                  :on on-download-clicked

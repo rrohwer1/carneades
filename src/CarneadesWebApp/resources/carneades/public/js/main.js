@@ -62,7 +62,7 @@ PM.url_changed = function(url) {
          return;
     }
 
-    var url_regex = /\/([^ \/]+)(?:\/([^ \/]+))?(?:\/([^ \/]+))?(?:\/([^ ?\/]+))?(?:\/([^ \/&\?]+))?/;
+    var url_regex = /\/([^ \/]+)(?:\/([^ \/]+))?(?:\/([^ \/]+))?(?:\/([^ ?\/]+))?(?:\/([^ ?\/]+))?(?:\/([^ \/&\?]+))?/;
     var result = url_regex.exec(url.value);
     if(result != null) {
         PM.dispatch_url(result);
@@ -80,8 +80,10 @@ PM.dispatch_url = function(sections) {
         carneades.analysis.web.views.admin.imports.show();
     } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "properties") {
         carneades.analysis.web.views.admin.properties.show(sections[3]);
+    } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "theories" && sections[5] == "upload") {
+        carneades.analysis.web.views.admin.theories.upload.show(sections[3]);
     } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "theories") {
-        carneades.analysis.web.views.admin.theories.show(sections[3]);
+        carneades.analysis.web.views.admin.theories.theories.show(sections[3]);
     } else if(sections[1] == "arguments") {
         PM.display_arguments(sections[3], sections[4], sections[2], sections[5]);
     } else if(sections[1] == "tour" && sections[2] == "intro") {
@@ -605,6 +607,7 @@ PM.load_templates = function(toolboxState) {
             'admin_import',
             'admin_properties',
             'admin_theories',
+            'admin_theories_upload',
             'argumentgraph',
             'argument',
             'argumentlink',
