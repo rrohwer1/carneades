@@ -7,7 +7,8 @@
         [carneades.analysis.web.i18n :only [i18n]])
   (:require [carneades.analysis.web.views.header :as header]
             [carneades.analysis.web.template :as tp]
-            [carneades.analysis.web.dispatch :as dispatch]))
+            [carneades.analysis.web.dispatch :as dispatch]
+            [carneades.analysis.web.views.admin.theories.theories :as theories]))
 
 (defn upload-progress
   [file progress]
@@ -15,17 +16,17 @@
     (js/PM.notify (i18n "server_processing"))
     (js/PM.notify (str "File:" (.-name file) " " progress (i18n "progress_message")))))
 
-(dispatch/react-to #{:import-upload-progress}
-                   (fn [_ msg]
-                     (upload-progress (:file msg) (:progress msg))))
+;; (dispatch/react-to #{:admin-theories-upload-progress}
+;;                    (fn [_ msg]
+;;                      (upload-progress (:file msg) (:progress msg))))
 
 (defn on-upload-success
   []
-  (.fetch js/PM.projects (clj->js {:async false}))
+  (.fetch (aget js/PM.projects_theories js/PM.project.id) (clj->js {:async false}))
   (js/PM.notify (i18n "upload_successful"))
-  (project/set-url))
+  (theories/set-url js/PM.project.id))
 
-(dispatch/react-to #{:import-success} on-upload-success)
+(dispatch/react-to #{:admin-theories-upload-success} on-upload-success)
 
 (defn on-upload-error
   []
