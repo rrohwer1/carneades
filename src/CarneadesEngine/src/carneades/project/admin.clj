@@ -130,3 +130,12 @@ representing the project."
                   theories-directory file-separator
                   name)]
     (fs/copy pathname dest)))
+
+(defn delete-theories
+  "Delete the theories of the project"
+  [project theories]
+  (let [pathname (str projects-directory file-separator
+                  project file-separator
+                  theories-directory file-separator
+                  (str theories ".clj"))]
+    (fs/delete pathname)))

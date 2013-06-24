@@ -32,9 +32,29 @@
     (dispatch/fire :admin-theories-download {:theories name}))
   false)
 
+(declare show)
+
+(defn on-delete-successful
+  []
+  (.fetch (aget js/PM.projects_theories js/PM.project.id) (clj->js {:async false}))
+  (show js/PM.project.id))
+
+(defn delete
+  [theories]
+  (when (js/confirm (i18n "delete_theories_confirmation1"))
+    (js/PM.ajax_delete (str js/IMPACT.wsurl "/project/" js/PM.project.id "/theories/" theories)
+                       on-delete-successful
+                       js/IMPACT.user
+                       js/IMPACT.password
+                       js/PM.on_error)))
+
+(dispatch/react-to #{:admin-theories-delete} (fn [_ msg] (delete (:theories msg))))
+
 (defn on-delete-clicked
   [event]
   (.stopPropagation event)
+  (let [theories (selectable-table/selection)]
+    (dispatch/fire :admin-theories-delete {:theories theories}))
   false)
 
 (defn get-url

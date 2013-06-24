@@ -96,6 +96,11 @@
              {:status 200}))
           {:status 200}))
 
+  (DELETE "/project/:id/theories/:theories" [id theories]
+          (project/delete-theories id theories)
+          (reset! state (init-projects-data))
+          {:status 200})
+
   (PUT "/project/:id" request
        (let [m (json/read-json (slurp (:body request)))
              id (-> request :params :id)
@@ -225,7 +230,7 @@
                                        x (unzip-metadata data)]
                                    x))})))
 
-  (DELETE "/metadata/:project/:db/:id" request
+  (DELETE"/metadata/:project/:db/:id" request
           (let [[username password] (get-username-and-password request)
                 dbname (:db (:params request))
                 dbconn (db/make-connection dbname username password)
