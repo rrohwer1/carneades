@@ -20,7 +20,7 @@
            (clj->js {:title (.val ($ ".title"))
                      :description (description/get)
                      :schemes (.select2 ($ ".schemes") "val")
-                     :policies (.val ($ ".policies"))})
+                     :policies (.select2 ($ ".policies") "val")})
            (clj->js {:success (fn [& args]
                                 (js/jQuery.address.value "admin/project"))
                      :error (fn [& args]
@@ -52,23 +52,38 @@
             :text canonical-path}))
        (json js/PM.projects)))
 
+(defn canonical-path
+  [theories]
+  (if (pos? (.indexOf theories "/"))
+      theories
+      (str js/PM.project.id "/" theories)))
+
+(defn activate-theories-selection
+  [selector project-attr]
+  (let [policies ($ selector)
+        current-policies (when-let  [policies (.get js/PM.project project-attr)]
+                           {:id (canonical-path policies)
+                            :text policies})
+        all-theories (get-all-available-theories)]
+    (log "all-theories =")
+    (log (clj->js all-theories))
+    (.select2 policies (clj->js
+                        {:data all-theories
+                         :initSelection (fn [element callback]
+                                          (when-let [found (first (filter #(= (:id %) (.val element)) all-theories))]
+                                            (callback (clj->js found))))}))
+    (when current-policies
+      (.select2 policies "val" (:id current-policies)))))
+
 (defn activate-schemes-selection
   "Activates the schemes input selection field."
   []
-  (let [schemes ($ ".schemes")
-        current-schemes {:id (str js/PM.project.id "/" (.get js/PM.project "schemes"))
-                         :text (.get js/PM.project "schemes")}
-        all-schemes (get-all-available-theories)]
-    (.select2 schemes (clj->js
-                       {:data all-schemes
-                        :initSelection (fn [element callback]
-                                         (log "all-elements =")
-                                         (log (clj->js all-schemes))
-                                         (log "element.val =")
-                                         (log (.val element))
-                                         (when-let [found (first (filter #(= (:id %) (.val element)) all-schemes))]
-                                           (callback (clj->js found))))}))
-    (.select2 schemes "val" (:id current-schemes))))
+  (activate-theories-selection ".schemes" "schemes"))
+
+(defn activate-policies-selection
+  "Activates the policies input selection field."
+  []
+  (activate-theories-selection ".policies" "policies"))
 
 (defn ^:export show
   [project]
@@ -93,4 +108,5 @@
                                        :schemes_input (:schemes properties)
                                        :policies_input (:policies properties)}))
     (description/show ".description-editor" (:description properties))
-    (activate-schemes-selection)))
+    (activate-schemes-selection)
+    (activate-policies-selection)))
