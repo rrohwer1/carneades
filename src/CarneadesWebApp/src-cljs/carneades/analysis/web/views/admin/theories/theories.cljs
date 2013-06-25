@@ -76,8 +76,8 @@
                  :link "#/admin/edit/theories/download"
                  :on on-download-clicked
                  }
-                {:text :edit
-                 :link "#/admin/edit/theories/edit"}
+                ;; {:text :edit
+                ;;  :link "#/admin/edit/theories/edit"}
                 {:text :menu_delete
                  :link "#/admin/edit/theories/delete"
                  :on on-delete-clicked}])
