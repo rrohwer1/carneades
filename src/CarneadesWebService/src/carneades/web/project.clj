@@ -31,3 +31,7 @@
 (defn get-project-theories
   [id state]
   (get-in (deref state) [:projects-data id :available-theories]))
+
+(defn get-project-documents
+  [id state]
+  (get-in (deref state) [:projects-data id :documents]))

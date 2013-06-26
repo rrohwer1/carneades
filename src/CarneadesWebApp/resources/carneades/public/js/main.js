@@ -25,7 +25,8 @@ var PM = {
     stmts: [],
     args: [],
     projects: [],
-    projects_theories: []
+    projects_theories: [],
+    projects_documents: []
 };
 
 // argument browser
@@ -80,6 +81,10 @@ PM.dispatch_url = function(sections) {
         carneades.analysis.web.views.admin.imports.show();
     } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "properties") {
         carneades.analysis.web.views.admin.properties.show(sections[3]);
+    } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "documents" && sections[5] == "upload") {
+        carneades.analysis.web.views.admin.documents.upload.show(sections[3]);
+    } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "documents") {
+        carneades.analysis.web.views.admin.documents.documents.show(sections[3]);
     } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "theories" && sections[5] == "upload") {
         carneades.analysis.web.views.admin.theories.upload.show(sections[3]);
     } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "theories") {
@@ -292,7 +297,14 @@ PM.load_project_theories = function (project) {
     project_theory.id = project.id;
     PM.projects_theories[project.id] = project_theory;
     project_theory.fetch({async: false});
-}
+};
+
+PM.load_project_documents = function (project) {
+    var project_document = new PM.ProjectDocument();
+    project_document.id = project.id;
+    PM.projects_documents[project.id] = project_document;
+    project_document.fetch({async: false});
+};
 
 PM.common_post_load = function() {
     Dropzone.autoDiscover = false;
@@ -307,6 +319,7 @@ PM.common_post_load = function() {
     PM.projects.each(
         function(project) {
             PM.load_project_theories(project);
+            PM.load_project_documents(project);
            });
 
     PM.markdown_add_hooks();
@@ -608,6 +621,7 @@ PM.load_templates = function(toolboxState) {
             'admin_properties',
             'admin_theories',
             'admin_theories_upload',
+            'admin_documents',
             'argumentgraph',
             'argument',
             'argumentlink',

@@ -46,6 +46,7 @@
             [carneades.policy_analysis.web.models.statement_poll]
             [carneades.policy_analysis.web.models.project]
             [carneades.policy_analysis.web.models.project_theory]
+            [carneades.policy_analysis.web.models.project_document]
             [carneades.policy_analysis.web.models.statement_info]
             [carneades.policy_analysis.web.models.argument_info]
             [carneades.policy_analysis.web.utils]

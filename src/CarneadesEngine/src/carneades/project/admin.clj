@@ -18,6 +18,8 @@
 
 (def theories-directory "theories")
 
+(def documents-directory "documents")
+
 (def projects-lock (Object.))
 
 (defn- project?
@@ -91,6 +93,11 @@ can be of the form \"theory\" or \"project/theory\". The former refers
         names (map (memfn getName) files)]
     names))
 
+(defn list-documents
+  "Returns a list of the documents names"
+  [project]
+  (fs/list-dir (str projects-directory file-separator project file-separator documents-directory)))
+
 (defn load-project
   "Loads the configuration of a project and its policy. Returns a map
 representing the project."
@@ -101,9 +108,11 @@ representing the project."
           policy-properties (:policies project-properties)
           policy (load-policy project project-properties)
           theories-files (list-theories-files project)
-          theories (map remove-extension theories-files)]
+          theories (map remove-extension theories-files)
+          documents (list-documents project)]
       {:properties project-properties
-       :available-theories theories})))
+       :available-theories theories
+       :documents documents})))
 
 (defn delete-project
   "Permanently delete project from the disk."
@@ -132,10 +141,20 @@ representing the project."
     (fs/copy pathname dest)))
 
 (defn delete-theories
-  "Delete the theories of the project"
+  "Delete the theories of the project."
   [project theories]
   (let [pathname (str projects-directory file-separator
                   project file-separator
                   theories-directory file-separator
                   (str theories ".clj"))]
+    (fs/delete pathname)))
+
+(defn delete-document
+  "Delete the document of the project."
+  [project document]
+  (let [pathname (str projects-directory file-separator
+                      project file-separator
+                      documents-directory file-separator
+                      document)]
+    (prn "pathname =" pathname)
     (fs/delete pathname)))

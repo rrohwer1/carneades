@@ -97,7 +97,7 @@
                 {:text :theories
                  :link (str "#/admin/edit/" project "/theories")}
                 {:text :documents
-                 :link "#/admin/edit/documents"}])
+                 :link (str "#/admin/edit/" project "/documents")}])
   (let [properties (js->clj (json js/PM.project) :keywordize-keys true)]
     (inner ($ ".content")
            (tp/get "admin_properties" {:title_input (:title properties)
