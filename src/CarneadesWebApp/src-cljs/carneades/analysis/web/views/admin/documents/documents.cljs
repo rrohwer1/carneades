@@ -55,6 +55,14 @@
   (when-let [name (selectable-table/selection)]
     (dispatch/fire :admin-documents-download {:document name})))
 
+(defn get-url
+  [project]
+  (str "admin/edit/" project "/documents"))
+
+(defn set-url
+  [project]
+  (js/jQuery.address.value (get-url project)))
+
 (defn ^:export show
   [project]
   (js/PM.load_project project)

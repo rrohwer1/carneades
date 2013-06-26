@@ -622,6 +622,7 @@ PM.load_templates = function(toolboxState) {
             'admin_theories',
             'admin_theories_upload',
             'admin_documents',
+            'admin_documents_upload',
             'argumentgraph',
             'argument',
             'argumentlink',

@@ -156,5 +156,13 @@ representing the project."
                       project file-separator
                       documents-directory file-separator
                       document)]
-    (prn "pathname =" pathname)
     (fs/delete pathname)))
+
+(defn import-document
+  "Imports a document into the project."
+  [project pathname name]
+  (let [dest (str projects-directory file-separator
+                      project file-separator
+                      documents-directory file-separator
+                      name)]
+    (fs/copy pathname dest)))

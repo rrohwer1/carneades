@@ -137,8 +137,16 @@
   (GET "/documents/:project" [project]
        {:body {:documents (get-project-documents project state)}})
 
+  (POST "/documents/:project" [project file]
+        (let [tempfile (:tempfile file)
+              filename (:filename file)]
+          (project/import-document project (.getPath tempfile) filename)
+          (reset! state (init-projects-data))
+          {:status 200}))
+
   (DELETE "/documents/:project/:doc" [project doc]
           (project/delete-document project doc)
+          (reset! state (init-projects-data))
           {:status 200})
 
   (PUT "/debate/:id" request
