@@ -220,7 +220,7 @@
          (db/with-db db2 {:body (ag-db/list-metadata)})))
 
   (GET "/metadata/:project/:db/:id" [project db id]
-       (let [db2 (db/make-connection db "guest" "")]
+       (let [db2 (db/make-connection project db "guest" "")]
          (db/with-db db2 {:body
                           (unzip-metadata
                            (ag-db/read-metadata id))})))
