@@ -49,11 +49,15 @@
     (.on "error"
          (fn [] (dispatch/fire :admin-theories-upload-error {})))))
 
+(defn get-url
+  [project]
+  (str "admin/edit/" project "/theories/upload"))
+
 (defn ^:export show
   [project]
   (js/PM.load_project project)
-  (header/show {:text :admin
-                :link (str "#/admin/" project)}
+  (header/show {:text :upload
+                :link (str "#/" (get-url project))}
                [])
   (inner ($ ".content")
          (tp/get "admin_theories_upload" {}))

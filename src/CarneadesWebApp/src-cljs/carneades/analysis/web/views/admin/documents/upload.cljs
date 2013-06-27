@@ -38,11 +38,15 @@
     (.on "error"
          (fn [] (dispatch/fire :admin-documents-upload-error {})))))
 
+(defn get-url
+  [project]
+  (str "admin/edit/" project "/documents/upload"))
+
 (defn ^:export show
   [project]
   (js/PM.load_project project)
-  (header/show {:text :admin
-                :link (str "#/admin/" project)}
+  (header/show {:text :upload
+                :link (str "#/" (get-url project))}
                [])
   (inner ($ ".content")
          (tp/get "admin_documents_upload" {}))

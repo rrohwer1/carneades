@@ -68,8 +68,8 @@
 (defn ^:export show
   [project]
   (js/PM.load_project project)
-  (header/show {:text :admin
-                :link (str "#/admin/" project)}
+  (header/show {:text :theories
+                :link (str "#/" (get-url project))}
                [{:text :upload
                  :link (str "#/admin/edit/" project "/theories/upload")}
                 {:text :download

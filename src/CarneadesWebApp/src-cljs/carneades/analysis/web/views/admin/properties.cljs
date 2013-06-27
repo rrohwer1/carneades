@@ -86,8 +86,8 @@
 (defn ^:export show
   [project]
   (js/PM.load_project project)
-  (header/show {:text :admin
-                :link "#/admin/project"}
+  (header/show {:text :properties
+                :link (str "#/" (get-url project))}
                [{:text :save
                  :link "#/admin/edit/properties/save"
                  :on on-save-properties}
