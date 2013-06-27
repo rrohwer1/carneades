@@ -124,20 +124,6 @@ PM.dispatch_facts_url = function(section) {
     }
 };
 
-PM.dispatch_sct_url = function(section) {
-    if(section == "intro") {
-        PM.display_sct_intro();
-    } else if(section == "issues") {
-        PM.display_sct_issues();
-    } else if(section == "question") {
-        PM.display_sct_question();
-    } else if(section == "summary") {
-        PM.display_sct_summary();
-    } else if(section == "comparison") {
-        PM.display_sct_comparison();
-    }
-};
-
 // ImpactToolbox = {
 
 // };
@@ -330,6 +316,7 @@ PM.common_post_load = function() {
 PM.load_project = function (id) {
     if(!_.isNil(PM.projects[id])) {
         // already loaded
+        PM.project = PM.projects[id];
         return;
     }
 
