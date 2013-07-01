@@ -10,13 +10,14 @@
         ring.middleware.session
         ring.middleware.stacktrace
         [hiccup.middleware :only (wrap-base-url)]
-        [ring.middleware.format-response :only [wrap-restful-response]])
+        [ring.middleware.format-response :only [wrap-restful-response]]
+        [carneades.web.license-analysis.routes.service :only [license-analysis-routes]])
   (:require [compojure.route :as route]
             [compojure.handler :as handler]))
 
 (defroutes carneades-webapp-routes
   (context "/carneades" [] policy-analysis-routes)
-  ;; TODO: (context "/carneades/license-analysis" [] license-analysis-routes)
+  (context "/carneadesws/license-analysis" [] (wrap-restful-response license-analysis-routes))
   (context "/carneadesws" [] (wrap-restful-response carneades-web-service-routes)))
 
 (def carneades-webapp

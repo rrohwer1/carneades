@@ -126,7 +126,7 @@
       (prn "[askengine] argument construction is finished!")
       (on-construction-finished session))))
 
-(defn- get-ag-or-next-question
+(defn get-ag-or-next-question
   [session]
   (prn "[get-ag-or-next-question]")
   (cond (:ag session) (on-questions-answered session)
