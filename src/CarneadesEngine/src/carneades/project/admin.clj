@@ -149,20 +149,40 @@ representing the project."
                   (str theories ".clj"))]
     (fs/delete pathname)))
 
-(defn delete-document
-  "Delete the document of the project."
+(defn document-path
+  "Returns the path of a project's document."
   [project document]
-  (let [pathname (str projects-directory file-separator
-                      project file-separator
-                      documents-directory file-separator
-                      document)]
+  (str projects-directory file-separator
+       project file-separator
+       documents-directory file-separator
+       document))
+
+(defn delete-document
+  "Deletes the document of the project."
+  [project document]
+  (let [pathname (document-path project document)]
     (fs/delete pathname)))
 
 (defn import-document
   "Imports a document into the project."
   [project pathname name]
-  (let [dest (str projects-directory file-separator
-                      project file-separator
-                      documents-directory file-separator
-                      name)]
+  (let [dest (document-path project name)]
     (fs/copy pathname dest)))
+
+(defn create-project
+  "Creates a new project in the projects' directory"
+  [project]
+  (let [docpath (str projects-directory file-separator
+                     project file-separator
+                     documents-directory)
+        theoriespath (str projects-directory file-separator
+                          project file-separator
+                          theories-directory)]
+    (fs/mkdirs docpath)
+    (fs/mkdir theoriespath)))
+
+(defn delete-project
+  "Delete project from project's directory."
+  [project]
+  (let [path (str projects-directory file-separator project)]
+    (fs/delete-dir path)))
