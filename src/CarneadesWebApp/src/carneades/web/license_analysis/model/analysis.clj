@@ -55,12 +55,12 @@ Returns a set of questions for the frontend."
 
 (defn debug-query
   "Returns the result of query in the triplestore"
-  [query limit]
-  (let [conn (triplestore/make-conn markos-triplestore-endpoint
-                                    markos-repo-name
+  [endpoint repo-name query limit]
+  (let [conn (triplestore/make-conn endpoint
+                                    repo-name
                                     markos-namespaces)]
     (binding [sparql/*select-limit* limit]
-      {:result (pp/write (sparql/query (:kb conn) (list (safe-read-string query)))
+      {:result (pp/write (sparql/query (:kb conn) (safe-read-string query))
                          :stream nil)})))
 
 ;; http://localhost:8080/carneadesws/license-analysis/analyse?entity=http://markosproject.eu/android&project=copyright&theories=copyright_policies

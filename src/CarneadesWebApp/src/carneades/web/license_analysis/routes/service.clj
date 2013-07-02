@@ -14,5 +14,7 @@
 
   ;; ex input: {"query": "(?/x ?/y ?/z)", "limit": 42}
   (POST "/debug/query" {{query :query
-                         limit :limit} :params}
-        {:body (analysis/debug-query query limit)}))
+                         limit :limit
+                         endpoint :endpoint
+                         repo-name :repo-name} :params}
+        {:body (analysis/debug-query endpoint repo-name query limit)}))

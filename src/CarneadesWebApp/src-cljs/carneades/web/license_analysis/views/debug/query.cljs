@@ -39,10 +39,14 @@
 (defn on-query-submit
   []
   (let [query (.trim (.val ($ ".sparql-query")))
-        limit (js/parseInt (.val ($ ".limit")) 10)]
+        limit (js/parseInt (.val ($ ".limit")) 10)
+        endpoint (.val ($ ".endpoint"))
+        repo-name (.val ($ ".repo-name"))]
     (.val ($ ".result") "Waiting for results...")
     (dispatch/fire :license-analysis-query-submit {:query query
-                                                   :limit limit})))
+                                                   :limit limit
+                                                   :endpoint endpoint
+                                                   :repo-name repo-name})))
 
 (defn- attach-listeners
   []
