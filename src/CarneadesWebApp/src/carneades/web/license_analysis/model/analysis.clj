@@ -36,6 +36,9 @@
   "Begins an analysis of a given software entity. The theories inside project is used.
 Returns a set of questions for the frontend."
   [project theories entity]
+  (prn "project=" project)
+  (prn "theories=" theories)
+  (prn "entity=" entity)
   (start-engine project theories entity))
 
 ;; http://localhost:8080/carneadesws/license-analysis/analyse?entity=http://markosproject.eu/android&project=copyright&theories=copyright_policies

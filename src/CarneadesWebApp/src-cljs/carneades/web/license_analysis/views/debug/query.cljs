@@ -1,7 +1,7 @@
 ;;; Copyright (c) 2013 Fraunhofer Gesellschaft
 ;;; Licensed under the EUPL V.1.1
 
-(ns carneades.analysis.web.views.home
+(ns carneades.web.license-analysis.views.debug.query
   (:use [jayq.core :only [$ inner attr append]]
         [carneades.analysis.web.views.core :only [json]])
   (:require [carneades.analysis.web.template :as tp]
@@ -11,4 +11,4 @@
   [project]
   (header/show {:text :home
                 :link "#/home"})
-  (inner ($ ".content") (tp/get "home" {:projects (json js/PM.projects)})))
+  (inner ($ ".content") "Debug"))
