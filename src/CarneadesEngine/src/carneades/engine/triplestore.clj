@@ -3,7 +3,7 @@
 
 (ns ^{:doc "Generation of arguments from a triplestore."}
   carneades.engine.triplestore
-  (:use [clojure.pprint :only [pprint]])
+  (:use [clojure.pprint :only [pprint write]])
   (:require [clojure.walk :as w]
             edu.ucdenver.ccp.kr.sesame.kb
             [edu.ucdenver.ccp.kr.kb :as kb]
@@ -29,29 +29,43 @@
                            ("dbpedia2" "http://dbpedia.org/property/"))))
 ;;;; scratch
 
+
 (comment
-  (defn sesame-remote-test-kb []
-    (kb/open
-     (edu.ucdenver.ccp.kr.sesame.kb/new-sesame-server
-      :server "http://markos.man.poznan.pl/openrdf-sesame"
-      :repo-name "markos_log4j")))
-  (def test-kb (add-namespaces (sesame-remote-test-kb)))
-  (clojure.pprint/pprint
-   (binding [sparql/*select-limit* 500]
-     (sparql/query test-kb '((?/x ?/y ?/z)))))
+  ;; Graphical Web Interface to query/manage:
+  ;; http://markos.man.poznan.pl/openrdf-workbench
+
+  (def markos-conn (make-conn "http://markos.man.poznan.pl/openrdf-sesame"
+                               "markos_log4j"
+                               [["top" "http://www.markosproject.eu/ontologies/top#"]
+                                ["reif" "http://www.markosproject.eu/ontologies/reification#"]
+                                ["soft" "http://www.markosproject.eu/ontologies/software#"]
+                                ["lic" "http://www.markosproject.eu/ontologies/licenses#"]
+                                ["kb" "http://markosproject.eu/kb/"]
+                                ["softproject" "http://markosproject.eu/kb/SoftwareProject"]]))
+  ;; Compile file with C-c C-k
+  ;; then execute this sexpr by placing cursor at the end of the sexp
+  ;; and type C-x C-e
+  ;; outputs goes in to the *nrepl* buffer
+  (pprint
+   (binding [sparql/*select-limit* 100]
+     (sparql/query (:kb markos-conn) '((?/x soft/name ?/z)))))
+
+  ;; example of returned value:
+  ;; {?/x http://markosproject.eu/kb/SoftwareProject/1,
+  ;; ?/y soft/name,
+  ;; ?/z "Apache log4j"}
 
   )
 
-(comment
-  (defn sesame-remote-test-kb []
-    (kb/open
-     (edu.ucdenver.ccp.kr.sesame.kb/new-sesame-server
-      :server "http://dbpedia.org/sparql"
-      :repo-name "")))
-  (def test-kb (add-namespaces (sesame-remote-test-kb)))
-  (pprint (binding [sparql/*select-limit* 100] (sparql/query test-kb '((?/subject dbpedia2/starring dbpedia/Tom_Cruise) (?/subject dbpedia-owl/releaseDate ?/released)  (<= ?/released ("2002-01-01" xsd/date))))))
-  )
-
+;; (comment
+;;   (defn sesame-remote-test-kb []
+;;     (kb/open
+;;      (edu.ucdenver.ccp.kr.sesame.kb/new-sesame-server
+;;       :server "http://dbpedia.org/sparql"
+;;       :repo-name "")))
+;;   (def test-kb (add-namespaces (sesame-remote-test-kb)))
+;;   (pprint (binding [sparql/*select-limit* 100] (sparql/query test-kb '((?/subject dbpedia2/starring dbpedia/Tom_Cruise) (?/subject dbpedia-owl/releaseDate ?/released)  (<= ?/released ("2002-01-01" xsd/date))))))
+;;   )
 
 ;; (pprint (binding [sparql/*select-limit* 50] (sparql/query-count test-kb '((?/x rdf/type dbpedia-owl/Philosopher)))))
 
