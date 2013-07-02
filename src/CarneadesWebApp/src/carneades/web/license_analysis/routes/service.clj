@@ -11,9 +11,8 @@
                     theories :theories
                     entity :entity} :params}
        {:body (analysis/analyse project theories entity)})
+
   ;; ex input: {"query": "(?/x ?/y ?/z)", "limit": 42}
   (POST "/debug/query" {{query :query
                          limit :limit} :params}
-        (prn "limit=" limit)
-        (prn "query=" query)
-        {:status 200}))
+        {:body (analysis/debug-query query limit)}))

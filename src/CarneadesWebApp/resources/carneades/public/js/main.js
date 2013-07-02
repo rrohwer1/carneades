@@ -11,6 +11,7 @@ var IMPACT = {
     question: "Q12",
     lang: "en",
     wsurl: "/carneadesws",
+    license_analysis_wsurl: "/carneadesws/license-analysis",
     argumentbrowser_url: "/argumentbrowser",
     simulation_url: "/carneades/questions",
     debate_db: "main",

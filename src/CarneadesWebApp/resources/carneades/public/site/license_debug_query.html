@@ -1,0 +1,38 @@
+<div class="query">
+
+  <div class="query-content">
+    <div class="sparql-namespaces">
+      Available namespaces:
+      <pre>
+        "top" "http://www.markosproject.eu/ontologies/top#"
+        "reif" "http://www.markosproject.eu/ontologies/reification#"
+        "soft" "http://www.markosproject.eu/ontologies/software#"
+        "lic" "http://www.markosproject.eu/ontologies/licenses#"
+        "kb" "http://markosproject.eu/kb/"
+      </pre>
+    </div>
+    <div>
+      Limit:
+      <input type="text" class="limit" value="100"/>
+    </div>
+
+    <div style="margin-top: 10px">
+      Query:
+      <div>
+        <textarea class="sparql-query" style="min-width:600px; min-height: 300px">
+          (?/x soft/name ?/z)
+      </textarea>
+      </div>
+    </div>
+    <button class="submit" style="min-width: 600px; min-height: 50px">Submit</button>
+  </div>
+
+  <div class="query-result" style="margin-top:20px">
+    Result:
+    <div>
+      <textarea class="result" style="min-width:600px; min-height: 300px">
+      </textarea>
+    <div>
+  </div>
+
+</div>
