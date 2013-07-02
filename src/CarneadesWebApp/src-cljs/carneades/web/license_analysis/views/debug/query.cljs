@@ -11,4 +11,5 @@
   [project]
   (header/show {:text :home
                 :link "#/home"})
-  (inner ($ ".content") "Debug"))
+  (inner ($ ".content") (tp/get "license_debug_query"
+                                {})))

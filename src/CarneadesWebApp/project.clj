@@ -9,7 +9,7 @@
                  [hiccup "0.3.6"]
                  [enlive "1.0.0"]
                  [ring/ring-servlet "1.0.1"]
-                 [ring-middleware-format "0.2.3"]
+                 [ring-middleware-format "0.3.0"]
                  [carneades-engine "2.0.0-SNAPSHOT"]
                  [carneades-web-service "1.0.0-SNAPSHOT"]
                  [org.clojars.pallix/mygengo "1.0.0"]
@@ -45,7 +45,7 @@
                            ;; to get :advanced mode working... There is a branch
                            ;; in github for this work.
                            :optimizations :simple}}],
-              
+
               :test-commands
               {;; lein cljsbuild test questions
                ;; to fix:
@@ -53,7 +53,7 @@
                ;;              "--dir=resources/carneades/private/html/"
                ;;              "--url=test-questions.html"
                ;;              "casper/run-questions-test.js"]
-               
+
                ;; lein cljsbuild test scenario
                "scenario" ["./scripts/run-casper-test.sh"]},
               :repl-listen-port 9000,
@@ -88,4 +88,3 @@
              :war {:ring {:handler carneades.analysis.web.routes-war/impact-app}
                    :sub ["../CarneadesWebService"]}}
   )
-

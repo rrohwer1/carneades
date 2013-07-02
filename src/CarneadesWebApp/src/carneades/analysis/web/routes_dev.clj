@@ -11,6 +11,8 @@
         ring.middleware.stacktrace
         [hiccup.middleware :only (wrap-base-url)]
         [ring.middleware.format-response :only [wrap-restful-response]]
+        [ring.middleware.format-params :only [wrap-json-params]]
+        [ring.middleware.keyword-params :only [wrap-keyword-params]]
         [carneades.web.license-analysis.routes.service :only [license-analysis-routes]])
   (:require [compojure.route :as route]
             [compojure.handler :as handler]))
@@ -21,7 +23,10 @@
   (context "/carneadesws" [] (wrap-restful-response carneades-web-service-routes)))
 
 (def carneades-webapp
-  (-> (handler/site carneades-webapp-routes)
+  (-> carneades-webapp-routes
+      (wrap-keyword-params)
+      (wrap-json-params)
+      (handler/site)
       (wrap-base-url)))
 
 ;; (def impact-server nil)

@@ -3,11 +3,17 @@
 
 (ns ^{:doc "HTTP routes definitions for the license-analysis REST service."}
   carneades.web.license-analysis.routes.service
-  (:use [compojure.core :only [defroutes GET]])
+  (:use [compojure.core :only [defroutes GET POST]])
   (:require [carneades.web.license-analysis.model.analysis :as analysis]))
 
 (defroutes license-analysis-routes
   (GET "/analyse" {{project :project
                     theories :theories
                     entity :entity} :params}
-       {:body (analysis/analyse project theories entity)}))
+       {:body (analysis/analyse project theories entity)})
+  ;; ex input: {"query": "(?/x ?/y ?/z)", "limit": 42}
+  (POST "/debug/query" {{query :query
+                         limit :limit} :params}
+        (prn "limit=" limit)
+        (prn "query=" query)
+        {:status 200}))
