@@ -40,8 +40,7 @@
                                 ["reif" "http://www.markosproject.eu/ontologies/reification#"]
                                 ["soft" "http://www.markosproject.eu/ontologies/software#"]
                                 ["lic" "http://www.markosproject.eu/ontologies/licenses#"]
-                                ["kb" "http://markosproject.eu/kb/"]
-                                ["softproject" "http://markosproject.eu/kb/SoftwareProject"]]))
+                                ["kb" "http://markosproject.eu/kb/"]]))
   ;; Compile file with C-c C-k
   ;; then execute this sexpr by placing cursor at the end of the sexp
   ;; and type C-x C-e
