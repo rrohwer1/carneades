@@ -76,47 +76,77 @@ PM.dispatch_url = function(sections) {
         carneades.analysis.web.views.home.show();
     } else if(sections[1] == "project") {
         carneades.analysis.web.views.project.show(sections[2]);
-    } else if(sections[1] == "admin" && sections[2] == "project") {
+    } else if(sections[1] == "admin" &&
+              sections[2] == "project") {
         carneades.analysis.web.views.admin.project.show();
-    } else if(sections[1] == "admin" && sections[2] == "import") {
+    } else if(sections[1] == "admin" &&
+              sections[2] == "import") {
         carneades.analysis.web.views.admin.imports.show();
-    } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "properties") {
+    } else if(sections[1] == "admin" &&
+              sections[2] == "edit" &&
+              sections[4] == "properties") {
         carneades.analysis.web.views.admin.properties.show(sections[3]);
-    } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "documents" && sections[5] == "upload") {
+    } else if(sections[1] == "admin" &&
+              sections[2] == "edit" &&
+              sections[4] == "documents" &&
+              sections[5] == "upload") {
         carneades.analysis.web.views.admin.documents.upload.show(sections[3]);
-    } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "documents") {
+    } else if(sections[1] == "admin" &&
+              sections[2] == "edit" &&
+              sections[4] == "documents") {
         carneades.analysis.web.views.admin.documents.documents.show(sections[3]);
-    } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "theories" && sections[5] == "upload") {
+    } else if(sections[1] == "admin" &&
+              sections[2] == "edit" &&
+              sections[4] == "theories" &&
+              sections[5] == "upload") {
         carneades.analysis.web.views.admin.theories.upload.show(sections[3]);
-    } else if(sections[1] == "admin" && sections[2] == "edit" && sections[4] == "theories") {
+    } else if(sections[1] == "admin" &&
+              sections[2] == "edit" &&
+              sections[4] == "theories") {
         carneades.analysis.web.views.admin.theories.theories.show(sections[3]);
     } else if(sections[1] == "arguments") {
         PM.display_arguments(sections[3], sections[4], sections[2], sections[5]);
-    } else if(sections[1] == "tour" && sections[2] == "intro") {
+    } else if(sections[1] == "tour" &&
+              sections[2] == "intro") {
         PM.display_sct_intro(sections[3]);
-    } else if(sections[1] == "tour" && sections[2] == "issues") {
+    } else if(sections[1] == "tour" &&
+              sections[2] == "issues") {
         PM.display_sct_issues();
-    } else if(sections[1] == "tour" && sections[2] == "question") {
+    } else if(sections[1] == "tour" &&
+              sections[2] == "question") {
         PM.display_sct_question();
-    } else if(sections[1] == "tour" && sections[2] == "summary") {
+    } else if(sections[1] == "tour" &&
+              sections[2] == "summary") {
         PM.display_sct_summary();
-    } else if(sections[1] == "tour" && sections[2] == "comparison") {
+    } else if(sections[1] == "tour" &&
+              sections[2] == "comparison") {
         PM.display_sct_comparison();
-    } else if(sections[1] == "policies" && sections[2] == "introduction") {
+    } else if(sections[1] == "policies" &&
+              sections[2] == "introduction") {
         PM.display_introduction(sections[3]);
-    } else if(sections[1] == "policies" && sections[2] == "issues") {
+    } else if(sections[1] == "policies" &&
+              sections[2] == "issues") {
         PM.display_issues(sections[3]);
-    } else if (sections[1] == "policies" && sections[2] == "facts" && sections[3] == "modify") {
+    } else if (sections[1] == "policies" &&
+               sections[2] == "facts" &&
+               sections[3] == "modify") {
         carneades.policy_analysis.web.views.pmt.submitted_facts.display();
-    } else if(sections[1] == "policies" && sections[2] == "facts") {
+    } else if(sections[1] == "policies" &&
+              sections[2] == "facts") {
         PM.display_facts(sections[3]);
-    } else if(sections[1] == "policies" && sections[2] == "policies") {
+    } else if(sections[1] == "policies" &&
+              sections[2] == "policies") {
         PM.display_policies(sections[3], undefined, undefined);
-    } else if(sections[1] == "policies" && sections[2] == "report") {
+    } else if(sections[1] == "policies" &&
+              sections[2] == "report") {
         carneades.policy_analysis.web.views.pmt.report.display(sections[3]);
-    } else if(sections[1] = "license-analysis" && sections[2] == "introduction") {
-        carneades.web.license_analysis.views.introduction.show(sections[3]);
-    } else if(sections[1] = "license-analysis" && sections[2] == "debug" && sections[3] == "query") {
+    } else if(sections[1] = "license-analysis" &&
+              sections[2] == "debug" &&
+              sections[3] == "introduction") {
+        carneades.web.license_analysis.views.debug.introduction.show(sections[4]);
+    } else if(sections[1] = "license-analysis" &&
+              sections[2] == "debug" &&
+              sections[3] == "query") {
         carneades.web.license_analysis.views.debug.query.show(sections[4]);
     }
 };
@@ -616,7 +646,7 @@ PM.load_templates = function(toolboxState) {
             'admin_documents',
             'admin_documents_upload',
             'license_debug_query',
-            'license_introduction',
+            'license_debug_introduction',
             'argumentgraph',
             'argument',
             'argumentlink',

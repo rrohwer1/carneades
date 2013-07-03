@@ -26,9 +26,8 @@
                         ["kb" "http://markosproject.eu/kb/"]])
 
 (defn- start-engine
-  [project theories entity]
-  (let [query '(may-publish the-person the-work) ;; TODO, instanciate the query from the theories
-        loaded-theories (project/load-theory project theories)
+  [project theories entity query]
+  (let [loaded-theories (project/load-theory project theories)
         [argument-from-user-generator questions send-answer]
         (ask/make-argument-from-user-generator (fn [p] (questions/askable? loaded-theories p)))
         ag (ag/make-argument-graph)
@@ -53,11 +52,8 @@
 (defn analyse
   "Begins an analysis of a given software entity. The theories inside project is used.
 Returns a set of questions for the frontend."
-  [project theories entity]
-  (prn "project=" project)
-  (prn "theories=" theories)
-  (prn "entity=" entity)
-  (start-engine project theories entity))
+  [project theories entity query]
+  (start-engine project theories entity query))
 
 (defn debug-query
   "Returns the result of query in the triplestore"
