@@ -16,7 +16,7 @@
   "Shows the facts of the ag to the user for modification."
   [questions]
   (inner ($ "#pm") (template/get "submitted_facts" {}))
-  (show-facts questions))
+  (show-facts questions {:wsurl js/IMPACT.simulation_url}))
 
 (defn ^:export display
   "Displays the facts submitted by the user for verification and correction."
