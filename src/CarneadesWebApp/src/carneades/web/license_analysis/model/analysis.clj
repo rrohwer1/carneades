@@ -17,9 +17,17 @@
             [carneades.engine.triplestore :as triplestore]
             [edu.ucdenver.ccp.kr.sparql :as sparql]))
 
+(def markos-triplestore-endpoint "http://markos.man.poznan.pl/openrdf-sesame")
+(def markos-repo-name "markos_test_sp2")
+(def markos-namespaces [["top" "http://www.markosproject.eu/ontologies/top#"]
+                        ["reif" "http://www.markosproject.eu/ontologies/reification#"]
+                        ["soft" "http://www.markosproject.eu/ontologies/software#"]
+                        ["lic" "http://www.markosproject.eu/ontologies/licenses#"]
+                        ["kb" "http://markosproject.eu/kb/"]])
+
 (defn- start-engine
   [project theories entity]
-  (let [query '(?x a b) ;; TODO, instanciate the query from the theories
+  (let [query '(may-publish the-person the-work) ;; TODO, instanciate the query from the theories
         loaded-theories (project/load-theory project theories)
         [argument-from-user-generator questions send-answer]
         (ask/make-argument-from-user-generator (fn [p] (questions/askable? loaded-theories p)))
@@ -28,21 +36,17 @@
                                   (list (theory/generate-arguments-from-theory loaded-theories)
                                         argument-from-user-generator))
         future-ag (future (shell/argue engine query))
-        analysis {:future-ag future-ag
+        analysis {:ag nil
+                  :lang :en
+                  :query query
+                  :policies loaded-theories
+                  :future-ag future-ag
                   :questions questions
                   :send-answer send-answer
                   :dialog (dialog/make-dialog)
                   :last-id 0}
         analysis (policy/get-ag-or-next-question analysis)]
     (select-keys analysis [:dialog :last-id])))
-
-(def markos-triplestore-endpoint "http://markos.man.poznan.pl/openrdf-sesame")
-(def markos-repo-name "markos_test_sp2")
-(def markos-namespaces [["top" "http://www.markosproject.eu/ontologies/top#"]
-                        ["reif" "http://www.markosproject.eu/ontologies/reification#"]
-                        ["soft" "http://www.markosproject.eu/ontologies/software#"]
-                        ["lic" "http://www.markosproject.eu/ontologies/licenses#"]
-                        ["kb" "http://markosproject.eu/kb/"]])
 
 ;; http://localhost:8080/carneadesws/license-analysis/analyse?entity=http://markosproject.eu/android&project=copyright&theories=copyright_policies
 
