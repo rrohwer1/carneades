@@ -148,6 +148,10 @@ PM.dispatch_url = function(sections) {
               sections[2] == "debug" &&
               sections[3] == "query") {
         carneades.web.license_analysis.views.debug.query.show(sections[4]);
+    } else if(sections[1] = "license-analysis" &&
+              sections[2] == "debug" &&
+              sections[3] == "facts") {
+        carneades.web.license_analysis.views.debug.facts.show(sections[4]);
     }
 };
 
@@ -647,6 +651,7 @@ PM.load_templates = function(toolboxState) {
             'admin_documents_upload',
             'license_debug_query',
             'license_debug_introduction',
+            'license_debug_facts',
             'argumentgraph',
             'argument',
             'argumentlink',
