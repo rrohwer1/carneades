@@ -616,6 +616,7 @@ PM.load_templates = function(toolboxState) {
             'admin_documents',
             'admin_documents_upload',
             'license_debug_query',
+            'license_introduction',
             'argumentgraph',
             'argument',
             'argumentlink',

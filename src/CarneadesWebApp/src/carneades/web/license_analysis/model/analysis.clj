@@ -44,6 +44,8 @@
                         ["lic" "http://www.markosproject.eu/ontologies/licenses#"]
                         ["kb" "http://markosproject.eu/kb/"]])
 
+;; http://localhost:8080/carneadesws/license-analysis/analyse?entity=http://markosproject.eu/android&project=copyright&theories=copyright_policies
+
 (defn analyse
   "Begins an analysis of a given software entity. The theories inside project is used.
 Returns a set of questions for the frontend."
@@ -62,5 +64,3 @@ Returns a set of questions for the frontend."
     (binding [sparql/*select-limit* limit]
       {:result (pp/write (sparql/query (:kb conn) (safe-read-string query))
                          :stream nil)})))
-
-;; http://localhost:8080/carneadesws/license-analysis/analyse?entity=http://markosproject.eu/android&project=copyright&theories=copyright_policies

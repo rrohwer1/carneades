@@ -58,6 +58,8 @@
 (defroutes carneades-web-service-routes
 
   ;; Projects
+  (GET "/debug/reload-projects" []
+       (reset! state (init-projects-data)))
 
   (GET "/project" []
        {:body
