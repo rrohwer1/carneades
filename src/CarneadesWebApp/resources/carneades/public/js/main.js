@@ -353,6 +353,8 @@ PM.common_post_load = function() {
 
 // Loads the arguments, statements, schemes and policies of a project
 PM.load_project = function (id) {
+    IMPACT.project = id;
+
     if(!_.isNil(PM.projects[id])) {
         // already loaded
         PM.project = PM.projects[id];

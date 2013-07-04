@@ -3,7 +3,8 @@
 
 (ns ^{:doc "HTTP routes definitions for the license-analysis REST service."}
   carneades.web.license-analysis.routes.service
-  (:use [compojure.core :only [defroutes GET POST]]
+  (:use [clojure.pprint :as pprint]
+        [compojure.core :only [defroutes GET POST]]
         [carneades.engine.utils :only [safe-read-string]])
   (:require [carneades.web.license-analysis.model.analysis :as analysis]))
 
@@ -14,6 +15,10 @@
                      query :query} :params}
         (let [query (safe-read-string query)]
           {:body (analysis/analyse project theories entity query)}))
+
+  (POST "/send-answers" {{answers :answers
+                          uuid :uuid} :params}
+        {:body (analysis/process-answers answers uuid)})
 
   (POST "/debug/query" {{query :query
                          limit :limit

@@ -456,7 +456,8 @@ Returns the answers indexed by question's id."
       (log (clj->js answers))
       (js/PM.busy_cursor_on)
       (js/PM.ajax_post (-> msg :ctx :wsurl)
-                       (clj->js {:answers answers})
+                       (clj->js {:answers answers
+                                 :uuid (-> msg :ctx :uuid)})
                        (fn [data]
                          (js/PM.busy_cursor_off)
                          (show-questions-or-ag (:ctx msg) data))
@@ -519,14 +520,18 @@ Returns the answers indexed by question's id."
 all questions have been answered."
   [ctx data]
   (if-let [questions-list (.-questions data)]
-    (show-questions questions-list ctx)
+    (show-questions questions-list (assoc ctx :uuid (.-uuid data)))
     (show-ag (.-db data))))
+
+(defn init-listeners
+  []
+  (swap! questions assoc :submit-listener send-answers))
 
 (defn ^:export init-show-questions
   "Initialize the questions and begins the process of showing them."
   [jsctx]
   (let [ctx (js->clj jsctx :keywordize-keys true)]
-    (swap! questions assoc :submit-listener send-answers)
+    (init-listeners)
     (js/PM.ajax_post (:wsurl ctx)
                      (clj->js {:request {:question js/IMPACT.question
                                          :project (.toJSON js/PM.project)}})

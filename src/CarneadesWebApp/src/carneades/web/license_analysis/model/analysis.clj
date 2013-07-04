@@ -4,7 +4,8 @@
 (ns ^{:doc ""}
   carneades.web.license-analysis.model.analysis
   (:use [clojure.tools.logging :only (info debug error)]
-        [carneades.engine.utils :only [safe-read-string]])
+        [carneades.engine.utils :only [safe-read-string]]
+        [carneades.engine.dialog :only [add-answers]])
   (:require [clojure.pprint :as pp]
             [carneades.engine.shell :as shell]
             [carneades.engine.scheme :as theory]
@@ -15,7 +16,9 @@
             [carneades.policy-analysis.web.logic.askengine :as policy]
             [carneades.policy-analysis.web.logic.questions :as questions]
             [carneades.engine.triplestore :as triplestore]
-            [edu.ucdenver.ccp.kr.sparql :as sparql]))
+            [carneades.engine.uuid :as uuid]
+            [edu.ucdenver.ccp.kr.sparql :as sparql]
+            [carneades.policy-analysis.web.controllers.reconstruction :as recons]))
 
 (def markos-triplestore-endpoint "http://markos.man.poznan.pl/openrdf-sesame")
 (def markos-repo-name "markos_test_sp2")
@@ -25,6 +28,24 @@
                         ["lic" "http://www.markosproject.eu/ontologies/licenses#"]
                         ["kb" "http://markosproject.eu/kb/"]])
 
+(defn initial-state
+  []
+  {:analyses {}})
+
+(def state (atom (initial-state)))
+
+(defn- index-analysis
+  [state analysis]
+  (assoc-in state [:analyses (:uuid analysis)] analysis))
+
+(defn build-response
+  [analysis]
+  (if (:all-questions-answered analysis)
+    {:db (:db analysis)
+     :uuid (:uuid analysis)}
+    {:questions (:last-questions analysis)
+     :uuid (:uuid analysis)}))
+
 (defn- start-engine
   [project theories entity query]
   (let [loaded-theories (project/load-theory project theories)
@@ -32,10 +53,13 @@
         (ask/make-argument-from-user-generator (fn [p] (questions/askable? loaded-theories p)))
         ag (ag/make-argument-graph)
         engine (shell/make-engine ag 500 #{}
+                                  ;; TODO: add triplestore generator
                                   (list (theory/generate-arguments-from-theory loaded-theories)
                                         argument-from-user-generator))
         future-ag (future (shell/argue engine query))
         analysis {:ag nil
+                  :project project
+                  :uuid (symbol (uuid/make-uuid-str))
                   :lang :en
                   :query query
                   :policies loaded-theories
@@ -45,15 +69,31 @@
                   :dialog (dialog/make-dialog)
                   :last-id 0}
         analysis (policy/get-ag-or-next-question analysis)]
-    (select-keys analysis [:dialog :last-id])))
-
-;; http://localhost:8080/carneadesws/license-analysis/analyse?entity=http://markosproject.eu/android&project=copyright&theories=copyright_policies
+    (swap! state index-analysis analysis)
+    (reset! debug-analysis analysis)
+    (build-response analysis)))
 
 (defn analyse
   "Begins an analysis of a given software entity. The theories inside project is used.
 Returns a set of questions for the frontend."
   [project theories entity query]
   (start-engine project theories entity query))
+
+(defn process-answers
+  "Process the answers send by the user and returns new questions or an ag."
+  [answers uuid]
+  (prn "process answers...")
+  (when-let [analysis (get-in @state [:analyses (symbol uuid)])]
+    (let [{:keys [policies dialog]} analysis
+          questions-to-answers (recons/reconstruct-answers answers
+                                                           dialog
+                                                           policies)
+          analysis (update-in analysis [:dialog] add-answers questions-to-answers)
+          ;; _ (prn "analysis after update")
+          ;; _ (pp/pprint (:questions analysis))
+          analysis (policy/send-answers-to-engine analysis)]
+      (swap! state index-analysis analysis)
+      (build-response analysis))))
 
 (defn debug-query
   "Returns the result of query in the triplestore"

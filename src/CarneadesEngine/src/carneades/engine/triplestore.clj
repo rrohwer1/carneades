@@ -98,6 +98,7 @@
 the goal exists and builds a list containing one response with an
 argument if is the case."
   [kbconn goal subs]
+  ;; TODO: invert predicate and subject
   (if (sparql/ask (:kb kbconn) [goal])
     (let [arg (argument/make-argument :conclusion goal
                                       :scheme (str "triplestore:" (:host kbconn))
@@ -148,6 +149,7 @@ Do nothing if v is not a variable."
   construct one argument for each binding."
   [kbconn goal subs]
   (let [query (variables->sparqlvariables goal)
+        ;; TODO: invert predicate and subject
         bindings (sparql/query (:kb kbconn) [query])]
     (map #(make-response-from-binding kbconn goal subs %) bindings)))
 

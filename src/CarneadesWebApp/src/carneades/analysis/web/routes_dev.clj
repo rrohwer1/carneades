@@ -13,6 +13,7 @@
         [ring.middleware.format-response :only [wrap-restful-response]]
         [ring.middleware.format-params :only [wrap-json-params]]
         [ring.middleware.keyword-params :only [wrap-keyword-params]]
+        [ring.middleware.stacktrace :only [wrap-stacktrace]]
         [carneades.web.license-analysis.routes.service :only [license-analysis-routes]])
   (:require [compojure.route :as route]
             [compojure.handler :as handler]))
@@ -27,7 +28,8 @@
       (wrap-keyword-params)
       (wrap-json-params)
       (handler/site)
-      (wrap-base-url)))
+      (wrap-base-url)
+      (wrap-stacktrace)))
 
 ;; (def impact-server nil)
 ;; (.start impact-server)

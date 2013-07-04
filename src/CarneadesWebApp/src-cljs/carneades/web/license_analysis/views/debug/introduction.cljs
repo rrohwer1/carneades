@@ -7,18 +7,19 @@
         [carneades.analysis.web.views.core :only [json]])
   (:require [carneades.analysis.web.template :as tp]
             [carneades.analysis.web.views.header :as header]
-            [carneades.analysis.web.dispatch :as dispatch]))
+            [carneades.analysis.web.dispatch :as dispatch]
+            [carneades.web.license-analysis.views.debug.facts :as facts]))
 
 (defn start-dialog
   [msg]
+  (js/PM.load_project (:project msg))
   (js/PM.ajax_post (str js/IMPACT.license_analysis_wsurl "/analyse")
                    (clj->js msg)
                    (fn [data]
                      (js/PM.busy_cursor_off)
                      (log "start-dialog, received question")
                      (log data)
-                     ;; (show-questions-or-ag data)
-                     )
+                     (facts/show data))
                    js/IMPACT.user
                    js/IMPACT.password
                    js/PM.on_error))
