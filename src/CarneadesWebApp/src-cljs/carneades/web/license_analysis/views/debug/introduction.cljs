@@ -13,7 +13,7 @@
 (defn start-dialog
   [msg]
   (js/PM.load_project (:project msg))
-  (js/PM.ajax_post (str js/IMPACT.license_analysis_wsurl "/analyse")
+  (js/PM.ajax_post (str js/IMPACT.license_analysis_wsurl "/debug/analyse")
                    (clj->js msg)
                    (fn [data]
                      (js/PM.busy_cursor_off)
@@ -49,11 +49,15 @@
   []
   (let [project (.val ($ ".project"))
         query (.val ($ ".query"))
-        theories (.val ($ ".theories"))]
+        theories (.val ($ ".theories"))
+        repo-name (.val ($ ".repo-name"))
+        endpoint (.val ($ ".endpoint"))]
     (dispatch/fire :license-analysis-start-dialog {:query query
                                                    :project project
                                                    :entity ""
-                                                   :theories theories})))
+                                                   :theories theories
+                                                   :endpoint endpoint
+                                                   :repo-name repo-name})))
 
 (defn attach-listeners
   []

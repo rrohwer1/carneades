@@ -18,7 +18,8 @@
             [carneades.engine.triplestore :as triplestore]
             [carneades.engine.uuid :as uuid]
             [edu.ucdenver.ccp.kr.sparql :as sparql]
-            [carneades.policy-analysis.web.controllers.reconstruction :as recons]))
+            [carneades.policy-analysis.web.controllers.reconstruction :as recons]
+            [carneades.engine.triplestore :as triplestore]))
 
 (def markos-triplestore-endpoint "http://markos.man.poznan.pl/openrdf-sesame")
 (def markos-repo-name "markos_test_sp2")
@@ -47,14 +48,19 @@
      :uuid (:uuid analysis)}))
 
 (defn- start-engine
-  [project theories entity query]
-  (let [loaded-theories (project/load-theory project theories)
+  [params]
+  (let [{:keys [project theories entity query repo-name endpoint]} params
+        loaded-theories (project/load-theory project theories)
         [argument-from-user-generator questions send-answer]
         (ask/make-argument-from-user-generator (fn [p] (questions/askable? loaded-theories p)))
         ag (ag/make-argument-graph)
         engine (shell/make-engine ag 500 #{}
-                                  ;; TODO: add triplestore generator
-                                  (list (theory/generate-arguments-from-theory loaded-theories)
+                                  ;; TODO: debug triplestore generator
+                                  (list
+                                   (triplestore/generate-arguments-from-triplestore endpoint
+                                                                                    repo-name
+                                                                                    markos-namespaces)
+                                   (theory/generate-arguments-from-theory loaded-theories)
                                         argument-from-user-generator))
         future-ag (future (shell/argue engine query))
         analysis {:ag nil
@@ -76,8 +82,8 @@
 (defn analyse
   "Begins an analysis of a given software entity. The theories inside project is used.
 Returns a set of questions for the frontend."
-  [project theories entity query]
-  (start-engine project theories entity query))
+  [params]
+  (start-engine params))
 
 (defn process-answers
   "Process the answers send by the user and returns new questions or an ag."
@@ -101,6 +107,9 @@ Returns a set of questions for the frontend."
   (let [conn (triplestore/make-conn endpoint
                                     repo-name
                                     markos-namespaces)]
-    (binding [sparql/*select-limit* limit]
-      {:result (pp/write (sparql/query (:kb conn) (safe-read-string query))
-                         :stream nil)})))
+    (try
+      (binding [sparql/*select-limit* limit]
+        {:result (pp/write (sparql/query (:kb conn) (safe-read-string query))
+                           :stream nil)})
+      (catch Exception e
+        {:result (.getMessage e)}))))

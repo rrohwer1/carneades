@@ -9,12 +9,10 @@
   (:require [carneades.web.license-analysis.model.analysis :as analysis]))
 
 (defroutes license-analysis-routes
-  (POST "/analyse" {{project :project
-                     theories :theories
-                     entity :entity
-                     query :query} :params}
-        (let [query (safe-read-string query)]
-          {:body (analysis/analyse project theories entity query)}))
+  (POST "/debug/analyse" {params :params}
+        (let [query (safe-read-string (:query params))
+              params (assoc params :query query)]
+          {:body (analysis/analyse params)}))
 
   (POST "/send-answers" {{answers :answers
                           uuid :uuid} :params}
