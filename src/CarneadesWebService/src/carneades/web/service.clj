@@ -651,6 +651,8 @@
                                     (catch Exception _
                                       (keyword val))))
                  ag (export-to-argument-graph dbconn)
+                 _ (prn "ag=")
+                 _ (pprint ag)
                  optionsseq (mapcat (fn [[k v]] [k (convert-option v)]) options)
                  svg (apply lacij/export-str ag lang optionsseq)]
              {:status 200

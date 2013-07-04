@@ -15,6 +15,8 @@
             [carneades.engine.unify :as unify])
   (:import java.net.URL))
 
+(def select-limit 100)
+
 (defn- add-namespaces [kb]
   (rdf/update-namespaces kb
                          '(("ex" "http://www.example.org/")
@@ -33,6 +35,10 @@
 (comment
   ;; Graphical Web Interface to query/manage:
   ;; http://markos.man.poznan.pl/openrdf-workbench
+  (require 'edu.ucdenver.ccp.kr.sesame.kb)
+  (require '[edu.ucdenver.ccp.kr.kb :as kb])
+  (require '[edu.ucdenver.ccp.kr.rdf :as rdf])
+  (require '[edu.ucdenver.ccp.kr.sparql :as sparql])
 
   (def markos-conn (make-conn "http://markos.man.poznan.pl/openrdf-sesame"
                               "markos_test_sp2"
@@ -93,19 +99,6 @@
   {:kb (make-sesame-conn endpoint-url repo-name prefixes)
    :host (.getHost (URL. endpoint-url))})
 
-(defn responses-from-ask
-  "Generates responses for a grounded goal. Asks the triplestore if
-the goal exists and builds a list containing one response with an
-argument if is the case."
-  [kbconn goal subs]
-  ;; TODO: invert predicate and subject
-  (if (sparql/ask (:kb kbconn) [goal])
-    (let [arg (argument/make-argument :conclusion goal
-                                      :scheme (str "triplestore:" (:host kbconn))
-                                      :strict true)]
-      [(generator/make-response subs [] arg)])
-    []))
-
 (defn variable->sparqlvariable
   "Converts a Carneades variable to Clojure/SPARQL variable.
 Do nothing if v is not a variable."
@@ -132,6 +125,27 @@ Do nothing if v is not a variable."
   [stmt]
   (w/postwalk sparqlvariable->variable stmt))
 
+(defn sexp->sparqlquery
+  "Converts a Carneades sexpression encoding a query to a Clojure/SPARQL query."
+  [sexp]
+  (let [[p s o] sexp]
+    (variables->sparqlvariables (list s p o))))
+
+(defn responses-from-ask
+  "Generates responses for a grounded goal. Asks the triplestore if
+the goal exists and builds a list containing one response with an
+argument if is the case."
+  [kbconn goal subs]
+  ;; TODO: invert predicate and subject
+  (let [query (sexp->sparqlquery goal)]
+    (prn "issuing ask= " query)
+    (if (sparql/ask (:kb kbconn) [query])
+      (let [arg (argument/make-argument :conclusion goal
+                                        :scheme (str "triplestore:" (:host kbconn))
+                                        :strict true)]
+        [(generator/make-response subs [] arg)])
+      [])))
+
 (defn make-response-from-binding
   "Creates a response for a binding returned by the triplestore."
   [kbconn goal subs binding]
@@ -148,17 +162,25 @@ Do nothing if v is not a variable."
   with the goal as a query, if some new bindings are returned we
   construct one argument for each binding."
   [kbconn goal subs]
-  (let [query (variables->sparqlvariables goal)
+  (let [query (sexp->sparqlquery goal)
         ;; TODO: invert predicate and subject
-        bindings (sparql/query (:kb kbconn) [query])]
+        _ (prn "issuing query= " query)
+        bindings (binding [sparql/*select-limit* select-limit]
+                   (sparql/query (:kb kbconn) [query]))]
     (map #(make-response-from-binding kbconn goal subs %) bindings)))
 
 (defn responses-from-goal
   "Generates responses for a given goal."
   [kbconn goal subs]
-  (if (stmt/ground? goal)
-    (responses-from-ask kbconn goal subs)
-    (responses-from-query kbconn goal subs)))
+  (try
+    (if (stmt/ground? goal)
+      (responses-from-ask kbconn goal subs)
+      (responses-from-query kbconn goal subs))
+    (catch Exception e
+      (prn "Invalid query " goal)
+      (prn "Error:")
+      (print (.getMessage e))
+      ())))
 
 (defn generate-arguments-from-triplestore
   "Creates a generator generating arguments from facts in a triplestore.
@@ -169,6 +191,10 @@ for instance (\"fn:\" \"http://www.w3.org/2005/xpath-functions#\") "
        (reify generator/ArgumentGenerator
          (generate [this goal subs]
            (when (stmt/literal-pos? goal)
-             (responses-from-goal kbconn goal subs))))))
+             (let [res
+                   (responses-from-goal kbconn goal subs)]
+               ;; (prn "responses from triplestore")
+               ;; (pprint res)
+               res))))))
   ([endpoint-url]
      (generate-arguments-from-triplestore endpoint-url "" [])))
