@@ -306,8 +306,8 @@
                                  (ag-db/delete-argument con))
                                (ag-db/delete-statement id))})))
 
-  (GET "/main-issues/:db" [db]
-       (let [db2 (db/make-connection db "guest" "")]
+  (GET "/main-issues/:project/:db" [project db]
+       (let [db2 (db/make-connection project db "guest" "")]
          (db/with-db db2 {:body (map pack-statement (ag-db/main-issues))})))
 
   (POST "/matching-statements/:db" request
@@ -565,10 +565,15 @@
          (db/with-db dbconn
            (let [metadata (ag-db/list-metadata)
                  main-issues (map pack-statement (ag-db/main-issues))
-                 outline (create-outline 5)]
+                 outline (create-outline main-issues 5)]
              {:body             {:metadata (map unzip-metadata metadata)
                                  :main-issues main-issues
                                  :outline outline}}))))
+
+  (GET "/outline/:project/:db" [project db]
+       (let [dbconn (db/make-connection project db "guest" "")]
+         (db/with-db dbconn
+           {:body {:outline (create-outline (map pack-statement (ag-db/main-issues)) 5)}})))
 
   (GET "/statement-info/:project/:db" [project db]
        (let [dbconn (db/make-connection project db "guest" "")]
