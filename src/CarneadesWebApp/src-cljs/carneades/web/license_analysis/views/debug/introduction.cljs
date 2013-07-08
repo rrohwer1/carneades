@@ -51,13 +51,15 @@
         query (.val ($ ".query"))
         theories (.val ($ ".theories"))
         repo-name (.val ($ ".repo-name"))
+        ag-name (.val ($ ".ag-name"))
         endpoint (.val ($ ".endpoint"))]
     (dispatch/fire :license-analysis-start-dialog {:query query
                                                    :project project
                                                    :entity ""
                                                    :theories theories
                                                    :endpoint endpoint
-                                                   :repo-name repo-name})))
+                                                   :repo-name repo-name
+                                                   :ag-name ag-name})))
 
 (defn attach-listeners
   []

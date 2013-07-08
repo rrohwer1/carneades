@@ -5,7 +5,8 @@
   carneades.web.license-analysis.model.analysis
   (:use [clojure.tools.logging :only (info debug error)]
         [carneades.engine.utils :only [safe-read-string]]
-        [carneades.engine.dialog :only [add-answers]])
+        [carneades.engine.dialog :only [add-answers]]
+        [carneades.database.export :only [export-to-argument-graph]])
   (:require [clojure.pprint :as pp]
             [carneades.engine.shell :as shell]
             [carneades.engine.scheme :as theory]
@@ -19,7 +20,8 @@
             [carneades.engine.uuid :as uuid]
             [edu.ucdenver.ccp.kr.sparql :as sparql]
             [carneades.policy-analysis.web.controllers.reconstruction :as recons]
-            [carneades.engine.triplestore :as triplestore]))
+            [carneades.engine.triplestore :as triplestore]
+            [carneades.database.db :as db]))
 
 (def markos-triplestore-endpoint "http://markos.man.poznan.pl/openrdf-sesame")
 (def markos-repo-name "markos_test_sp2")
@@ -47,13 +49,21 @@
     {:questions (:last-questions analysis)
      :uuid (:uuid analysis)}))
 
+(defn get-ag
+  [project ag-name]
+  (if (empty? ag-name)
+    (ag/make-argument-graph)
+    (let [dbconn (db/make-connection project ag-name "guest" "")
+          ag (export-to-argument-graph dbconn)]
+      ag)))
+
 (defn- start-engine
   [params]
-  (let [{:keys [project theories entity query repo-name endpoint]} params
+  (let [{:keys [project theories entity query repo-name endpoint ag-name]} params
         loaded-theories (project/load-theory project theories)
         [argument-from-user-generator questions send-answer]
         (ask/make-argument-from-user-generator (fn [p] (questions/askable? loaded-theories p)))
-        ag (ag/make-argument-graph)
+        ag (get-ag project ag-name)
         engine (shell/make-engine ag 500 #{}
                                   ;; TODO: debug triplestore generator
                                   (list
@@ -76,7 +86,6 @@
                   :last-id 0}
         analysis (policy/get-ag-or-next-question analysis)]
     (swap! state index-analysis analysis)
-    (reset! debug-analysis analysis)
     (build-response analysis)))
 
 (defn analyse
