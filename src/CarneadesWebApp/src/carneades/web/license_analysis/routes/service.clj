@@ -22,4 +22,10 @@
                          limit :limit
                          endpoint :endpoint
                          repo-name :repo-name} :params}
-        {:body (analysis/debug-query endpoint repo-name query limit)}))
+        {:body (analysis/debug-query endpoint repo-name query limit)})
+
+  (POST "/debug/ask" {{query :query
+                       limit :limit
+                       endpoint :endpoint
+                       repo-name :repo-name} :params}
+        {:body (analysis/debug-ask endpoint repo-name query limit)}))

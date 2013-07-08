@@ -26,23 +26,47 @@
       Repo-name:
       <input type="text" class="repo-name" value="markos_test_sp2"/>
     </div>
-    <div style="margin-top: 10px">
-      Query:
-      <div>
-        <textarea class="sparql-query" style="min-width:600px; min-height: 300px">
-          ((?/x soft/name ?/z))
-      </textarea>
+
+    <div style="float:left; width: 60%">
+      <div style="margin-top: 10px">
+        Query:
+        <div>
+          <textarea class="sparql-query" style="min-width:600px; min-height: 300px">
+            ((?/x soft/name ?/z))
+          </textarea>
+        </div>
+      </div>
+      <button class="submit" style="min-width: 600px; min-height: 50px">Submit</button>
+
+      <div class="query-result" style="margin-top:20px">
+        Result:
+        <div>
+          <textarea class="result" style="min-width:600px; min-height: 300px">
+          </textarea>
+          <div>
+          </div>
+        </div>
+
       </div>
     </div>
-    <button class="submit" style="min-width: 600px; min-height: 50px">Submit</button>
-  </div>
 
-  <div class="query-result" style="margin-top:20px">
-    Result:
-    <div>
-      <textarea class="result" style="min-width:600px; min-height: 300px">
-      </textarea>
-    <div>
-  </div>
+    <div style="float:left; width:40%; margin-left; 40%">
+      <div style="margin-top: 10px">
+        Ask:
+        <div>
+          <textarea class="sparql-ask" style="min-width:600px; min-height: 15px">
+            ((soft/x soft/name soft/z))
+          </textarea>
+        </div>
+      </div>
+      <button class="submit-ask" style="min-width: 600px; min-height: 50px">Submit</button>
+
+      <div style="margin-top:20px">
+        Result:
+        <div>
+          <input type="text" class="ask-result" style="min-width:60px; min-height: 15px" />
+        </div>
+      </div>
+    </div>
 
 </div>

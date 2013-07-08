@@ -122,3 +122,18 @@ Returns a set of questions for the frontend."
                            :stream nil)})
       (catch Exception e
         {:result (.getMessage e)}))))
+
+(defn debug-ask
+  "Returns the ask result of query in the triplestore"
+  [endpoint repo-name query limit]
+  (let [conn (triplestore/make-conn endpoint
+                                    repo-name
+                                    markos-namespaces)
+        sexp (safe-read-string query)]
+    (prn "sexp=" sexp)
+    (try
+      (binding [sparql/*select-limit* limit]
+        {:result (pp/write (sparql/ask (:kb conn) sexp)
+                           :stream nil)})
+      (catch Exception e
+        {:result (.getMessage e)}))))

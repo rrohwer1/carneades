@@ -55,6 +55,10 @@
    (binding [sparql/*select-limit* 100]
      (sparql/query (:kb markos-conn) '((?/x soft/name ?/z)))))
 
+  (pprint
+   (binding [sparql/*select-limit* 100]
+     (sparql/ask (:kb markos-conn) '((soft/x soft/name soft/z)))))
+
   ;; example of returned value:
   ;; {?/x http://markosproject.eu/kb/SoftwareProject/1,
   ;; ?/y soft/name,
