@@ -140,7 +140,6 @@ Do nothing if v is not a variable."
 the goal exists and builds a list containing one response with an
 argument if is the case."
   [kbconn goal subs]
-  ;; TODO: invert predicate and subject
   (let [query (sexp->sparqlquery goal)]
     (prn "issuing ask= " query)
     (if (sparql/ask (:kb kbconn) [query])
@@ -167,7 +166,6 @@ argument if is the case."
   construct one argument for each binding."
   [kbconn goal subs]
   (let [query (sexp->sparqlquery goal)
-        ;; TODO: invert predicate and subject
         _ (prn "issuing query= " query)
         bindings (binding [sparql/*select-limit* select-limit]
                    (sparql/query (:kb kbconn) [query]))]
