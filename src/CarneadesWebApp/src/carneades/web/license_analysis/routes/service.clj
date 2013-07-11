@@ -10,9 +10,7 @@
 
 (defroutes license-analysis-routes
   (POST "/debug/analyse" {params :params}
-        (let [query (safe-read-string (:query params))
-              params (assoc params :query query)]
-          {:body (analysis/analyse params)}))
+        {:body (analysis/analyse params)})
 
   (POST "/send-answers" {{answers :answers
                           uuid :uuid} :params}

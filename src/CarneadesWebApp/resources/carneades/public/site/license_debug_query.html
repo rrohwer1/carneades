@@ -9,6 +9,12 @@
         "soft" "http://www.markosproject.eu/ontologies/software#"
         "lic" "http://www.markosproject.eu/ontologies/licenses#"
         "kb" "http://markosproject.eu/kb/"
+        "package" "http://markosproject.eu/kb/Package/"
+        "directory" "http://markosproject.eu/kb/Directory/"
+        "api" "http://markosproject.eu/kb/API/"
+        "softwareproject" "http://markosproject.eu/kb/SoftwareProject/"
+        "softwarerelease" "http://markosproject.eu/kb/SoftwareRelease/"
+        "programminglanguage" "http://markosproject.eu/kb/ProgrammingLanguage/"
       </pre>
     </div>
     <div>
@@ -32,7 +38,7 @@
         Query:
         <div>
           <textarea class="sparql-query" style="min-width:600px; min-height: 300px">
-            ((?/x soft/name ?/z))
+            ((?/x soft/name ("org.apache.log4j" xsd/string)))
           </textarea>
         </div>
       </div>
@@ -55,7 +61,7 @@
         Ask:
         <div>
           <textarea class="sparql-ask" style="min-width:600px; min-height: 15px">
-            ((soft/x soft/name soft/z))
+            ((package/_3 soft/name ("org.apache.log4j" xsd/string)))
           </textarea>
         </div>
       </div>

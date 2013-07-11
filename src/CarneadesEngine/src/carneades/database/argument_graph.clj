@@ -283,23 +283,6 @@
     2 :brd,
     3 :dv))
 
-(defn serialize-atom
-  [atom]
-  ;; this is a hack for the https://github.com/drlivingston/kr
-  ;; library which returns binding having symbol not readable
-  ;; by the Clojure reader, such as kb/ProgrammingLanguage/1
-  (s/replace (str atom) #"/([0-9]+)" "_$1"))
-
-(defn restore-kr-symbol
-  [sexp]
-  (if (symbol? sexp)
-    (symbol (s/replace (str sexp) #"_([0-9]+)" "/$1"))
-    sexp))
-
-(defn unserialize-atom
-  [s]
-  (w/postwalk restore-kr-symbol (safe-read-string s)))
-
 (defn create-statement
   "Creates and inserts a statement record in the database for the atom of the given
    literal. Returns the id of the new statement record."

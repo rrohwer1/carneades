@@ -4,7 +4,7 @@
 (ns ^{:doc ""}
   carneades.web.license-analysis.model.analysis
   (:use [clojure.tools.logging :only (info debug error)]
-        [carneades.engine.utils :only [safe-read-string]]
+        [carneades.engine.utils :only [unserialize-atom]]
         [carneades.engine.dialog :only [add-answers]]
         [carneades.database.export :only [export-to-argument-graph]])
   (:require [clojure.pprint :as pp]
@@ -29,7 +29,13 @@
                         ["reif" "http://www.markosproject.eu/ontologies/reification#"]
                         ["soft" "http://www.markosproject.eu/ontologies/software#"]
                         ["lic" "http://www.markosproject.eu/ontologies/licenses#"]
-                        ["kb" "http://markosproject.eu/kb/"]])
+                        ["kb" "http://markosproject.eu/kb/"]
+                        ["package" "http://markosproject.eu/kb/Package/"]
+                        ["directory" "http://markosproject.eu/kb/Directory/"]
+                        ["api" "http://markosproject.eu/kb/API/"]
+                        ["softwareproject" "http://markosproject.eu/kb/SoftwareProject/"]
+                        ["softwarerelease" "http://markosproject.eu/kb/SoftwareRelease/"]
+                        ["programminglanguage" "http://markosproject.eu/kb/ProgrammingLanguage/"]])
 
 (defn initial-state
   []
@@ -60,6 +66,7 @@
 (defn- start-engine
   [params]
   (let [{:keys [project theories entity query repo-name endpoint ag-name]} params
+        sexp (unserialize-atom query)
         loaded-theories (project/load-theory project theories)
         [argument-from-user-generator questions send-answer]
         (ask/make-argument-from-user-generator (fn [p] (questions/askable? loaded-theories p)))
@@ -71,13 +78,13 @@
                                                                                     repo-name
                                                                                     markos-namespaces)
                                    (theory/generate-arguments-from-theory loaded-theories)
-                                        argument-from-user-generator))
-        future-ag (future (shell/argue engine query))
+                                   argument-from-user-generator))
+        future-ag (future (shell/argue engine sexp))
         analysis {:ag nil
                   :project project
                   :uuid (symbol (uuid/make-uuid-str))
                   :lang :en
-                  :query query
+                  :query sexp
                   :policies loaded-theories
                   :future-ag future-ag
                   :questions questions
@@ -115,10 +122,12 @@ Returns a set of questions for the frontend."
   [endpoint repo-name query limit]
   (let [conn (triplestore/make-conn endpoint
                                     repo-name
-                                    markos-namespaces)]
+                                    markos-namespaces)
+        sexp (unserialize-atom query)]
+    (prn "sexp=" sexp)
     (try
       (binding [sparql/*select-limit* limit]
-        {:result (pp/write (sparql/query (:kb conn) (safe-read-string query))
+        {:result (pp/write (sparql/query (:kb conn) sexp)
                            :stream nil)})
       (catch Exception e
         {:result (.getMessage e)}))))
@@ -129,7 +138,7 @@ Returns a set of questions for the frontend."
   (let [conn (triplestore/make-conn endpoint
                                     repo-name
                                     markos-namespaces)
-        sexp (safe-read-string query)]
+        sexp (unserialize-atom query)]
     (prn "sexp=" sexp)
     (try
       (binding [sparql/*select-limit* limit]

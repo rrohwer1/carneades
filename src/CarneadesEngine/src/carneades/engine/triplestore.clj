@@ -3,7 +3,8 @@
 
 (ns ^{:doc "Generation of arguments from a triplestore."}
   carneades.engine.triplestore
-  (:use [clojure.pprint :only [pprint write]])
+  (:use [clojure.pprint :only [pprint write]]
+        [carneades.engine.utils :only [unserialize-atom]])
   (:require [clojure.walk :as w]
             edu.ucdenver.ccp.kr.sesame.kb
             [edu.ucdenver.ccp.kr.kb :as kb]
@@ -42,11 +43,17 @@
 
   (def markos-conn (make-conn "http://markos.man.poznan.pl/openrdf-sesame"
                               "markos_test_sp2"
-                               [["top" "http://www.markosproject.eu/ontologies/top#"]
-                                ["reif" "http://www.markosproject.eu/ontologies/reification#"]
-                                ["soft" "http://www.markosproject.eu/ontologies/software#"]
-                                ["lic" "http://www.markosproject.eu/ontologies/licenses#"]
-                                ["kb" "http://markosproject.eu/kb/"]]))
+                              [["top" "http://www.markosproject.eu/ontologies/top#"]
+                               ["reif" "http://www.markosproject.eu/ontologies/reification#"]
+                               ["soft" "http://www.markosproject.eu/ontologies/software#"]
+                               ["lic" "http://www.markosproject.eu/ontologies/licenses#"]
+                               ["kb" "http://markosproject.eu/kb/"]
+                               ["package" "http://markosproject.eu/kb/Package/"]
+                               ["directory" "http://markosproject.eu/kb/Directory/"]
+                               ["api" "http://markosproject.eu/kb/API/"]
+                               ["softwareproject" "http://markosproject.eu/kb/SoftwareProject/"]
+                               ["softwarerelease" "http://markosproject.eu/kb/SoftwareRelease/"]
+                               ["programminglanguage" "http://markosproject.eu/kb/ProgrammingLanguage/"]]))
   ;; Compile file with C-c C-k
   ;; then execute this sexpr by placing cursor at the end of the sexp
   ;; and type C-x C-e
@@ -57,13 +64,46 @@
 
   (pprint
    (binding [sparql/*select-limit* 100]
+     (sparql/query (:kb markos-conn) '((?/x soft/name ("org.apache.log4j" xsd/string))))))
+
+
+  (pprint
+   (binding [sparql/*select-limit* 100]
      (sparql/ask (:kb markos-conn) '((soft/x soft/name soft/z)))))
+
+
+  ;; SELECT ?x {
+  ;;            ?x <http://www.markosproject.eu/ontologies/software#name> "org.apache.log4j"^^xsd:string
+  ;;            }
+
+  ;; SELECT ?x {
+  ;;            ?x soft:name "org.apache.log4j"^^xsd:string
+  ;;            }
+  ;; ASK {
+  ;;      ?x soft:name "org.apache.log4j"^^xsd:string
+  ;;      }
+
+  ;; ASK  {
+  ;;       <http://markosproject.eu/kb/Package/3> <http://www.markosproject.eu/ontologies/software#name> "org.apache.log4j"^^xsd:string
+  ;;       }
+  (pprint
+   (let [query (unserialize-atom "((package/_3 soft/name (\"org.apache.log4j\" xsd/string)))")]
+     (prn "query=" query)
+     (binding [sparql/*select-limit* 100]
+       (sparql/ask (:kb markos-conn) query))))
+
+  ;; this won't work :-( full URI not working in the SPARQL library?
+  (pprint
+   (let [query (unserialize-atom "((http://markosproject.eu/kb/Package/_3 soft/name (\"org.apache.log4j\" xsd/string)))")]
+     (prn "query=" query)
+     (binding [sparql/*select-limit* 100]
+       (sparql/ask (:kb markos-conn) query))))
+
 
   ;; example of returned value:
   ;; {?/x http://markosproject.eu/kb/SoftwareProject/1,
   ;; ?/y soft/name,
   ;; ?/z "Apache log4j"}
-
   )
 
 ;; (comment

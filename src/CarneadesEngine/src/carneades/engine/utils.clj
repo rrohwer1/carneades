@@ -6,7 +6,8 @@
   (:use clojure.java.io
         clojure.pprint)
   (:require [clojure.string :as str]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [clojure.walk :as w])
   (:import java.security.MessageDigest
            java.util.zip.ZipOutputStream
            java.util.zip.ZipInputStream
@@ -374,3 +375,20 @@ ByteArrayInputStream is returned."
   [zippath destination]
   (let [zip-stream (ZipInputStream. (io/input-stream zippath))]
     (unzip-stream zip-stream destination)))
+
+(defn serialize-atom
+  [atom]
+  ;; this is a hack for the https://github.com/drlivingston/kr
+  ;; library which returns binding having symbol not readable
+  ;; by the Clojure reader, such as kb/ProgrammingLanguage/1
+  (str/replace (str atom) #"/([0-9]+)" "/_$1"))
+
+(defn restore-kr-symbol
+  [sexp]
+  (if (symbol? sexp)
+    (symbol (str/replace (str sexp) #"_([0-9]+)" "$1"))
+    sexp))
+
+(defn unserialize-atom
+  [s]
+  (w/postwalk restore-kr-symbol (safe-read-string s)))
