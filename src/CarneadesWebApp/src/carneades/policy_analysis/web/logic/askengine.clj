@@ -4,7 +4,7 @@
 (ns carneades.policy-analysis.web.logic.askengine
   (:use clojure.pprint
         carneades.policy-analysis.web.core
-        (carneades.engine aspic argument-evaluation argument-graph ask statement scheme
+        (carneades.engine aspic argument-evaluation argument-graph ask statement theory
                           argument shell unify dialog)
         (carneades.policy-analysis.web.logic questions)
         [clojure.tools.logging :only (info debug error)])

@@ -1,9 +1,9 @@
-;;; Copyright ? 2010 Fraunhofer Gesellschaft 
+;;; Copyright ? 2010 Fraunhofer Gesellschaft
 ;;; Licensed under the EUPL V.1.1
 
 (ns carneades.examples.copyright-policies
   (:use carneades.engine.dublin-core
-        carneades.engine.scheme
+        carneades.engine.theory
         carneades.engine.argument))
 
 ;; test
@@ -13,7 +13,7 @@
 
 
 (def UrhG-31
-  (make-scheme                            
+  (make-scheme
    :id 'UrhG-31
    :header (make-metadata :title "§ 31 UrhG de lege lata"
                           :description {:de "> Einräumung von
@@ -42,10 +42,10 @@
 
 (def copyright-policies
   (make-theory
-   :header 
+   :header
    (make-metadata :title "Copyright in the Knowledge Economy"
                   :description {:en ""}) ;; TODO add a description
-   
+
    :language
    (make-language
     (make-individual :symbol 'yes :text {:en "Yes"
@@ -93,7 +93,7 @@
      :arity 2
      :text {:en "the use by %s of %s"
             :fr "l'utilisation par %s de %s"})
-     
+
     (make-role
      :category 'license
      :symbol 'license-to-publish
@@ -110,7 +110,7 @@
      :hint {:en "Information about an existing license."
             :fr "Information sur une licence existante."}
      :followups '[])
-    
+
     (make-role
      :symbol 'may-publish
      :min 0
@@ -130,7 +130,7 @@
      :forms {:en (make-form :positive "%s is a person."
                             :negative "%s is not a person."
                             :question "Is %s a person?")
-             
+
              :de (make-form :positive "%s ist ein Rechtsperson."
                             :negative "%s ist nicht ein Rechtsperson."
                             :question "Ist %s ein Rechtsperson?")
@@ -156,7 +156,7 @@
                             :question "Est-ce que %s est une œuvre?")}
      :hint {:en "Please provide an identifier for the orphaned work, such as W1."}
      :category 'identifiers)
-    
+
     (make-role
      :symbol 'type-of-use
      :askable true
@@ -205,7 +205,7 @@
                             :negative "%s n'a pas été publiquement déclarée."
                             :question "Est-ce que %s a été publiquement déclarée?")}
      :category 'search)
-    
+
     (make-concept
      :symbol 'valid
      :askable false
@@ -229,10 +229,10 @@
 This arguments pro and con the policy proposals for this issue can be browsed in the [argument map](http://localhost:8080/carneades/policy-analysis/#/arguments/outline/copyright/main).
 
 "})
-     
+
      ;; one section below for each policy proposed for this issue as well as for current polices on this issue.
 
-     :sections  
+     :sections
      [(make-section
        :id 'UrhG
        :header (make-metadata :title "Urheberrechtsgesetz"
@@ -251,7 +251,7 @@ policies for handling orphaned works [@Aktionsbündnis, pp. 6-7]."})
        :schemes
        [UrhG-31
 
-        (make-scheme                            
+        (make-scheme
          :id 'AB-52c-1-a
          :header (make-metadata :title "§ 52c (1) (a)"
                                 :description {:de "(1) Öffentliche Zugänglichmachung für nicht-gewerbliche und private Zwecke, insbesondere durch Nutzer für Zwecke der Archivierung und für Forschung und Ausbildung ... (a)  Zulässig  ist  die  öffentliche  Zugänglichmachung  von  Werken, deren Urheber oder Rechteinhaber
@@ -260,13 +260,13 @@ nach einer dokumentierten Standardsuche [alternativ: einer zeitlich auf 30 Tage 
          :premises [(make-premise :statement '(type-of-use (the-use ?P ?W) non-commercial))
                     (make-premise :statement '(search-type (the-search ?P ?W) standard))
                     (make-premise :statement '(valid AB-52c-1-a)) ])
-        
+
         (make-scheme
          :id 'AB-52c-2-a
          :header (make-metadata :title "§ 52c (2) (a)"
                                 :description {:de "(2) Öffentliche Zugänglichmachung für gewerbliche Zwecke ... (a)  Zulässig  ist  die  öffentliche
-Zugänglichmachung  von  Werken, deren Urheber oder Rechteinhaber 
-nach einer angemessenen professionellen und dokumentierten Suche und einer öffentlichen 
+Zugänglichmachung  von  Werken, deren Urheber oder Rechteinhaber
+nach einer angemessenen professionellen und dokumentierten Suche und einer öffentlichen
 Bekanntmachung nicht ermittelt werden können."})
          :conclusion '(may-publish ?P ?W)
          :premises [(make-premise :statement '(type-of-use (the-use ?P ?W) commercial))

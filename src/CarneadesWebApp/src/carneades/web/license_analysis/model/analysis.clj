@@ -9,7 +9,7 @@
         [carneades.database.export :only [export-to-argument-graph]])
   (:require [clojure.pprint :as pp]
             [carneades.engine.shell :as shell]
-            [carneades.engine.scheme :as theory]
+            [carneades.engine.theory :as theory]
             [carneades.engine.argument-graph :as ag]
             [carneades.engine.ask :as ask]
             [carneades.engine.dialog :as dialog]

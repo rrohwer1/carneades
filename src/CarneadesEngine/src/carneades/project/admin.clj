@@ -9,7 +9,7 @@
             [clojure.string :as s]
             [me.raynes.fs :as fs]
             [carneades.config.config :as config]
-            [carneades.engine.scheme :as theory]))
+            [carneades.engine.theory :as theory]))
 
 (def projects-directory (config/properties :projects-directory
                                            (str (System/getProperty "user.dir")

@@ -4,7 +4,7 @@
 (ns carneades.web.service
   (:use clojure.pprint
         compojure.core
-        (carneades.engine uuid policy unify statement argument scheme dublin-core utils
+        (carneades.engine uuid policy unify statement argument theory dublin-core utils
                           argument-evaluation aspic)
         (carneades.web pack outline)
         carneades.database.export
