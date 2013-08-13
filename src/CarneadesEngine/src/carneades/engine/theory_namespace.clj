@@ -2,30 +2,26 @@
 ;;; Licensed under the EUPL V.1.1
 
 (ns carneades.engine.theory-namespace
-  (:require [carneades.engine.theory :as t]
+  (:require
             [clojure.zip :as z]))
 
-(defn may-have-children?
-  [node]
-  (or (t/theory? node)
-      (t/section? node)))
+(defn change-schemes
+  [section]
+  (update-in section [:schemes] concat [{:myscheme 42}]))
 
-(defn get-children
-  [node]
-  (:sections node))
-
-(defn make-node
-  [node children]
-  (prn "node =" node)
-  (prn "children = " children)
-  (assoc node :sections children))
-
-(defn theory-zip
-  [root]
-  (z/zipper may-have-children?
-            get-children
-            make-node
-            root))
+(defn explore
+  [theory]
+  (let [zip (theory-zip theory)]
+    (loop [loc zip]
+      (if (z/end? loc)
+        (z/root loc)
+        (let [node (z/node loc)]
+          (if (empty? (:schemes node))
+            (recur (z/next loc))
+            (do
+              (prn "something")
+              (prn (:schemes node))
+              (recur (z/next (z/edit loc change-schemes))))))))))
 
 (defn make-schemes-absolute
   [theory]
