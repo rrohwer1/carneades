@@ -2,6 +2,7 @@
 ;;; Licensed under the EUPL V.1.1
 
 (ns carneades.owl.import
+  (:refer-clojure :exclude [import])
   (:require [carneades.engine.statement :refer [literal-complement]]
             [carneades.engine.theory :as t]
             [carneades.owl.owl :as o])

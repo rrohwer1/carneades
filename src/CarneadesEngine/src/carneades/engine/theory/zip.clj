@@ -3,17 +3,15 @@
 
 (ns ^{:doc "Zipper for a theory. @See clojure.zip"}
   carneades.engine.theory.zip
-  (:require [clojure.zip :as z]
-            [carneades.engine.theory :as t]))
+  (:require [clojure.zip :as z]))
 
 (defn- may-have-children?
   [node]
-  (or (t/theory? node)
-      (t/section? node)))
+  (contains? node :sections))
 
 (defn- make-node
   [node children]
-  (assoc node :sections children))
+  (assoc node :sections (into [] children)))
 
 (defn theory-zip
   "Returns a zipper for a theory. The zipper navigates
